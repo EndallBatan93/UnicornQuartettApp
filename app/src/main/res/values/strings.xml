@@ -2,7 +2,8 @@
     <string name="app_name">UnicornQuartett</string>
     <string name="PlayGame">Play</string>
     <string name="RangList">Ranglist</string>
-    <string name="Friend">Friend</string>
+    <string name="Friend">Friends</string>
     <string name="DeckGallery">Deck Gallery</string>
     <string name="Profile">Profile</string>
+    <string name="friends">Friends</string>
 </resources>
