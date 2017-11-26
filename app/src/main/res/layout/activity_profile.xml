@@ -8,12 +8,138 @@
     tools:context="com.unicorn.unicornquartett.Profile.ProfileActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/titleView"
         android:layout_width="101dp"
         android:layout_height="31dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/Profile"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/difficultyButton"
+        android:layout_width="50dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="248dp"
+        android:background="@android:drawable/ic_menu_more"
+        android:onClick="connectToGooglePlay"
+        android:src="@drawable/background"
+        android:textColor="@android:color/background_light"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/googleButton"
+        android:layout_width="47dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginStart="312dp"
+        android:background="@drawable/round"
+        android:onClick="connectToGooglePlay"
+        android:src="@drawable/background"
+        android:text="G"
+        android:textColor="@android:color/background_light"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.236"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="143dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="72dp"
+        android:text="UserName"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/registered"
+        android:layout_width="157dp"
+        android:layout_height="17dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="100dp"
+        android:text="Registerd since 11-12-2017"
+        android:textSize="9sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lost"
+        android:layout_width="99dp"
+        android:layout_height="33dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="204dp"
+        android:fontFamily="monospace"
+        android:text="LOST"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        android:textColor="?attr/colorError"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:typeface="monospace"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.074"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/won"
+        android:layout_width="89dp"
+        android:layout_height="34dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="204dp"
+        android:text="WON"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.544"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/lostView"
+        android:layout_width="123dp"
+        android:layout_height="173dp"
+        android:layout_marginBottom="80dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ListView
+        android:id="@+id/wonView"
+        android:layout_width="118dp"
+        android:layout_height="173dp"
+        android:layout_marginBottom="80dp"
+        android:layout_marginStart="160dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/editbutton"
+        android:layout_width="21dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginTop="76dp"
+        android:background="@android:drawable/ic_menu_edit"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
