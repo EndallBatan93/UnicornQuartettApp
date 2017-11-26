@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context="com.unicorn.unicornquartett.Friends.FriendActivity">
     <Button
         android:id="@+id/profileButton"
@@ -13,7 +14,7 @@
         android:layout_marginStart="16dp"
         android:background="@drawable/round"
         android:onClick="goToProfileActivity"
-        android:src="@drawable/awesomebackground"
+        android:src="@drawable/background"
         android:text="@string/Profile"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/applogoscreen"
+    android:background="@drawable/background"
     tools:context="com.unicorn.unicornquartett.Menu.MenuActivity">
 
     <Button
@@ -66,10 +66,10 @@
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.962"
+        app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.027" />
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <Button
@@ -80,7 +80,6 @@
         android:layout_marginStart="16dp"
         android:background="@drawable/round"
         android:onClick="goToProfileActivity"
-        android:src="@drawable/awesomebackground"
         android:text="@string/Profile"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
