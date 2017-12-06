@@ -1,6 +1,8 @@
 package com.unicorn.unicornquartett.Menu;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +21,11 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+       // start loading screen
+        this.manageLoadingScreen();
+
+        // Initializing Varables
         Button playButton = findViewById(R.id.playbutton);
         Button ranglistButton = findViewById(R.id.ranglisbutton);
         Button deckButotn = findViewById(R.id.deckbutton);
@@ -28,6 +35,8 @@ public class MenuActivity extends AppCompatActivity {
 
 
 
+
+    // Navigation Methods
     public void goToPlayGameActivity(View view) {
         Intent intent = new Intent(this, PlayGameActivity.class);
         startActivity(intent);
@@ -57,7 +66,32 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+    /**
+     * makes dialog which shows loading animation
+     * this methods starts a countdown of 5 second
+     * on finish the dialog for loading activity is hidden
+     * can siimply used everywhere else you like
+     *
+     * **/
+    public void manageLoadingScreen() {
+        final ProgressDialog dialog=new ProgressDialog(this);
+        dialog.setMessage("loading");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+        dialog.show();
 
+        CountDownTimer countDownTimer = new CountDownTimer(5000, 1000) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                dialog.hide();
+            }
+        }.start();
+    }
 
     }
 
