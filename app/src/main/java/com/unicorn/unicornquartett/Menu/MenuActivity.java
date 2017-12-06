@@ -14,6 +14,9 @@ import com.unicorn.unicornquartett.PlayGame.PlayGameActivity;
 import com.unicorn.unicornquartett.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Ranglist.RangListActivity;
+import com.unicorn.unicornquartett.domain.User;
+
+import io.realm.Realm;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -21,9 +24,12 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        Realm realm = Realm.getDefaultInstance();
+
+
 
        // start loading screen
-        this.manageLoadingScreen();
+//        this.manageLoadingScreen();
 
         // Initializing Varables
         Button playButton = findViewById(R.id.playbutton);

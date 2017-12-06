@@ -9,13 +9,15 @@ import android.widget.Button;
 import com.unicorn.unicornquartett.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.R;
 
+import io.realm.Realm;
+
 public class PlayGameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game);
-
+        Realm realm = Realm.getDefaultInstance();
         Button offlineOnline = findViewById(R.id.onlineOffline);
         Button playStandard = findViewById(R.id.playStandard);
         Button playUnicorn = findViewById(R.id.playUnicorn);

@@ -9,11 +9,14 @@ import android.widget.ListView;
 import com.unicorn.unicornquartett.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.R;
 
+import io.realm.Realm;
+
 public class FriendActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Realm realm = Realm.getDefaultInstance();
         setContentView(R.layout.activity_friend);
         ListView friendList = findViewById(R.id.friendList);
     }

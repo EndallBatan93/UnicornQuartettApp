@@ -9,8 +9,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.domain.User;
 
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -18,6 +22,8 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        Realm realm = Realm.getDefaultInstance();
+
 
         ListView wonList = findViewById(R.id.wonView);
         ListView lostList = findViewById(R.id.lostView);
