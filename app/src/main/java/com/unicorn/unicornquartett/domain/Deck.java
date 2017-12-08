@@ -1,5 +1,7 @@
 package com.unicorn.unicornquartett.domain;
 
+import java.util.Map;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
@@ -11,6 +13,8 @@ public class Deck extends RealmObject {
     private int numberOfCards;
     private RealmList<Card> cards;
     private Boolean locked;
+    private RealmList<Shema>shema;
+
 
     public Deck () {
 
@@ -55,6 +59,15 @@ public class Deck extends RealmObject {
     public void setLocked(Boolean locked) {
         this.locked = locked;
     }
+
+    public RealmList<Shema> getShema() {
+        return shema;
+    }
+
+    public void setShema(RealmList<Shema> shema) {
+        this.shema = shema;
+    }
 }
+
 
 

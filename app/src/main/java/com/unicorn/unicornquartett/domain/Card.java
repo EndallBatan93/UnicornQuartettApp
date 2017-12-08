@@ -8,13 +8,12 @@ public class Card extends RealmObject {
     @Index
     private int id;
     private String name;
-    private String quartettindex;
+    private String quartettIndex;
     private RealmList <String> attributes;
     private String description;
-    private RealmList<String> images;
+    private RealmList<Image> images;
 
     public Card ()  {
-
     }
     public int getId() {
         return id;
@@ -32,12 +31,12 @@ public class Card extends RealmObject {
         this.name = name;
     }
 
-    public String getQuartettindex() {
-        return quartettindex;
+    public String getQuartettIndex() {
+        return quartettIndex;
     }
 
-    public void setQuartettindex(String quartettindex) {
-        this.quartettindex = quartettindex;
+    public void setQuartettIndex(String quartettIndex) {
+        this.quartettIndex = quartettIndex;
     }
 
     public RealmList<String> getAttributes() {
@@ -56,11 +55,11 @@ public class Card extends RealmObject {
         this.description = description;
     }
 
-    public RealmList<String> getImages() {
+    public RealmList<Image> getImages() {
         return images;
     }
 
-    public void setImages(RealmList<String> images) {
+    public void setImages(RealmList<Image> images) {
         this.images = images;
     }
 }

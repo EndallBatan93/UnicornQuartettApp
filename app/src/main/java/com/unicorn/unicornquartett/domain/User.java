@@ -1,12 +1,11 @@
 package com.unicorn.unicornquartett.domain;
 
 
-import java.util.List;
+import java.util.UUID;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
-import io.realm.annotations.Required;
 
 public class User extends RealmObject {
 
@@ -16,6 +15,7 @@ public class User extends RealmObject {
     private RealmList<String> decks;
     private RealmList<GameResult> stats;
     private RealmList<User> friends;
+    // Fluffy,moreFluffy,superFluffy
     private String difficulty;
     private Boolean runningOffline;
     private Boolean runningOnline;

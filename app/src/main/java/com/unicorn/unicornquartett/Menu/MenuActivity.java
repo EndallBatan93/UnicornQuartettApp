@@ -17,6 +17,7 @@ import com.unicorn.unicornquartett.Ranglist.RangListActivity;
 import com.unicorn.unicornquartett.domain.User;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -25,10 +26,11 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         Realm realm = Realm.getDefaultInstance();
+        RealmResults<User> all = realm.where(User.class).findAll();
+        User user = all.first();
+        System.out.println(user.getId() + user.getName() + user.getDecks().size() + user.getRunningOffline() + user.getRunningOnline() + user.getDifficulty());
 
-
-
-       // start loading screen
+        // start loading screen
 //        this.manageLoadingScreen();
 
         // Initializing Varables
@@ -37,6 +39,8 @@ public class MenuActivity extends AppCompatActivity {
         Button deckButotn = findViewById(R.id.deckbutton);
         Button profileButton = findViewById(R.id.profileButton);
         Button friendButton = findViewById(R.id.friendButton);
+
+        profileButton.setText(user.getName());
     }
 
 
