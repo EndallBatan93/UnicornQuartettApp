@@ -15,7 +15,7 @@
         android:name=".UnicornQuartett">
 
 
-        <activity android:name=".Menu.MenuActivity">
+        <activity android:name=".activity.Menu.MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,49 +23,49 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Ranglist.RangListActivity"
-            android:parentActivityName=".Menu.MenuActivity">
+            android:name=".activity.Ranglist.RangListActivity"
+            android:parentActivityName=".activity.Menu.MenuActivity">
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.unicorn.unicornquartett.Menu.MenuActivity" />
+                android:value=".activity.Menu.MenuActivity" />
         </activity>
         <activity
-            android:name=".Decks.DeckGalleryActivity"
-            android:parentActivityName=".Menu.MenuActivity">
+            android:name=".activity.Decks.DeckGalleryActivity"
+            android:parentActivityName=".activity.Menu.MenuActivity">
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.unicorn.unicornquartett.Menu.MenuActivity" />
+                android:value=".activity.Menu.MenuActivity" />
         </activity>
         <activity
-            android:name=".PlayGame.PlayGameActivity"
-            android:parentActivityName=".Menu.MenuActivity">
+            android:name=".activity.PlayGame.PlayGameActivity"
+            android:parentActivityName=".activity.Menu.MenuActivity">
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.unicorn.unicornquartett.Menu.MenuActivity" />
+                android:value=".activity.Menu.MenuActivity" />
         </activity>
         <activity
-            android:name=".Profile.ProfileActivity"
-            android:parentActivityName=".Menu.MenuActivity">
+            android:name=".activity.Profile.ProfileActivity"
+            android:parentActivityName=".activity.Menu.MenuActivity">
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.unicorn.unicornquartett.Menu.MenuActivity" />
+                android:value=".activity.Menu.MenuActivity" />
         </activity>
         <activity
-            android:name=".Friends.FriendActivity"
-            android:parentActivityName=".Menu.MenuActivity">
+            android:name=".activity.Friends.FriendActivity"
+            android:parentActivityName=".activity.Menu.MenuActivity">
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.unicorn.unicornquartett.Menu.MenuActivity" />
+                android:value=".activity.Menu.MenuActivity" />
         </activity>
     </application>
 
