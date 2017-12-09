@@ -15,6 +15,7 @@ import com.unicorn.unicornquartett.activity.PlayGame.PlayGameActivity;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.activity.Ranglist.RangListActivity;
+import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.User;
 
 import org.w3c.dom.Text;
@@ -31,7 +32,7 @@ public class MenuActivity extends AppCompatActivity {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<User> all = realm.where(User.class).findAll();
         User user = all.first();
-
+        RealmResults<Deck> decks = realm.where(Deck.class).findAll();
 
 
         // Initializing Varables

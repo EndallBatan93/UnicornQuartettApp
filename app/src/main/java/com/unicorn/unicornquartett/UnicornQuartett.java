@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
+import com.unicorn.unicornquartett.domain.Image;
 import com.unicorn.unicornquartett.domain.Shema;
 import com.unicorn.unicornquartett.domain.User;
 
@@ -19,7 +20,10 @@ import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 
 public class UnicornQuartett extends Application {
-    private JSONArray cardlist;
+    private JSONArray bikeListcards;
+    private JSONArray tuningListcards;
+    private RealmList<Shema> bikeShemas;
+    private RealmList<Shema> tuningShemas;
 
     @Override
     public void onCreate() {
@@ -38,9 +42,14 @@ public class UnicornQuartett extends Application {
         String tuningsJSON = this.loadJSONFromAsset("tuning/tuning.json");
         String bikesJSON = this.loadJSONFromAsset("bikes/bikes.json");
         try {
+
             JSONObject bikesObject = new JSONObject(bikesJSON);
             JSONArray bikeCards = bikesObject.getJSONArray("cards");
-            this.cardlist = bikeCards;
+            this.bikeListcards = bikeCards;
+
+            JSONObject tuningObject = new JSONObject(tuningsJSON);
+            JSONArray tuningCards = tuningObject.getJSONArray("cards");
+            this.tuningListcards = tuningCards;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -60,6 +69,71 @@ public class UnicornQuartett extends Application {
             user.setRunningOnline(false);
         }
 
+        Deck bikeExists = realm.where(Deck.class).equalTo("name", "Bikes").findFirst();
+        if (bikeExists == null) {
+            Deck bikes = realm.createObject(Deck.class);
+            bikes.setName("Bikes");
+            bikes.setId(1);
+            bikes.setNumberOfCards(32);
+            bikes.setLocked(false);
+            bikes.setShema(bikeShemas);
+
+            getShemas(realm, "bikes");
+            RealmList<Card> bikeCards = getCards(realm, bikeListcards, bikeShemas);
+            bikes.setCards(bikeCards);
+        }
+
+        Deck tuningExists = realm.where(Deck.class).equalTo("name", "Tuning").findFirst();
+        if (tuningExists == null) {
+
+            Deck tuning = realm.createObject(Deck.class);
+            tuning.setName("Tuning");
+            tuning.setId(2);
+            tuning.setLocked(false);
+            tuning.setNumberOfCards(32);
+            tuning.setShema(tuningShemas);
+
+            getShemas(realm, "tuning");
+            RealmList<Card> tuningCards = getCards(realm, tuningListcards, tuningShemas);
+            tuning.setCards(tuningCards);
+        }
+
+        realm.commitTransaction();
+        realm.close();
+    }
+
+    public String loadJSONFromAsset(String filename) {
+        String json = null;
+        try {
+
+            InputStream is = getAssets().open(filename);
+
+            int size = is.available();
+
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
+    }
+
+    private void clearDatabaseRealm(Realm realm) {
+        realm.beginTransaction();
+        realm.deleteAll();
+        realm.commitTransaction();
+    }
+
+    public void getShemas(Realm realm, String deckParameter) {
         // Shemas
         Shema bikeShema1 = realm.createObject(Shema.class);
         bikeShema1.setProperty("Geschwindigkeit");
@@ -139,61 +213,53 @@ public class UnicornQuartett extends Application {
         tuningshemas.add(tuningShema5);
         tuningshemas.add(tuningShema6);
 
-        //Cards
-        for (int i = 0; i <= cardlist.length(); i++) {
+        if (deckParameter.equals("tuning")) {
+
+            this.tuningShemas = tuningshemas;
+        } else {
+            this.bikeShemas = bikeShemas;
+        }
+    }
+
+
+    public RealmList<Card> getCards(Realm realm, JSONArray listParameter, RealmList<Shema> shemaParameter) {
+        RealmList<Card> returnCardList = new RealmList<>();
+        for (int i = 0; i < listParameter.length(); i++) {
+
             Card card = realm.createObject(Card.class);
+            RealmList<String> imagesList = new RealmList();
+            RealmList<String> attributeList = new RealmList<>();
+            try {
+                // TODO add iterator for multiple images
+                String filename = (String) listParameter.getJSONObject(i).getJSONArray("images").getJSONObject(0).get("filename");
+                imagesList.add(filename);
+                Image image = realm.createObject(Image.class);
+                image.setId(i);
+                image.setImageIdentifiers(imagesList);
+                card.setImages(image);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            for (int j = 0; j <= shemaParameter.size(); j++) {
+                try {
+                    String attributeValue = (String) listParameter.getJSONObject(i).getJSONArray("values").getJSONObject(j).get("value");
+                    attributeList.add(attributeValue);
+                    card.setAttributes(attributeList);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                String cardName = (String) listParameter.getJSONObject(i).get("name");
+                card.setName(cardName);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            card.setDescription("");
+            card.setId(i);
+            returnCardList.add(card);
         }
-        //Decks
-        Deck bikes = realm.createObject(Deck.class);
-        bikes.setName("Bikes");
-        bikes.setId(1);
-        bikes.setNumberOfCards(32);
-        bikes.setLocked(false);
-        bikes.setShema(bikeShemas);
-//        bikes.setCards();
 
-        Deck tuning = realm.createObject(Deck.class);
-        tuning.setName("Tuning");
-        tuning.setId(2);
-        tuning.setLocked(false);
-        tuning.setNumberOfCards(32);
-        tuning.setShema(tuningshemas);
-//        tuning.setCards();
-
-        realm.commitTransaction();
-        realm.close();
+        return returnCardList ;
     }
-
-    public String loadJSONFromAsset(String filename) {
-        String json = null;
-        try {
-
-            InputStream is = getAssets().open(filename);
-
-            int size = is.available();
-
-            byte[] buffer = new byte[size];
-
-            is.read(buffer);
-
-            is.close();
-
-            json = new String(buffer, "UTF-8");
-
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-
-    }
-
-
-    private void clearDatabaseRealm(Realm realm) {
-        realm.beginTransaction();
-        realm.deleteAll();
-        realm.commitTransaction();
-    }
-
 }
