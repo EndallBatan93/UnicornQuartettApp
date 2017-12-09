@@ -1,0 +1,1170 @@
+{
+  "cards": [
+    {
+      "images": [{
+          "id": "0",
+          "filename": "1.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte, hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "320",
+          "propertyId": "0"
+        },
+        {
+          "value": "799",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "200",
+          "propertyId": "4"
+        },
+        {
+          "value": "17200",
+          "propertyId": "5"
+        }
+      ],
+      "id": "0",
+      "name": "Yamaha YZR M1 (10)"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "2.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte, hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "320",
+          "propertyId": "0"
+        },
+        {
+          "value": "799",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "230",
+          "propertyId": "4"
+        },
+        {
+          "value": "18000",
+          "propertyId": "5"
+        }
+      ],
+      "id": "1",
+      "name": "Ducati Desmosedici GP11"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "3.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "290",
+          "propertyId": "0"
+        },
+        {
+          "value": "246",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.5",
+          "propertyId": "2"
+        },
+        {
+          "value": "2",
+          "propertyId": "3"
+        },
+        {
+          "value": "108",
+          "propertyId": "4"
+        },
+        {
+          "value": "13800",
+          "propertyId": "5"
+        }
+      ],
+      "id": "2",
+      "name": "Aprilia 250 (08)"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "4.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "298",
+          "propertyId": "0"
+        },
+        {
+          "value": "1195",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.5",
+          "propertyId": "2"
+        },
+        {
+          "value": "2",
+          "propertyId": "3"
+        },
+        {
+          "value": "190",
+          "propertyId": "4"
+        },
+        {
+          "value": "10500",
+          "propertyId": "5"
+        }
+      ],
+      "id": "3",
+      "name": "KTM 1190 RC8 R"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "5.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "235",
+          "propertyId": "0"
+        },
+        {
+          "value": "600",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.3",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "140",
+          "propertyId": "4"
+        },
+        {
+          "value": "14500",
+          "propertyId": "5"
+        }
+      ],
+      "id": "4",
+      "name": "LCR Yamaha PSV wels"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "6.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "310",
+          "propertyId": "0"
+        },
+        {
+          "value": "1198",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.3",
+          "propertyId": "2"
+        },
+        {
+          "value": "2",
+          "propertyId": "3"
+        },
+        {
+          "value": "198",
+          "propertyId": "4"
+        },
+        {
+          "value": "11000",
+          "propertyId": "5"
+        }
+      ],
+      "id": "5",
+      "name": "Ducati 1098R F09"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "7.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "334",
+          "propertyId": "0"
+        },
+        {
+          "value": "999",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "218",
+          "propertyId": "4"
+        },
+        {
+          "value": "14000",
+          "propertyId": "5"
+        }
+      ],
+      "id": "6",
+      "name": "BMW S1000 RR (12)"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "8.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "280",
+          "propertyId": "0"
+        },
+        {
+          "value": "999",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.8",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "200",
+          "propertyId": "4"
+        },
+        {
+          "value": "13100",
+          "propertyId": "5"
+        }
+      ],
+      "id": "7",
+      "name": "LCR Suzuki HRT"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "9.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "310",
+          "propertyId": "0"
+        },
+        {
+          "value": "800",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.4",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "210",
+          "propertyId": "4"
+        },
+        {
+          "value": "17400",
+          "propertyId": "5"
+        }
+      ],
+      "id": "8",
+      "name": "Honda RC 212V (10)"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "10.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "339",
+          "propertyId": "0"
+        },
+        {
+          "value": "998",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.1",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "225",
+          "propertyId": "4"
+        },
+        {
+          "value": "14200",
+          "propertyId": "5"
+        }
+      ],
+      "id": "9",
+      "name": "Kawasaki Ninja ZX-10R (12)"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "11.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "230",
+          "propertyId": "0"
+        },
+        {
+          "value": "125",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.6",
+          "propertyId": "2"
+        },
+        {
+          "value": "1",
+          "propertyId": "3"
+        },
+        {
+          "value": "44",
+          "propertyId": "4"
+        },
+        {
+          "value": "12800",
+          "propertyId": "5"
+        }
+      ],
+      "id": "10",
+      "name": "Malaguti 125"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "12.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "322",
+          "propertyId": "0"
+        },
+        {
+          "value": "998",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.0",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "183",
+          "propertyId": "4"
+        },
+        {
+          "value": "12500",
+          "propertyId": "5"
+        }
+      ],
+      "id": "11",
+      "name": "Yamaha YZF R1"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "13.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "330",
+          "propertyId": "0"
+        },
+        {
+          "value": "990",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.1",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "225",
+          "propertyId": "4"
+        },
+        {
+          "value": "17600",
+          "propertyId": "5"
+        }
+      ],
+      "id": "12",
+      "name": "Suzuki GSV-R Rizia"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "14.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "270",
+          "propertyId": "0"
+        },
+        {
+          "value": "599",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.6",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "140",
+          "propertyId": "4"
+        },
+        {
+          "value": "13000",
+          "propertyId": "5"
+        }
+      ],
+      "id": "13",
+      "name": "Pons HP 40 Kalex"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "15.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "265",
+          "propertyId": "0"
+        },
+        {
+          "value": "999",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.1",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "200",
+          "propertyId": "4"
+        },
+        {
+          "value": "13500",
+          "propertyId": "5"
+        }
+      ],
+      "id": "14",
+      "name": "LCR-BMW (12)"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "16.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "325",
+          "propertyId": "0"
+        },
+        {
+          "value": "1000",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "211",
+          "propertyId": "4"
+        },
+        {
+          "value": "13800",
+          "propertyId": "5"
+        }
+      ],
+      "id": "15",
+      "name": "Honda CBR 1000RR"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "17.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "285",
+          "propertyId": "0"
+        },
+        {
+          "value": "1000",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.9",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "200",
+          "propertyId": "4"
+        },
+        {
+          "value": "12000",
+          "propertyId": "5"
+        }
+      ],
+      "id": "16",
+      "name": "LCR Suzuki Robson"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "18.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "315",
+          "propertyId": "0"
+        },
+        {
+          "value": "800",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.3",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "212",
+          "propertyId": "4"
+        },
+        {
+          "value": "17600",
+          "propertyId": "5"
+        }
+      ],
+      "id": "17",
+      "name": "Honda RC 212V (11)"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "19.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "305",
+          "propertyId": "0"
+        },
+        {
+          "value": "999",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "185",
+          "propertyId": "4"
+        },
+        {
+          "value": "12000",
+          "propertyId": "5"
+        }
+      ],
+      "id": "18",
+      "name": "Suzuki GSX-R 1000 K8"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "20.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "305",
+          "propertyId": "0"
+        },
+        {
+          "value": "899",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.5",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "185",
+          "propertyId": "4"
+        },
+        {
+          "value": "13500",
+          "propertyId": "5"
+        }
+      ],
+      "id": "19",
+      "name": "Petronas Foggy-FP1"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "21.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "265",
+          "propertyId": "0"
+        },
+        {
+          "value": "599",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.6",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "145",
+          "propertyId": "4"
+        },
+        {
+          "value": "14500",
+          "propertyId": "5"
+        }
+      ],
+      "id": "20",
+      "name": "Yamaha YZF R6"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "22.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "275",
+          "propertyId": "0"
+        },
+        {
+          "value": "998",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.9",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "185",
+          "propertyId": "4"
+        },
+        {
+          "value": "11500",
+          "propertyId": "5"
+        }
+      ],
+      "id": "21",
+      "name": "LCR Gemini"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "23.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "230",
+          "propertyId": "0"
+        },
+        {
+          "value": "249",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.3",
+          "propertyId": "2"
+        },
+        {
+          "value": "1",
+          "propertyId": "3"
+        },
+        {
+          "value": "58",
+          "propertyId": "4"
+        },
+        {
+          "value": "13800",
+          "propertyId": "5"
+        }
+      ],
+      "id": "22",
+      "name": "KTM 250 FFR (12)"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "24.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "285",
+          "propertyId": "0"
+        },
+        {
+          "value": "248",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.8",
+          "propertyId": "2"
+        },
+        {
+          "value": "2",
+          "propertyId": "3"
+        },
+        {
+          "value": "97",
+          "propertyId": "4"
+        },
+        {
+          "value": "12900",
+          "propertyId": "5"
+        }
+      ],
+      "id": "23",
+      "name": "Honda RS 250 RW"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "25.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "230",
+          "propertyId": "0"
+        },
+        {
+          "value": "125",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "1",
+          "propertyId": "3"
+        },
+        {
+          "value": "51",
+          "propertyId": "4"
+        },
+        {
+          "value": "14000",
+          "propertyId": "5"
+        }
+      ],
+      "id": "24",
+      "name": "Aprilia 125 (08)"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "26.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "225",
+          "propertyId": "0"
+        },
+        {
+          "value": "125",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.4",
+          "propertyId": "2"
+        },
+        {
+          "value": "1",
+          "propertyId": "3"
+        },
+        {
+          "value": "50",
+          "propertyId": "4"
+        },
+        {
+          "value": "12900",
+          "propertyId": "5"
+        }
+      ],
+      "id": "25",
+      "name": "Derbi 125 RSA"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "27.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "325",
+          "propertyId": "0"
+        },
+        {
+          "value": "799",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "205",
+          "propertyId": "4"
+        },
+        {
+          "value": "17500",
+          "propertyId": "5"
+        }
+      ],
+      "id": "26",
+      "name": "Yamaha YZR M1 (11)"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "28.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "318",
+          "propertyId": "0"
+        },
+        {
+          "value": "990",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.1",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "240",
+          "propertyId": "4"
+        },
+        {
+          "value": "16000",
+          "propertyId": "5"
+        }
+      ],
+      "id": "27",
+      "name": "Suzuki GSV-R 06"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "29.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "310",
+          "propertyId": "0"
+        },
+        {
+          "value": "799",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "220",
+          "propertyId": "4"
+        },
+        {
+          "value": "18000",
+          "propertyId": "5"
+        }
+      ],
+      "id": "28",
+      "name": "Ducati Desmosedici GP8"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "30.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "235",
+          "propertyId": "0"
+        },
+        {
+          "value": "125",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.3",
+          "propertyId": "2"
+        },
+        {
+          "value": "1",
+          "propertyId": "3"
+        },
+        {
+          "value": "54",
+          "propertyId": "4"
+        },
+        {
+          "value": "13600",
+          "propertyId": "5"
+        }
+      ],
+      "id": "29",
+      "name": "Aprilia 125 RTG"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "31.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "332",
+          "propertyId": "0"
+        },
+        {
+          "value": "999",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.3",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "220",
+          "propertyId": "4"
+        },
+        {
+          "value": "14000",
+          "propertyId": "5"
+        }
+      ],
+      "id": "30",
+      "name": "Aprilia RSV (12)"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "32.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "290",
+          "propertyId": "0"
+        },
+        {
+          "value": "990",
+          "propertyId": "1"
+        },
+        {
+          "value": "2.7",
+          "propertyId": "2"
+        },
+        {
+          "value": "4",
+          "propertyId": "3"
+        },
+        {
+          "value": "210",
+          "propertyId": "4"
+        },
+        {
+          "value": "13200",
+          "propertyId": "5"
+        }
+      ],
+      "id": "31",
+      "name": "LCR Yamaha BPR"
+    }
+  ],
+  "properties": [
+    {
+      "text": "Geschwindigkeit",
+      "compare": "1",
+      "id": "0",
+      "unit": "km/h",
+      "precision": "0"
+    },
+    {
+      "text": "Hubraum",
+      "compare": "1",
+      "id": "1",
+      "unit": "ccm",
+      "precision": "0"
+    },
+    {
+      "text": "0 auf 100",
+      "compare": "-1",
+      "id": "2",
+      "unit": "sec",
+      "precision": "0"
+    },
+    {
+      "text": "Zylinder",
+      "compare": "1",
+      "id": "3",
+      "unit": "",
+      "precision": "0"
+    },
+    {
+      "text": "Leistung",
+      "compare": "1",
+      "id": "4",
+      "unit": "PS",
+      "precision": "0"
+    },
+    {
+      "text": "Umdrehungen",
+      "compare": "1",
+      "id": "5",
+      "unit": "1/min.",
+      "precision": "0"
+    }
+  ],
+  "name": "Bikes",
+  "description": "Those are some fancy bikes!"
+}

@@ -1,0 +1,1170 @@
+{
+  "cards": [
+    {
+      "images": [{
+          "id": "0",
+          "filename": "1.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "315",
+          "propertyId": "0"
+        },
+        {
+          "value": "5500",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.7",
+          "propertyId": "2"
+        },
+        {
+          "value": "4806",
+          "propertyId": "3"
+        },
+        {
+          "value": "580",
+          "propertyId": "4"
+        },
+        {
+          "value": "830",
+          "propertyId": "5"
+        }
+      ],
+      "id": "0",
+      "name": "Techart GrandGT"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "2.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "348",
+          "propertyId": "0"
+        },
+        {
+          "value": "6000",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.6",
+          "propertyId": "2"
+        },
+        {
+          "value": "5439",
+          "propertyId": "3"
+        },
+        {
+          "value": "700",
+          "propertyId": "4"
+        },
+        {
+          "value": "830",
+          "propertyId": "5"
+        }
+      ],
+      "id": "1",
+      "name": "Hamann Volcano"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "3.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "251",
+          "propertyId": "0"
+        },
+        {
+          "value": "6240",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.9",
+          "propertyId": "2"
+        },
+        {
+          "value": "1984",
+          "propertyId": "3"
+        },
+        {
+          "value": "318",
+          "propertyId": "4"
+        },
+        {
+          "value": "420",
+          "propertyId": "5"
+        }
+      ],
+      "id": "2",
+      "name": "MTM KTM X-Bow"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "4.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "280",
+          "propertyId": "0"
+        },
+        {
+          "value": "8300",
+          "propertyId": "1"
+        },
+        {
+          "value": "4.8",
+          "propertyId": "2"
+        },
+        {
+          "value": "3999",
+          "propertyId": "3"
+        },
+        {
+          "value": "425",
+          "propertyId": "4"
+        },
+        {
+          "value": "400",
+          "propertyId": "5"
+        }
+      ],
+      "id": "3",
+      "name": "AC Schnitzer ACS3 Sport"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "5.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "352",
+          "propertyId": "0"
+        },
+        {
+          "value": "6500",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "3600",
+          "propertyId": "3"
+        },
+        {
+          "value": "700",
+          "propertyId": "4"
+        },
+        {
+          "value": "860",
+          "propertyId": "5"
+        }
+      ],
+      "id": "4",
+      "name": "Techart GTstreet R"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "6.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "370",
+          "propertyId": "0"
+        },
+        {
+          "value": "5500",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.7",
+          "propertyId": "2"
+        },
+        {
+          "value": "6300",
+          "propertyId": "3"
+        },
+        {
+          "value": "800",
+          "propertyId": "4"
+        },
+        {
+          "value": "1100",
+          "propertyId": "5"
+        }
+      ],
+      "id": "5",
+      "name": "Brabus 800 V12 Cabriolet"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "7.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "320",
+          "propertyId": "0"
+        },
+        {
+          "value": "7900",
+          "propertyId": "1"
+        },
+        {
+          "value": "4.5",
+          "propertyId": "2"
+        },
+        {
+          "value": "4999",
+          "propertyId": "3"
+        },
+        {
+          "value": "567",
+          "propertyId": "4"
+        },
+        {
+          "value": "574",
+          "propertyId": "5"
+        }
+      ],
+      "id": "6",
+      "name": "Hamann M6 Edition Race"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "8.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "260",
+          "propertyId": "0"
+        },
+        {
+          "value": "5500",
+          "propertyId": "1"
+        },
+        {
+          "value": "5.9",
+          "propertyId": "2"
+        },
+        {
+          "value": "4496",
+          "propertyId": "3"
+        },
+        {
+          "value": "480",
+          "propertyId": "4"
+        },
+        {
+          "value": "640",
+          "propertyId": "5"
+        }
+      ],
+      "id": "7",
+      "name": "Arden Range Rover Sport AR5"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "9.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "219",
+          "propertyId": "0"
+        },
+        {
+          "value": "4200",
+          "propertyId": "1"
+        },
+        {
+          "value": "8.4",
+          "propertyId": "2"
+        },
+        {
+          "value": "3000",
+          "propertyId": "3"
+        },
+        {
+          "value": "285",
+          "propertyId": "4"
+        },
+        {
+          "value": "550",
+          "propertyId": "5"
+        }
+      ],
+      "id": "8",
+      "name": "JE Design Q7 S-Line"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "10.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "335",
+          "propertyId": "0"
+        },
+        {
+          "value": "7500",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.4",
+          "propertyId": "2"
+        },
+        {
+          "value": "3800",
+          "propertyId": "3"
+        },
+        {
+          "value": "800",
+          "propertyId": "4"
+        },
+        {
+          "value": "950",
+          "propertyId": "5"
+        }
+      ],
+      "id": "9",
+      "name": "Gemballa Avalanche GTR 800"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "11.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "280",
+          "propertyId": "0"
+        },
+        {
+          "value": "6500",
+          "propertyId": "1"
+        },
+        {
+          "value": "4.5",
+          "propertyId": "2"
+        },
+        {
+          "value": "5000",
+          "propertyId": "3"
+        },
+        {
+          "value": "605",
+          "propertyId": "4"
+        },
+        {
+          "value": "675",
+          "propertyId": "5"
+        }
+      ],
+      "id": "10",
+      "name": "Arden AJ 22"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "12.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "292",
+          "propertyId": "0"
+        },
+        {
+          "value": "6600",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.9",
+          "propertyId": "2"
+        },
+        {
+          "value": "2480",
+          "propertyId": "3"
+        },
+        {
+          "value": "472",
+          "propertyId": "4"
+        },
+        {
+          "value": "600",
+          "propertyId": "5"
+        }
+      ],
+      "id": "11",
+      "name": "MTM RS3 Sportback"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "13.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "370",
+          "propertyId": "0"
+        },
+        {
+          "value": "5500",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.7",
+          "propertyId": "2"
+        },
+        {
+          "value": "6233",
+          "propertyId": "3"
+        },
+        {
+          "value": "800",
+          "propertyId": "4"
+        },
+        {
+          "value": "1420",
+          "propertyId": "5"
+        }
+      ],
+      "id": "12",
+      "name": "Brabus E V12 one of ten"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "14.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "245",
+          "propertyId": "0"
+        },
+        {
+          "value": "5600",
+          "propertyId": "1"
+        },
+        {
+          "value": "5.5",
+          "propertyId": "2"
+        },
+        {
+          "value": "8277",
+          "propertyId": "3"
+        },
+        {
+          "value": "506",
+          "propertyId": "4"
+        },
+        {
+          "value": "712",
+          "propertyId": "5"
+        }
+      ],
+      "id": "13",
+      "name": "Startech Dodge RAM SRT-10"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "15.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "354",
+          "propertyId": "0"
+        },
+        {
+          "value": "6700",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.8",
+          "propertyId": "2"
+        },
+        {
+          "value": "5400",
+          "propertyId": "3"
+        },
+        {
+          "value": "810",
+          "propertyId": "4"
+        },
+        {
+          "value": "945",
+          "propertyId": "5"
+        }
+      ],
+      "id": "14",
+      "name": "Geigercars Mustang GT Shelby"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "16.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "300",
+          "propertyId": "0"
+        },
+        {
+          "value": "6800",
+          "propertyId": "1"
+        },
+        {
+          "value": "4.7",
+          "propertyId": "2"
+        },
+        {
+          "value": "2979",
+          "propertyId": "3"
+        },
+        {
+          "value": "400",
+          "propertyId": "4"
+        },
+        {
+          "value": "560",
+          "propertyId": "5"
+        }
+      ],
+      "id": "15",
+      "name": "AC Schnitzer ACS1 M Coupé"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "17.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "244",
+          "propertyId": "0"
+        },
+        {
+          "value": "5700",
+          "propertyId": "1"
+        },
+        {
+          "value": "6.4",
+          "propertyId": "2"
+        },
+        {
+          "value": "1984",
+          "propertyId": "3"
+        },
+        {
+          "value": "270",
+          "propertyId": "4"
+        },
+        {
+          "value": "350",
+          "propertyId": "5"
+        }
+      ],
+      "id": "16",
+      "name": "Abt VW GTI VS4-R"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "18.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "360",
+          "propertyId": "0"
+        },
+        {
+          "value": "8000",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.0",
+          "propertyId": "2"
+        },
+        {
+          "value": "4991",
+          "propertyId": "3"
+        },
+        {
+          "value": "777",
+          "propertyId": "4"
+        },
+        {
+          "value": "888",
+          "propertyId": "5"
+        }
+      ],
+      "id": "17",
+      "name": "MTM R8 V10"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "19.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "389",
+          "propertyId": "0"
+        },
+        {
+          "value": "7000",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.4",
+          "propertyId": "2"
+        },
+        {
+          "value": "3600",
+          "propertyId": "3"
+        },
+        {
+          "value": "1020",
+          "propertyId": "4"
+        },
+        {
+          "value": "1108",
+          "propertyId": "5"
+        }
+      ],
+      "id": "18",
+      "name": "Wimmer GT2 RS"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "20.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "310",
+          "propertyId": "0"
+        },
+        {
+          "value": "6500",
+          "propertyId": "1"
+        },
+        {
+          "value": "4.3",
+          "propertyId": "2"
+        },
+        {
+          "value": "5935",
+          "propertyId": "3"
+        },
+        {
+          "value": "517",
+          "propertyId": "4"
+        },
+        {
+          "value": "570",
+          "propertyId": "5"
+        }
+      ],
+      "id": "19",
+      "name": "Mansory Cyrus"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "21.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "330",
+          "propertyId": "0"
+        },
+        {
+          "value": "9000",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "4497",
+          "propertyId": "3"
+        },
+        {
+          "value": "590",
+          "propertyId": "4"
+        },
+        {
+          "value": "560",
+          "propertyId": "5"
+        }
+      ],
+      "id": "20",
+      "name": "Mansory Siracusa"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "22.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "261",
+          "propertyId": "0"
+        },
+        {
+          "value": "5800",
+          "propertyId": "1"
+        },
+        {
+          "value": "5.9",
+          "propertyId": "2"
+        },
+        {
+          "value": "1984",
+          "propertyId": "3"
+        },
+        {
+          "value": "285",
+          "propertyId": "4"
+        },
+        {
+          "value": "385",
+          "propertyId": "5"
+        }
+      ],
+      "id": "21",
+      "name": "JE Design Leon 1P Cupra"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "23.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "245",
+          "propertyId": "0"
+        },
+        {
+          "value": "4400",
+          "propertyId": "1"
+        },
+        {
+          "value": "6.4",
+          "propertyId": "2"
+        },
+        {
+          "value": "2993",
+          "propertyId": "3"
+        },
+        {
+          "value": "313",
+          "propertyId": "4"
+        },
+        {
+          "value": "680",
+          "propertyId": "5"
+        }
+      ],
+      "id": "22",
+      "name": "AC Schnitzer X6 Falcon"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "24.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "300",
+          "propertyId": "0"
+        },
+        {
+          "value": "6400",
+          "propertyId": "1"
+        },
+        {
+          "value": "4.5",
+          "propertyId": "2"
+        },
+        {
+          "value": "4802",
+          "propertyId": "3"
+        },
+        {
+          "value": "620",
+          "propertyId": "4"
+        },
+        {
+          "value": "875",
+          "propertyId": "5"
+        }
+      ],
+      "id": "23",
+      "name": "Techart Magnum"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "25.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "320",
+          "propertyId": "0"
+        },
+        {
+          "value": "7200",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.8",
+          "propertyId": "2"
+        },
+        {
+          "value": "6208",
+          "propertyId": "3"
+        },
+        {
+          "value": "611",
+          "propertyId": "4"
+        },
+        {
+          "value": "670",
+          "propertyId": "5"
+        }
+      ],
+      "id": "24",
+      "name": "FAB Design SLS"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "26.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "225",
+          "propertyId": "0"
+        },
+        {
+          "value": "5850",
+          "propertyId": "1"
+        },
+        {
+          "value": "7.4",
+          "propertyId": "2"
+        },
+        {
+          "value": "1598",
+          "propertyId": "3"
+        },
+        {
+          "value": "202",
+          "propertyId": "4"
+        },
+        {
+          "value": "242",
+          "propertyId": "5"
+        }
+      ],
+      "id": "25",
+      "name": "Steinmetz Corsa OPC"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "27.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "230",
+          "propertyId": "0"
+        },
+        {
+          "value": "6000",
+          "propertyId": "1"
+        },
+        {
+          "value": "6.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "1598",
+          "propertyId": "3"
+        },
+        {
+          "value": "226",
+          "propertyId": "4"
+        },
+        {
+          "value": "260",
+          "propertyId": "5"
+        }
+      ],
+      "id": "26",
+      "name": "Breyton Mini Cooper S"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "28.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "343",
+          "propertyId": "0"
+        },
+        {
+          "value": "7800",
+          "propertyId": "1"
+        },
+        {
+          "value": "4.1",
+          "propertyId": "2"
+        },
+        {
+          "value": "6208",
+          "propertyId": "3"
+        },
+        {
+          "value": "600",
+          "propertyId": "4"
+        },
+        {
+          "value": "680",
+          "propertyId": "5"
+        }
+      ],
+      "id": "27",
+      "name": "edo competition C63 AMG T-Modell"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "29.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "245",
+          "propertyId": "0"
+        },
+        {
+          "value": "4000",
+          "propertyId": "1"
+        },
+        {
+          "value": "6.1",
+          "propertyId": "2"
+        },
+        {
+          "value": "2967",
+          "propertyId": "3"
+        },
+        {
+          "value": "310",
+          "propertyId": "4"
+        },
+        {
+          "value": "610",
+          "propertyId": "5"
+        }
+      ],
+      "id": "28",
+      "name": "Abt Audi Q5"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "30.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "352",
+          "propertyId": "0"
+        },
+        {
+          "value": "5000",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.7",
+          "propertyId": "2"
+        },
+        {
+          "value": "5980",
+          "propertyId": "3"
+        },
+        {
+          "value": "753",
+          "propertyId": "4"
+        },
+        {
+          "value": "1150",
+          "propertyId": "5"
+        }
+      ],
+      "id": "29",
+      "name": "Carlsson C25 Royale"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "31.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "355",
+          "propertyId": "0"
+        },
+        {
+          "value": "7200",
+          "propertyId": "1"
+        },
+        {
+          "value": "3.7",
+          "propertyId": "2"
+        },
+        {
+          "value": "6162",
+          "propertyId": "3"
+        },
+        {
+          "value": "730",
+          "propertyId": "4"
+        },
+        {
+          "value": "950",
+          "propertyId": "5"
+        }
+      ],
+      "id": "30",
+      "name": "Geigercars Corvette ZR1-Stealth"
+    },
+    {
+      "images": [{
+          "id": "0",
+          "filename": "32.jpg"
+        }],
+      "description": "Ich bin ein Blindtext. Hör auf mich zu lesen. Bitte hör auf mich zu lesen. Es tut so weh.",
+      "values": [
+        {
+          "value": "330",
+          "propertyId": "0"
+        },
+        {
+          "value": "8000",
+          "propertyId": "1"
+        },
+        {
+          "value": "4.2",
+          "propertyId": "2"
+        },
+        {
+          "value": "5500",
+          "propertyId": "3"
+        },
+        {
+          "value": "900",
+          "propertyId": "4"
+        },
+        {
+          "value": "870",
+          "propertyId": "5"
+        }
+      ],
+      "id": "31",
+      "name": "G-Power Typhoon RS Ultimate"
+    }
+  ],
+  "properties": [
+    {
+      "text": "Geschwindigkeit",
+      "compare": "1",
+      "id": "0",
+      "unit": "km/h",
+      "precision": "0"
+    },
+    {
+      "text": "Umdrehungen",
+      "compare": "1",
+      "id": "1",
+      "unit": "1/min.",
+      "precision": "0"
+    },
+    {
+      "text": "0 auf 100",
+      "compare": "-1",
+      "id": "2",
+      "unit": "sec",
+      "precision": "0"
+    },
+    {
+      "text": "Hubraum",
+      "compare": "1",
+      "id": "3",
+      "unit": "ccm",
+      "precision": "0"
+    },
+    {
+      "text": "Leistung",
+      "compare": "1",
+      "id": "4",
+      "unit": "PS",
+      "precision": "0"
+    },
+    {
+      "text": "Drehmoment",
+      "compare": "1",
+      "id": "5",
+      "unit": "Nm",
+      "precision": "0"
+    }
+  ],
+  "name": "Tuning",
+  "description": "These are some fancy tuned up cars!"
+}
