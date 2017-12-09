@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.activity.Friends.FriendActivity;
@@ -15,6 +16,8 @@ import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.activity.Ranglist.RangListActivity;
 import com.unicorn.unicornquartett.domain.User;
+
+import org.w3c.dom.Text;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -35,10 +38,11 @@ public class MenuActivity extends AppCompatActivity {
         Button playButton = findViewById(R.id.playbutton);
         Button ranglistButton = findViewById(R.id.ranglisbutton);
         Button deckButotn = findViewById(R.id.deckbutton);
-        Button profileButton = findViewById(R.id.profileButton);
         Button friendButton = findViewById(R.id.friendButton);
+        TextView profileName = findViewById(R.id.userName);
 
-        profileButton.setText(user.getName());
+        assert user != null;
+        profileName.setText(user.getName());
 
     }
 

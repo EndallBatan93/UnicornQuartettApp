@@ -27,6 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
         Button googlePlayButton = findViewById(R.id.googleButton);
         Button difficultyButton = findViewById(R.id.difficultyButton);
         Button editButton = findViewById(R.id.editbutton);
+
     }
 
     public void connectToGooglePlay(View view) {
