@@ -34,7 +34,6 @@ public class MenuActivity extends AppCompatActivity {
         User user = all.first();
         RealmResults<Deck> decks = realm.where(Deck.class).findAll();
 
-
         // Initializing Varables
         Button playButton = findViewById(R.id.playbutton);
         Button ranglistButton = findViewById(R.id.ranglisbutton);
@@ -46,7 +45,6 @@ public class MenuActivity extends AppCompatActivity {
         profileName.setText(user.getName());
 
     }
-
 
     // Navigation Methods
     public void goToPlayGameActivity(View view) {

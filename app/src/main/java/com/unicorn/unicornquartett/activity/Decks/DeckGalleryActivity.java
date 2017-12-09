@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.User;
 
 import io.realm.Realm;
@@ -27,10 +28,17 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
         assert user != null;
         profileName.setText(user.getName());
+        RealmResults<Deck> decks = realm.where(Deck.class).findAll();
+        TextView decksAvailable = findViewById(R.id.decks);
+        StringBuilder deckName= new StringBuilder();
+        for (Deck deck : decks) {
+            deckName.append(deck.getName());
+        }
+        decksAvailable.setText(deckName.toString());
+
     }
     public void goToProfileActivity(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
-
     }
 }

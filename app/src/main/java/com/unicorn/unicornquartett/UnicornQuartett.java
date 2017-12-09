@@ -24,6 +24,8 @@ public class UnicornQuartett extends Application {
     private JSONArray tuningListcards;
     private RealmList<Shema> bikeShemas;
     private RealmList<Shema> tuningShemas;
+    private JSONArray bikeShemaArray;
+    private JSONArray tuningShemaArray;
 
     @Override
     public void onCreate() {
@@ -37,7 +39,8 @@ public class UnicornQuartett extends Application {
         Realm.setDefaultConfiguration(config);
         Realm realm = Realm.getDefaultInstance();
 
-//        clearDatabaseRealm(realm);
+        // IMPORTANT For database testing purposes only
+        clearDatabaseRealm(realm);
 
         String tuningsJSON = this.loadJSONFromAsset("tuning/tuning.json");
         String bikesJSON = this.loadJSONFromAsset("bikes/bikes.json");
@@ -45,10 +48,14 @@ public class UnicornQuartett extends Application {
 
             JSONObject bikesObject = new JSONObject(bikesJSON);
             JSONArray bikeCards = bikesObject.getJSONArray("cards");
+            JSONArray bikeShema = bikesObject.getJSONArray("properties");
+            this.bikeShemaArray = bikeShema;
             this.bikeListcards = bikeCards;
 
             JSONObject tuningObject = new JSONObject(tuningsJSON);
             JSONArray tuningCards = tuningObject.getJSONArray("cards");
+            JSONArray tuningShema = tuningObject.getJSONArray("properties");
+            this.tuningShemaArray = tuningShema;
             this.tuningListcards = tuningCards;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -76,9 +83,13 @@ public class UnicornQuartett extends Application {
             bikes.setId(1);
             bikes.setNumberOfCards(32);
             bikes.setLocked(false);
+            try {
+                getShemas(realm, bikeShemaArray, "bikes");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             bikes.setShema(bikeShemas);
 
-            getShemas(realm, "bikes");
             RealmList<Card> bikeCards = getCards(realm, bikeListcards, bikeShemas);
             bikes.setCards(bikeCards);
         }
@@ -91,9 +102,13 @@ public class UnicornQuartett extends Application {
             tuning.setId(2);
             tuning.setLocked(false);
             tuning.setNumberOfCards(32);
+            try {
+                getShemas(realm, tuningShemaArray, "tuning");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             tuning.setShema(tuningShemas);
 
-            getShemas(realm, "tuning");
             RealmList<Card> tuningCards = getCards(realm, tuningListcards, tuningShemas);
             tuning.setCards(tuningCards);
         }
@@ -133,94 +148,28 @@ public class UnicornQuartett extends Application {
         realm.commitTransaction();
     }
 
-    public void getShemas(Realm realm, String deckParameter) {
-        // Shemas
-        Shema bikeShema1 = realm.createObject(Shema.class);
-        bikeShema1.setProperty("Geschwindigkeit");
-        bikeShema1.setHigherWins(true);
-        bikeShema1.setUnit("km/h");
+    public void getShemas(Realm realm, JSONArray listParameter, String deckParameter) throws JSONException {
+        RealmList<Shema> tempShemasList = new RealmList<>();
 
-        Shema bikeShema2 = realm.createObject(Shema.class);
-        bikeShema2.setProperty("Hubraum");
-        bikeShema2.setHigherWins(true);
-        bikeShema2.setUnit("ccm");
+        for (int i = 0; i < listParameter.length(); i++) {
+            Shema tempShema = realm.createObject(Shema.class);
+            tempShema.setProperty((String) listParameter.getJSONObject(i).get("text"));
+            String compare = (String) listParameter.getJSONObject(i).get("compare");
+            Boolean isHigher = Boolean.TRUE;
+            if (compare.equals("-1")) {
+                isHigher = Boolean.FALSE;
+            }
+            tempShema.setHigherWins(isHigher);
+            tempShema.setUnit((String) listParameter.getJSONObject(i).get("unit"));
+            tempShemasList.add(tempShema);
+        }
 
-        Shema bikeShema3 = realm.createObject(Shema.class);
-        bikeShema3.setProperty("0 auf 100");
-        bikeShema3.setHigherWins(false);
-        bikeShema3.setUnit("sec");
-
-        Shema bikeShema4 = realm.createObject(Shema.class);
-        bikeShema4.setProperty("Zylinder");
-        bikeShema4.setHigherWins(true);
-        bikeShema4.setUnit("0");
-
-        Shema bikeShema5 = realm.createObject(Shema.class);
-        bikeShema5.setProperty("Leistung");
-        bikeShema5.setHigherWins(true);
-        bikeShema5.setUnit("PS");
-
-        Shema bikeShema6 = realm.createObject(Shema.class);
-        bikeShema6.setProperty("Umdrehungen");
-        bikeShema6.setHigherWins(true);
-        bikeShema6.setUnit("1/min");
-
-
-        RealmList<Shema> bikeShemas = new RealmList<>();
-        bikeShemas.add(bikeShema1);
-        bikeShemas.add(bikeShema2);
-        bikeShemas.add(bikeShema3);
-        bikeShemas.add(bikeShema4);
-        bikeShemas.add(bikeShema5);
-
-        Shema tuningShema1 = realm.createObject(Shema.class);
-        tuningShema1.setProperty("Geschwindigkeit");
-        tuningShema1.setHigherWins(true);
-        tuningShema1.setUnit("km/h");
-
-        Shema tuningShema2 = realm.createObject(Shema.class);
-        tuningShema2.setProperty("Umdrehungen");
-        tuningShema2.setHigherWins(true);
-        tuningShema2.setUnit("1/min");
-
-
-        Shema tuningShema3 = realm.createObject(Shema.class);
-        tuningShema3.setProperty("0 auf 100");
-        tuningShema3.setHigherWins(false);
-        tuningShema3.setUnit("sec");
-
-
-        Shema tuningShema4 = realm.createObject(Shema.class);
-        tuningShema4.setProperty("Hubraum");
-        tuningShema4.setHigherWins(true);
-        tuningShema4.setUnit("ccm");
-
-        Shema tuningShema5 = realm.createObject(Shema.class);
-        tuningShema5.setProperty("Leistung");
-        tuningShema5.setHigherWins(true);
-        tuningShema5.setUnit("PS");
-
-        Shema tuningShema6 = realm.createObject(Shema.class);
-        tuningShema6.setProperty("Drehmoment");
-        tuningShema6.setHigherWins(true);
-        tuningShema6.setUnit("Nm");
-
-        RealmList<Shema> tuningshemas = new RealmList<>();
-        tuningshemas.add(tuningShema1);
-        tuningshemas.add(tuningShema2);
-        tuningshemas.add(tuningShema3);
-        tuningshemas.add(tuningShema4);
-        tuningshemas.add(tuningShema5);
-        tuningshemas.add(tuningShema6);
-
-        if (deckParameter.equals("tuning")) {
-
-            this.tuningShemas = tuningshemas;
-        } else {
-            this.bikeShemas = bikeShemas;
+        if (deckParameter.equals("bikes")) {
+            this.bikeShemas = tempShemasList;
+        } else if (deckParameter.equals("tuning")) {
+            this.tuningShemas = tempShemasList;
         }
     }
-
 
     public RealmList<Card> getCards(Realm realm, JSONArray listParameter, RealmList<Shema> shemaParameter) {
         RealmList<Card> returnCardList = new RealmList<>();
@@ -244,7 +193,7 @@ public class UnicornQuartett extends Application {
                 try {
                     String attributeValue = (String) listParameter.getJSONObject(i).getJSONArray("values").getJSONObject(j).get("value");
                     attributeList.add(attributeValue);
-                    card.setAttributes(attributeList);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -255,11 +204,12 @@ public class UnicornQuartett extends Application {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            card.setAttributes(attributeList);
             card.setDescription("");
             card.setId(i);
             returnCardList.add(card);
         }
 
-        return returnCardList ;
+        return returnCardList;
     }
 }
