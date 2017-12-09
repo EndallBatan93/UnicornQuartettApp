@@ -27,9 +27,8 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         Realm realm = Realm.getDefaultInstance();
         RealmResults<User> all = realm.where(User.class).findAll();
-        if(all.size()!= 0) {
-            User user = all.first();
-        }
+        User user = all.first();
+
 
 
         // Initializing Varables
@@ -38,6 +37,8 @@ public class MenuActivity extends AppCompatActivity {
         Button deckButotn = findViewById(R.id.deckbutton);
         Button profileButton = findViewById(R.id.profileButton);
         Button friendButton = findViewById(R.id.friendButton);
+
+        profileButton.setText(user.getName());
 
     }
 
