@@ -1,8 +1,6 @@
 package com.unicorn.unicornquartett.domain;
 
 
-import java.util.UUID;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
@@ -19,9 +17,26 @@ public class User extends RealmObject {
     private String difficulty;
     private Boolean runningOffline;
     private Boolean runningOnline;
-
+    private String imageAbsolutePath;
+    private String imageIdentifier;
 
     public User() {
+    }
+
+    public String getImageIdentifier() {
+        return imageIdentifier;
+    }
+
+    public void setImageIdentifier(String imageIdentifier) {
+        this.imageIdentifier = imageIdentifier;
+    }
+
+    public String getImageAbsolutePath() {
+        return imageAbsolutePath;
+    }
+
+    public void setImageAbsolutePath(String imageAbsolutePath) {
+        this.imageAbsolutePath = imageAbsolutePath;
     }
 
     public int getId() {

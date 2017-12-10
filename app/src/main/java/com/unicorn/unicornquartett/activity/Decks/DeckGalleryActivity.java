@@ -1,6 +1,9 @@
 package com.unicorn.unicornquartett.activity.Decks;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +14,11 @@ import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.User;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -23,6 +31,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<User> all = realm.where(User.class).findAll();
         User user = all.first();
+//        loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
 
         TextView profileName = findViewById(R.id.userName);
 
@@ -41,4 +50,23 @@ public class DeckGalleryActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
+
+    private void loadImageFromStorage()
+    {
+        SharedPreferences userData = getSharedPreferences("USER", 0);
+        String imageIdentifier = userData.getString("imageIdentifier", "");
+        String absolutePath = userData.getString("absolutePath", "");
+        try {
+            File f=new File(absolutePath, imageIdentifier);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            CircleImageView profileButton = findViewById(R.id.profileButton);
+            profileButton.setImageBitmap(b);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
 }
