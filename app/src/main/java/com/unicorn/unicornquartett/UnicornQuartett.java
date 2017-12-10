@@ -6,7 +6,6 @@ import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Image;
 import com.unicorn.unicornquartett.domain.Shema;
-import com.unicorn.unicornquartett.domain.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +39,7 @@ public class UnicornQuartett extends Application {
         Realm realm = Realm.getDefaultInstance();
 
         // IMPORTANT For database testing purposes only
-        //clearDatabaseRealm(realm);
+        // clearDatabaseRealm(realm);
 
         String tuningsJSON = this.loadJSONFromAsset("tuning/tuning.json");
         String bikesJSON = this.loadJSONFromAsset("bikes/bikes.json");
@@ -61,20 +60,6 @@ public class UnicornQuartett extends Application {
             e.printStackTrace();
         }
         realm.beginTransaction();
-        //create User
-        if (realm.where(User.class).findAll().size() != 1) {
-            User user = realm.createObject(User.class);
-            RealmList<String> decks = new RealmList<>();
-            decks.add("Bikes");
-            decks.add("Tuning");
-            user.setId(1);
-            user.setName("Unicorn Hunter69");
-            user.setDifficulty("Fluffy");
-            user.setFriends(null);
-            user.setDecks(decks);
-            user.setRunningOffline(false);
-            user.setRunningOnline(false);
-        }
 
         Deck bikeExists = realm.where(Deck.class).equalTo("name", "Bikes").findFirst();
         if (bikeExists == null) {
@@ -189,7 +174,7 @@ public class UnicornQuartett extends Application {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            for (int j = 0; j <= shemaParameter.size(); j++) {
+            for (int j = 0; j < shemaParameter.size(); j++) {
                 try {
                     String attributeValue = (String) listParameter.getJSONObject(i).getJSONArray("values").getJSONObject(j).get("value");
                     attributeList.add(attributeValue);

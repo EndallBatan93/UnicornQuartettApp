@@ -11,4 +11,6 @@
     <string name="playUnicorn">Unicorn Mode</string>
     <string name="Online">online</string>
     <string name="OfflineMode">OfflineMode</string>
+    <string name="createTitle">Enter username:</string>
+    <string name="createTitleInput">UnicornHunter69</string>
 </resources>
