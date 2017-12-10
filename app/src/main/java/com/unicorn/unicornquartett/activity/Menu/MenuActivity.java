@@ -61,8 +61,6 @@ public class MenuActivity extends AppCompatActivity {
         CircleImageView profileButton = findViewById(R.id.profileButton);
         Button takePhoto = findViewById(R.id.takePhoto);
 //        Button selectPhoto = findViewById(R.id.selectPhoto);
-        assert user != null;
-        profileName.setText(user.getName());
         profileName = findViewById(R.id.userName);
 
         RealmResults<User> allUsers = realm.where(User.class).findAll();
