@@ -31,7 +31,7 @@ public class PlayGameActivity extends AppCompatActivity {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<User> all = realm.where(User.class).findAll();
         User user = all.first();
-//        loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+        loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
 
         Button offlineOnline = findViewById(R.id.onlineOffline);
         Button playStandard = findViewById(R.id.playStandard);
@@ -48,19 +48,13 @@ public class PlayGameActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-    private void loadImageFromStorage()
-    {
-        SharedPreferences userData = getSharedPreferences("USER", 0);
-        String imageIdentifier = userData.getString("imageIdentifier", "");
-        String absolutePath = userData.getString("absolutePath", "");
+    private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
         try {
-            File f=new File(absolutePath, imageIdentifier);
+            File f = new File(absolutePath, imageIdentifier);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             CircleImageView profileButton = findViewById(R.id.profileButton);
             profileButton.setImageBitmap(b);
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 

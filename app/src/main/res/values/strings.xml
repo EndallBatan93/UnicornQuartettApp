@@ -13,4 +13,5 @@
     <string name="OfflineMode">OfflineMode</string>
     <string name="createTitle">Enter username:</string>
     <string name="createTitleInput">UnicornHunter69</string>
+    <string name="createPhoto">Take or choose a photo</string>
 </resources>

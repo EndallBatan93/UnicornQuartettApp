@@ -33,13 +33,15 @@ public class UnicornQuartett extends Application {
         Realm.init(getApplicationContext());
         RealmConfiguration config = new RealmConfiguration
                 .Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build();
+//                .deleteRealmIfMigrationNeeded()
+                .name("unicornQuartett")
+               .build();
+
         Realm.setDefaultConfiguration(config);
         Realm realm = Realm.getDefaultInstance();
 
         // IMPORTANT For database testing purposes only
-        // clearDatabaseRealm(realm);
+//        clearDatabaseRealm(realm);
 
         String tuningsJSON = this.loadJSONFromAsset("tuning/tuning.json");
         String bikesJSON = this.loadJSONFromAsset("bikes/bikes.json");

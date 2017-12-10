@@ -4,17 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.CountDownTimer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +31,6 @@ import com.unicorn.unicornquartett.domain.User;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -44,10 +41,13 @@ import io.realm.RealmResults;
 public class MenuActivity extends AppCompatActivity {
     private static int RESULT_LOAD_IMAGE = 1;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_TAKE_PHOTO = 1;
 
     final Context c = this;
     Realm realm = Realm.getDefaultInstance();
     TextView profileName;
+
+    String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,69 +64,20 @@ public class MenuActivity extends AppCompatActivity {
         profileName = findViewById(R.id.userName);
 
         RealmResults<User> allUsers = realm.where(User.class).findAll();
-//        loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
-
-        takePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dispatchTakePictureIntent();
-            }
-        });
-
-//        selectPhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dispatchSelectPictureIntent();
-//            }
-//        });
 
         if (allUsers.isEmpty()) {
             new CreateUserDialogFragment();
-        }
 
-//        SharedPreferences userData = getSharedPreferences("USER", 0);
-//        SharedPreferences.Editor editor = userData.edit();
-//        editor.putString("imageIdentifier", user.getName() + user.getId() + ".jpg");
-//        editor.apply();
-    }
+        } else {
+            User user = allUsers.first();
+            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
 
-//    private void dispatchSelectPictureIntent() {
-//        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        startActivityForResult(i, RESULT_LOAD_IMAGE);
-//    }
-
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            String absolutePath = saveToInternalStorage(imageBitmap);
-            SharedPreferences userData = getSharedPreferences("USER", 0);
-            SharedPreferences.Editor editor = userData.edit();
-            editor.putString("absolutePath", absolutePath);
-            editor.apply();
-            loadImageFromStorage();
-
-        }
-
-//        if (requestCode == RESULT_LOAD_IMAGE  && resultCode == RESULT_OK) {
-//            //TODO: get picture from gallery into bitmap variable and set it as bitmapProperty for CircleImageView
-//        }
-    }
 
     // give parameters absolutePath and imageIdentifier and on call set user.absolutePath and user.imageIdentifier
-    private void loadImageFromStorage() {
-        SharedPreferences userData = getSharedPreferences("USER", 0);
-        String imageIdentifier = userData.getString("imageIdentifier", "");
-        String absolutePath = userData.getString("absolutePath", "");
+    private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
         try {
             File f = new File(absolutePath, imageIdentifier);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
@@ -138,30 +89,56 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
-    private String saveToInternalStorage(Bitmap bitmapImage) {
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        // Create imageDir
-        SharedPreferences userData = getSharedPreferences("USER", 0);
-        String imageIdentifier = userData.getString("imageIdentifier", "");
-        File mypath = new File(directory, imageIdentifier);
 
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+    private File createImageFile() throws IOException {
+        User user = realm.where(User.class).findFirst();
+        String imageFileName = user.getImageIdentifier();
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        user.setImageAbsolutePath(storageDir.getAbsolutePath());
+        File image = new File(storageDir, imageFileName);
+
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
             try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                photoFile = createImageFile();
+
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
+            }
+
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            if (resultCode == RESULT_OK) {
+                User user = realm.where(User.class).findFirst();
+                loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
             }
         }
-        return directory.getAbsolutePath();
+        realm.commitTransaction();
+        realm.close();
     }
 
     // Navigation Methods
@@ -211,6 +188,24 @@ public class MenuActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             String username = String.valueOf(userInputDialogText.getText());
                             createUser(username);
+                            takePictureDialog();
+                        }
+                    });
+            AlertDialog createUserDialog = builder.create();
+            createUserDialog.show();
+        }
+
+        private void takePictureDialog() {
+
+            LayoutInflater layoutInflater = LayoutInflater.from(c);
+            View createPhotoDialogView = layoutInflater.inflate(R.layout.dialog_create_photo, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(c);
+            builder.setView(createPhotoDialogView);
+
+            builder.setCancelable(false)
+                    .setPositiveButton("Take picture", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dispatchTakePictureIntent();
                         }
                     });
             AlertDialog createUserDialog = builder.create();
@@ -232,9 +227,7 @@ public class MenuActivity extends AppCompatActivity {
         user.setDecks(decks);
         user.setRunningOffline(false);
         user.setRunningOnline(false);
-        realm.commitTransaction();
-        realm.close();
-
+        user.setImageIdentifier(user.getName() + user.getId() + ".jpg");
         profileName.setText(username);
     }
 
