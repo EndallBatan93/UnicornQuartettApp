@@ -8,8 +8,11 @@ import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.CountDownTimer;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +42,7 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class MenuActivity extends AppCompatActivity {
-
+    private static int RESULT_LOAD_IMAGE = 1;
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     final Context c = this;
@@ -57,6 +60,9 @@ public class MenuActivity extends AppCompatActivity {
         Button friendButton = findViewById(R.id.friendButton);
         CircleImageView profileButton = findViewById(R.id.profileButton);
         Button takePhoto = findViewById(R.id.takePhoto);
+//        Button selectPhoto = findViewById(R.id.selectPhoto);
+        assert user != null;
+        profileName.setText(user.getName());
         profileName = findViewById(R.id.userName);
 
         RealmResults<User> allUsers = realm.where(User.class).findAll();
@@ -69,6 +75,13 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+//        selectPhoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dispatchSelectPictureIntent();
+//            }
+//        });
+
         if (allUsers.isEmpty()) {
             new CreateUserDialogFragment();
         }
@@ -78,6 +91,11 @@ public class MenuActivity extends AppCompatActivity {
 //        editor.putString("imageIdentifier", user.getName() + user.getId() + ".jpg");
 //        editor.apply();
     }
+
+//    private void dispatchSelectPictureIntent() {
+//        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        startActivityForResult(i, RESULT_LOAD_IMAGE);
+//    }
 
 
     private void dispatchTakePictureIntent() {
@@ -100,6 +118,10 @@ public class MenuActivity extends AppCompatActivity {
             loadImageFromStorage();
 
         }
+
+//        if (requestCode == RESULT_LOAD_IMAGE  && resultCode == RESULT_OK) {
+//            //TODO: get picture from gallery into bitmap variable and set it as bitmapProperty for CircleImageView
+//        }
     }
 
     // give parameters absolutePath and imageIdentifier and on call set user.absolutePath and user.imageIdentifier
