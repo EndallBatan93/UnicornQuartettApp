@@ -1,37 +1,35 @@
 package com.unicorn.unicornquartett.activity.Profile;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.Util;
-import com.unicorn.unicornquartett.activity.Menu.MenuActivity;
 import com.unicorn.unicornquartett.domain.User;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -44,7 +42,12 @@ public class ProfileActivity extends AppCompatActivity {
     String mCurrentPhotoPath;
     private static final int REQUEST_FROM_GALLERY = 2;
     static final int REQUEST_TAKE_PHOTO = 1;
+    Button googlePlayButton;
 
+    String diff1 = "fluffy";
+    String diff2 = "fluffier";
+    String diff3 = "superfluffy";
+    String[] diffArray = new String[]{diff1, diff2, diff3};
 
     final Context c = this;
 
@@ -59,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
             usernameTextView.setText(user.getName());
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +72,8 @@ public class ProfileActivity extends AppCompatActivity {
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
         final EditText usernameTextView = findViewById(R.id.username);
         TextView registeredTextView = findViewById(R.id.registered);
-        Button googlePlayButton = findViewById(R.id.googleButton);
-        Button difficultyButton = findViewById(R.id.difficultyButton);
+        googlePlayButton = findViewById(R.id.googleButton);
+        final Button difficultyButton = findViewById(R.id.difficultyButton);
         CircleImageView circleImageView = findViewById(R.id.profileButton);
 
         Date date = user.getDate();
@@ -91,6 +95,12 @@ public class ProfileActivity extends AppCompatActivity {
                 user.setName(usernameTextView.getText().toString());
                 realm.commitTransaction();
                 return false;
+            }
+        });
+        difficultyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DifficultyChooser();
             }
         });
 
@@ -138,6 +148,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
+
     private void choosePictureFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -204,6 +215,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         return result;
     }
+
     private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
         Util.verifyStoragePermissions(ProfileActivity.this);
         try {
@@ -214,6 +226,29 @@ public class ProfileActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
 
+
+    @SuppressLint("ValidFragment")
+    private class DifficultyChooser extends DialogFragment {
+        public DifficultyChooser() {
+            LayoutInflater layoutInflater = LayoutInflater.from(c);
+            View createUserDialogView = layoutInflater.inflate(R.layout.dialog_difficulty, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(c);
+            builder.setView(createUserDialogView);
+
+            builder.setCancelable(false)
+                    .setSingleChoiceItems(diffArray, -1, new DialogInterface
+                            .OnClickListener() {
+                        public void onClick(DialogInterface dialog, int item) {
+                            String diff = diffArray[item];
+                            googlePlayButton.setText(diff);
+                            dialog.dismiss();// dismiss the alertbox after chose option
+
+                        }
+                    });
+            AlertDialog createUserDialog = builder.create();
+            createUserDialog.show();
+        }
     }
 }

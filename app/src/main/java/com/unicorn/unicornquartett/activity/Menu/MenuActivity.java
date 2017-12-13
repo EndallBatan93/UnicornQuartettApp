@@ -1,14 +1,11 @@
 package com.unicorn.unicornquartett.activity.Menu;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,7 +13,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -38,7 +34,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -50,11 +45,11 @@ public class MenuActivity extends AppCompatActivity {
     private static final int REQUEST_FROM_GALLERY = 2;
     static final int REQUEST_TAKE_PHOTO = 1;
 
+    String mCurrentPhotoPath;
+
     final Context c = this;
     Realm realm = Realm.getDefaultInstance();
     TextView profileName;
-
-    String mCurrentPhotoPath;
 
     @Override
     public void onResume() {
@@ -220,7 +215,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ValidFragment")
-    public class CreateUserDialogFragment extends DialogFragment {
+    private class CreateUserDialogFragment extends DialogFragment {
 
         public CreateUserDialogFragment() {
             LayoutInflater layoutInflater = LayoutInflater.from(c);
@@ -283,6 +278,7 @@ public class MenuActivity extends AppCompatActivity {
         user.setDate(new Date());
         profileName.setText(username);
     }
+
 
 }
 
