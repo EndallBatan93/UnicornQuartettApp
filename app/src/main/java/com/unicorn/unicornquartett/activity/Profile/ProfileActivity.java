@@ -163,8 +163,7 @@ public class ProfileActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setView(createPhotoDialogView);
         realm.beginTransaction();
-        builder.setCancelable(false)
-                .setPositiveButton("Take picture", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Take picture", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dispatchTakePictureIntent();
                     }
@@ -232,6 +231,8 @@ public class ProfileActivity extends AppCompatActivity {
     @SuppressLint("ValidFragment")
     private class DifficultyChooser extends DialogFragment {
         public DifficultyChooser() {
+            realm.beginTransaction();
+            final User user = realm.where(User.class).findFirst();
             LayoutInflater layoutInflater = LayoutInflater.from(c);
             View createUserDialogView = layoutInflater.inflate(R.layout.dialog_difficulty, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(c);
@@ -244,7 +245,8 @@ public class ProfileActivity extends AppCompatActivity {
                             String diff = diffArray[item];
                             googlePlayButton.setText(diff);
                             dialog.dismiss();// dismiss the alertbox after chose option
-
+                            user.setDifficulty(diff);
+                            realm.commitTransaction();
                         }
                     });
             AlertDialog createUserDialog = builder.create();
