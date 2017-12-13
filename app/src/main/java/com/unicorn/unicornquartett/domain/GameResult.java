@@ -7,7 +7,7 @@ import io.realm.annotations.Index;
 public class GameResult extends RealmObject {
     @Index
     private int id;
-    private RealmList<User> user;
+    private User user;
     private Boolean won;
 
     public GameResult() {
@@ -21,11 +21,11 @@ public class GameResult extends RealmObject {
         this.id = id;
     }
 
-    public RealmList<User> getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(RealmList<User> user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

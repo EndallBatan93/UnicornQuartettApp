@@ -28,6 +28,7 @@ import com.unicorn.unicornquartett.activity.Friends.FriendActivity;
 import com.unicorn.unicornquartett.activity.PlayGame.PlayGameActivity;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.activity.Ranglist.RangListActivity;
+import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
 
 import java.io.File;
@@ -276,8 +277,46 @@ public class MenuActivity extends AppCompatActivity {
         user.setRunningOnline(false);
         user.setImageIdentifier(user.getName() + user.getId() + ".jpg");
         user.setDate(new Date());
+        user.setStats(createTestData(user));
         profileName.setText(username);
     }
+
+    private RealmList<GameResult> createTestData(User user) {
+        RealmList<GameResult> results = new RealmList<>();
+        GameResult object = realm.createObject(GameResult.class);
+        object.setId(0);
+        object.setUser(user);
+        object.setWon(true);
+
+        GameResult object1 = realm.createObject(GameResult.class);
+        object1.setId(1);
+        object1.setUser(user);
+        object1.setWon(true);
+
+        GameResult object2 = realm.createObject(GameResult.class);
+        object2.setId(2);
+        object2.setUser(user);
+        object2.setWon(false);
+
+        GameResult object3 = realm.createObject(GameResult.class);
+        object3.setId(3);
+        object3.setUser(user);
+        object3.setWon(false);
+
+        GameResult object4 = realm.createObject(GameResult.class);
+        object4.setId(4);
+        object4.setUser(user);
+        object4.setWon(false);
+
+        results.add(object);
+        results.add(object1);
+        results.add(object2);
+        results.add(object3);
+        results.add(object4);
+
+        return results;
+    }
+
 
 
 }

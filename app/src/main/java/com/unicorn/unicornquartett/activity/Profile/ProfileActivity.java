@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.Util;
+import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
 
 import java.io.File;
@@ -35,6 +36,7 @@ import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -63,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,16 +75,41 @@ public class ProfileActivity extends AppCompatActivity {
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
         final EditText usernameTextView = findViewById(R.id.username);
         TextView registeredTextView = findViewById(R.id.registered);
+        TextView dissView = findViewById(R.id.dissView);
         googlePlayButton = findViewById(R.id.googleButton);
         final Button difficultyButton = findViewById(R.id.difficultyButton);
         CircleImageView circleImageView = findViewById(R.id.profileButton);
-
+        TextView statistics = findViewById(R.id.stats);
         Date date = user.getDate();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd:MM:yyyy");
         String dateString = dateFormat.format(date);
 
         registeredTextView.setText("Registered since: " + dateString);
         usernameTextView.setText(user.getName());
+
+        RealmList<GameResult> stats = user.getStats();
+        int won = 0;
+        int lost = 0;
+        for (GameResult stat : stats) {
+            if(stat.getWon()) {
+                won = won+1;
+            } else {
+                lost = lost+1;
+            }
+        }
+
+        statistics.setText("won: "+won +" || lost: " +lost);
+        if(won > lost) {
+            dissView.setText("Such Wow. Get youself an icecream. Just jizzed in my pants");
+        } else if(won == lost) {
+            dissView.setText("Seriously. Much too learn you have KACKNOOB");
+
+        } else {
+            dissView.setText("DU SPASSTGLATZE.Deine Mutter ist so fett sie arbeitet im Aufzug als Gegengewicht");
+        }
+
+
+
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
