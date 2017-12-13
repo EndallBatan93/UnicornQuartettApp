@@ -1,17 +1,22 @@
 package com.unicorn.unicornquartett.activity.Menu;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -21,6 +26,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.activity.Friends.FriendActivity;
 import com.unicorn.unicornquartett.activity.PlayGame.PlayGameActivity;
@@ -32,6 +38,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -39,8 +46,7 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class MenuActivity extends AppCompatActivity {
-    private static int RESULT_LOAD_IMAGE = 1;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_FROM_GALLERY = 2;
     static final int REQUEST_TAKE_PHOTO = 1;
 
     final Context c = this;
@@ -58,9 +64,6 @@ public class MenuActivity extends AppCompatActivity {
         Button ranglistButton = findViewById(R.id.ranglisbutton);
         Button deckButotn = findViewById(R.id.deckbutton);
         Button friendButton = findViewById(R.id.friendButton);
-        CircleImageView profileButton = findViewById(R.id.profileButton);
-        Button takePhoto = findViewById(R.id.takePhoto);
-//        Button selectPhoto = findViewById(R.id.selectPhoto);
         profileName = findViewById(R.id.userName);
 
         RealmResults<User> allUsers = realm.where(User.class).findAll();
@@ -78,6 +81,7 @@ public class MenuActivity extends AppCompatActivity {
 
     // give parameters absolutePath and imageIdentifier and on call set user.absolutePath and user.imageIdentifier
     private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
+        Util.verifyStoragePermissions(MenuActivity.this);
         try {
             File f = new File(absolutePath, imageIdentifier);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
@@ -122,11 +126,15 @@ public class MenuActivity extends AppCompatActivity {
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-
             }
-
         }
+    }
 
+    private void choosePictureFromGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, REQUEST_FROM_GALLERY);
     }
 
     @Override
@@ -136,9 +144,35 @@ public class MenuActivity extends AppCompatActivity {
                 User user = realm.where(User.class).findFirst();
                 loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
             }
+        } else if (requestCode == REQUEST_FROM_GALLERY) {
+            if (resultCode != RESULT_CANCELED) {
+                Uri contentURI = data.getData();
+                String absolutePath = getRealPathFromURI(contentURI);
+                User first = realm.where(User.class).findFirst();
+                String identifier = absolutePath.substring(absolutePath.lastIndexOf('/')+1);
+                String absPath = absolutePath.replace(identifier,"");
+                first.setImageAbsolutePath(absPath);
+                first.setImageIdentifier(identifier);
+                loadImageFromStorage(absPath,identifier);
+            }
+
         }
         realm.commitTransaction();
         realm.close();
+    }
+
+    private String getRealPathFromURI(Uri contentUri) {
+        String result;
+        Cursor cursor = this.getContentResolver().query(contentUri, null, null, null, null);
+        if (cursor == null) {
+            result = contentUri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int indx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(indx);
+            cursor.close();
+        }
+        return result;
     }
 
     // Navigation Methods
@@ -207,6 +241,11 @@ public class MenuActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             dispatchTakePictureIntent();
                         }
+                    })
+                    .setNeutralButton("Choose picture", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            choosePictureFromGallery();
+                        }
                     });
             AlertDialog createUserDialog = builder.create();
             createUserDialog.show();
@@ -230,7 +269,6 @@ public class MenuActivity extends AppCompatActivity {
         user.setImageIdentifier(user.getName() + user.getId() + ".jpg");
         profileName.setText(username);
     }
-
 
 }
 

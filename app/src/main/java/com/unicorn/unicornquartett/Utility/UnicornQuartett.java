@@ -1,4 +1,4 @@
-package com.unicorn.unicornquartett;
+package com.unicorn.unicornquartett.Utility;
 
 import android.app.Application;
 
@@ -41,7 +41,7 @@ public class UnicornQuartett extends Application {
         Realm realm = Realm.getDefaultInstance();
 
         // IMPORTANT For database testing purposes only
-//        clearDatabaseRealm(realm);
+        clearDatabaseRealm(realm);
 
         String tuningsJSON = this.loadJSONFromAsset("tuning/tuning.json");
         String bikesJSON = this.loadJSONFromAsset("bikes/bikes.json");
