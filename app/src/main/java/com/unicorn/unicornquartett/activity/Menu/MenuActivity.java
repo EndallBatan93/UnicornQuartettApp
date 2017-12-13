@@ -39,6 +39,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -54,6 +55,18 @@ public class MenuActivity extends AppCompatActivity {
     TextView profileName;
 
     String mCurrentPhotoPath;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        RealmResults<User> allUsers = realm.where(User.class).findAll();
+        if (!allUsers.isEmpty()) {
+            User user = allUsers.first();
+            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+            profileName.setText(user.getName());
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +87,7 @@ public class MenuActivity extends AppCompatActivity {
         } else {
             User user = allUsers.first();
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
-
+            profileName.setText(user.getName());
         }
     }
 
@@ -149,16 +162,16 @@ public class MenuActivity extends AppCompatActivity {
                 Uri contentURI = data.getData();
                 String absolutePath = getRealPathFromURI(contentURI);
                 User first = realm.where(User.class).findFirst();
-                String identifier = absolutePath.substring(absolutePath.lastIndexOf('/')+1);
-                String absPath = absolutePath.replace(identifier,"");
+                String identifier = absolutePath.substring(absolutePath.lastIndexOf('/') + 1);
+                String absPath = absolutePath.replace(identifier, "");
                 first.setImageAbsolutePath(absPath);
                 first.setImageIdentifier(identifier);
-                loadImageFromStorage(absPath,identifier);
+                loadImageFromStorage(absPath, identifier);
             }
 
         }
         realm.commitTransaction();
-        realm.close();
+//        realm.close();
     }
 
     private String getRealPathFromURI(Uri contentUri) {
@@ -217,7 +230,7 @@ public class MenuActivity extends AppCompatActivity {
             final EditText userInputDialogText = (EditText) createUserDialogView.findViewById(R.id.createUserInput);
 
             builder.setCancelable(false)
-                    .setMessage("Hallo i bims 1 nicer User vong Creation her")
+                    .setMessage("Ich bin so süss ich könnte Zucker pupsen")
                     .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             String username = String.valueOf(userInputDialogText.getText());
@@ -267,6 +280,7 @@ public class MenuActivity extends AppCompatActivity {
         user.setRunningOffline(false);
         user.setRunningOnline(false);
         user.setImageIdentifier(user.getName() + user.getId() + ".jpg");
+        user.setDate(new Date());
         profileName.setText(username);
     }
 

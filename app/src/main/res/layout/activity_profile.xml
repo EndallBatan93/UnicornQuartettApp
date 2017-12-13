@@ -21,7 +21,7 @@
         android:id="@+id/difficultyButton"
         android:layout_width="50dp"
         android:layout_height="49dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="28dp"
         android:layout_marginEnd="50dp"
         android:layout_marginStart="248dp"
         android:background="@android:drawable/ic_menu_more"
@@ -31,14 +31,14 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/googleButton"
         android:layout_width="47dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="28dp"
         android:layout_marginEnd="80dp"
         android:layout_marginStart="312dp"
         android:background="@drawable/round"
@@ -49,18 +49,17 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.236"
+        app:layout_constraintHorizontal_bias="0.254"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <EditText
         android:id="@+id/username"
-        android:layout_width="143dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginTop="72dp"
+        android:layout_width="174dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="36dp"
         android:text="UserName"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="24sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -71,75 +70,25 @@
         android:layout_height="17dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="92dp"
         android:text="Registerd since 11-12-2017"
         android:textSize="9sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/lost"
-        android:layout_width="99dp"
-        android:layout_height="33dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="204dp"
-        android:fontFamily="monospace"
-        android:text="LOST"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-        android:textColor="?attr/colorError"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:typeface="monospace"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.074"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/won"
-        android:layout_width="89dp"
-        android:layout_height="34dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="204dp"
-        android:text="WON"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-        android:textColor="@android:color/holo_green_dark"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.544"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ListView
-        android:id="@+id/lostView"
-        android:layout_width="123dp"
-        android:layout_height="173dp"
-        android:layout_marginBottom="80dp"
-        android:layout_marginStart="16dp"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profileButton"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginBottom="284dp"
+        android:layout_marginStart="256dp"
+        android:onClick="goToProfileActivity"
+        android:src="@drawable/geilesau"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ListView
-        android:id="@+id/wonView"
-        android:layout_width="118dp"
-        android:layout_height="173dp"
-        android:layout_marginBottom="80dp"
-        android:layout_marginStart="160dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/editbutton"
-        android:layout_width="21dp"
-        android:layout_height="16dp"
-        android:layout_marginEnd="38dp"
-        android:layout_marginTop="76dp"
-        android:background="@android:drawable/ic_menu_edit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

@@ -1,6 +1,8 @@
 package com.unicorn.unicornquartett.domain;
 
 
+import java.util.Date;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
@@ -19,8 +21,17 @@ public class User extends RealmObject {
     private Boolean runningOnline;
     private String imageAbsolutePath;
     private String imageIdentifier;
+    private Date date;
 
     public User() {
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getImageIdentifier() {
