@@ -41,7 +41,7 @@ public class UnicornQuartett extends Application {
         Realm realm = Realm.getDefaultInstance();
 
         // IMPORTANT For database testing purposes only
-        clearDatabaseRealm(realm);
+//        clearDatabaseRealm(realm);
 
         String tuningsJSON = this.loadJSONFromAsset("tuning/tuning.json");
         String bikesJSON = this.loadJSONFromAsset("bikes/bikes.json");
@@ -63,10 +63,11 @@ public class UnicornQuartett extends Application {
         }
         realm.beginTransaction();
 
-        Deck bikeExists = realm.where(Deck.class).equalTo("name", "Bikes").findFirst();
+        String bikeName = "bikes";
+        Deck bikeExists = realm.where(Deck.class).equalTo("name", bikeName).findFirst();
         if (bikeExists == null) {
             Deck bikes = realm.createObject(Deck.class);
-            bikes.setName("Bikes");
+            bikes.setName(bikeName);
             bikes.setId(1);
             bikes.setNumberOfCards(32);
             bikes.setLocked(false);
@@ -81,11 +82,12 @@ public class UnicornQuartett extends Application {
             bikes.setCards(bikeCards);
         }
 
-        Deck tuningExists = realm.where(Deck.class).equalTo("name", "Tuning").findFirst();
+        String tuningName = "tuning";
+        Deck tuningExists = realm.where(Deck.class).equalTo("name", tuningName).findFirst();
         if (tuningExists == null) {
 
             Deck tuning = realm.createObject(Deck.class);
-            tuning.setName("Tuning");
+            tuning.setName(tuningName);
             tuning.setId(2);
             tuning.setLocked(false);
             tuning.setNumberOfCards(32);
