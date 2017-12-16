@@ -23,7 +23,18 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class FriendActivity extends AppCompatActivity {
-
+    Realm realm = Realm.getDefaultInstance();
+    TextView profileName;
+    @Override
+    public void onResume() {
+        super.onResume();
+        RealmResults<User> allUsers = realm.where(User.class).findAll();
+        if (!allUsers.isEmpty()) {
+            User user = allUsers.first();
+            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+            profileName.setText(user.getName());
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +43,7 @@ public class FriendActivity extends AppCompatActivity {
         User user = all.first();
         setContentView(R.layout.activity_friend);
         ListView friendList = findViewById(R.id.friendList);
-        TextView profileName = findViewById(R.id.userName);
+        profileName = findViewById(R.id.userName);
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
 
 

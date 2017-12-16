@@ -24,7 +24,18 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class RangListActivity extends AppCompatActivity {
-
+    Realm realm = Realm.getDefaultInstance();
+    TextView profileName;
+    @Override
+    public void onResume() {
+        super.onResume();
+        RealmResults<User> allUsers = realm.where(User.class).findAll();
+        if (!allUsers.isEmpty()) {
+            User user = allUsers.first();
+            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+            profileName.setText(user.getName());
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +45,7 @@ public class RangListActivity extends AppCompatActivity {
         User user = all.first();
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
         ListView rangList = (ListView) findViewById(R.id.ranglistView);
-        TextView profileName = findViewById(R.id.userName);
+        profileName = findViewById(R.id.userName);
 
         assert user != null;
         profileName.setText(user.getName());

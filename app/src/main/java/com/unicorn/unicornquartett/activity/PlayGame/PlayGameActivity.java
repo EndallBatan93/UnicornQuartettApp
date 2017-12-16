@@ -23,7 +23,18 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class PlayGameActivity extends AppCompatActivity {
-
+    Realm realm = Realm.getDefaultInstance();
+    TextView profileName;
+    @Override
+    public void onResume() {
+        super.onResume();
+        RealmResults<User> allUsers = realm.where(User.class).findAll();
+        if (!allUsers.isEmpty()) {
+            User user = allUsers.first();
+            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+            profileName.setText(user.getName());
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +47,7 @@ public class PlayGameActivity extends AppCompatActivity {
         Button offlineOnline = findViewById(R.id.onlineOffline);
         Button playStandard = findViewById(R.id.playStandard);
         Button playUnicorn = findViewById(R.id.playUnicorn);
-        TextView profileName = findViewById(R.id.userName);
+        profileName = findViewById(R.id.userName);
 
         assert user != null;
         profileName.setText(user.getName());

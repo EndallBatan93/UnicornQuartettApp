@@ -69,6 +69,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Menu.MenuActivity" />
         </activity>
+        <activity
+            android:name=".activity.Decks.DisplayCardActivity"
+            android:parentActivityName=".activity.Decks.DeckGalleryActivity">
+
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.Decks.DeckGalleryActivity" />
+        </activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.android.fileprovider"

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,11 +33,26 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class DeckGalleryActivity extends AppCompatActivity {
 
     ListView deckListView;
+    Realm realm = Realm.getDefaultInstance();
+    TextView profileName;
+    @Override
+    public void onResume() {
+        super.onResume();
+        RealmResults<User> allUsers = realm.where(User.class).findAll();
+        if (!allUsers.isEmpty()) {
+            User user = allUsers.first();
+            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+            profileName.setText(user.getName());
+        }
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +60,14 @@ public class DeckGalleryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_deck_gallery);
         Realm realm = Realm.getDefaultInstance();
         RealmResults<User> allUsers = realm.where(User.class).findAll();
-        User user = allUsers.first();
+        final User user = allUsers.first();
 
-        TextView profileName = findViewById(R.id.userName);
+        profileName = findViewById(R.id.userName);
         ListView deckListView = findViewById(R.id.decksListView);
 
         assert user != null;
         profileName.setText(user.getName());
-        RealmResults<Deck> decks = realm.where(Deck.class).findAll();
+        final RealmResults<Deck> decks = realm.where(Deck.class).findAll();
 
         List<String> deckNames = new ArrayList<String>();
         List<Integer> imageList = new ArrayList<>();
@@ -87,6 +103,14 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
         CustomAdapter customAdapter = new CustomAdapter(getBaseContext(), listOfDeckItems);
         deckListView.setAdapter(customAdapter);
+        deckListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Deck deckIdentity = decks.get(position);
+                goToDisplayCardActivity(view, deckIdentity.getName());
+            }
+        });
+
 
 //        SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), listOfDeckMaps, R.layout.view_with_image_and_text, buildDescriptors, buildLocation);
 //        deckListView.setAdapter(simpleAdapter);
@@ -153,7 +177,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
             if(view==null)
                 view =((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_with_image_and_text,null);
             final ListViewItem item = getItem(position);
-
             TextView title = view.findViewById(R.id.vwiatImageTitle);
             ImageView image = view.findViewById(R.id.vwiatImage);
 
@@ -163,5 +186,10 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
             return view;
         }
+    }
+    public void goToDisplayCardActivity(View view, String deckName) {
+        Intent intent = new Intent(this, DisplayCardActivity.class);
+        intent.putExtra("DeckName", deckName);
+        startActivity(intent);
     }
 }
