@@ -88,6 +88,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
 
+
     // give parameters absolutePath and imageIdentifier and on call set user.absolutePath and user.imageIdentifier
     private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
         Util.verifyStoragePermissions(MenuActivity.this);
@@ -316,7 +317,6 @@ public class MenuActivity extends AppCompatActivity {
 
         return results;
     }
-
 
 
 }

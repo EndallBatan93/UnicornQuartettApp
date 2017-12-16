@@ -1,5 +1,6 @@
 package com.unicorn.unicornquartett.activity.Decks;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -22,7 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class DeckGalleryActivity extends AppCompatActivity {
+public class DeckGalleryActivity extends  AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
