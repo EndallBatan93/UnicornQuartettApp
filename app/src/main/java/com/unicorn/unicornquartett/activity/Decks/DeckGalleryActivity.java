@@ -33,7 +33,6 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class DeckGalleryActivity extends AppCompatActivity {
@@ -98,9 +97,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
             }
         }
 
-        String[] buildDescriptors = {"image", "title"};
-        int[] buildLocation = {R.id.vwiatImage, R.id.vwiatImageTitle};
-
         CustomAdapter customAdapter = new CustomAdapter(getBaseContext(), listOfDeckItems);
         deckListView.setAdapter(customAdapter);
         deckListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -110,15 +106,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 goToDisplayCardActivity(view, deckIdentity.getName());
             }
         });
-
-
-//        SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), listOfDeckMaps, R.layout.view_with_image_and_text, buildDescriptors, buildLocation);
-//        deckListView.setAdapter(simpleAdapter);
-
-//        ArrayAdapter<String> deckListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, deckNames);
-//        vwiat
-//        deckListView.setAdapter(deckListAdapter);
-
 
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
 
@@ -175,7 +162,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
             if(view==null)
-                view =((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_with_image_and_text,null);
+                view =((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.listview_image_text,null);
             final ListViewItem item = getItem(position);
             TextView title = view.findViewById(R.id.vwiatImageTitle);
             ImageView image = view.findViewById(R.id.vwiatImage);
