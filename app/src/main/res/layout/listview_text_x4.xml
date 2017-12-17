@@ -21,6 +21,7 @@
             android:layout_height="60dp"
             android:text="TextView"
             android:textAlignment="viewStart"
+            android:textStyle="bold"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="0dp" />
 
