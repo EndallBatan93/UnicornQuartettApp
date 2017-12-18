@@ -34,24 +34,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/googleButton"
-        android:layout_width="47dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="28dp"
-        android:layout_marginEnd="80dp"
-        android:layout_marginStart="312dp"
-        android:background="@drawable/round"
-        android:onClick="connectToGooglePlay"
-        android:src="@drawable/background"
-        android:text="G"
-        android:textColor="@android:color/background_light"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.254"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <EditText
         android:id="@+id/username"
         android:layout_width="174dp"

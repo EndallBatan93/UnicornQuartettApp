@@ -2,6 +2,7 @@ package com.unicorn.unicornquartett.activity.Decks;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -43,30 +44,11 @@ public class DisplayCardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_card);
-        Button right = findViewById(R.id.right);
-        Button left = findViewById(R.id.left);
         final Deck deck = getDeck();
         Card first = deck.getCards().first();
-        final RealmList<Card> cards = deck.getCards();
+
 
         setAttributes(deck,first);
-
-    //ButtonListener
-
-        right.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setAttributes(deck, getCurrentCard(false, cards));
-            }
-        });
-
-
-        left.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setAttributes(deck,getCurrentCard(true,cards));
-            }
-        });
     }
 
 
@@ -108,9 +90,9 @@ public class DisplayCardActivity extends AppCompatActivity {
         }
     }
 
-    public void setAttributes(Deck deck, Card card) {
+    public void setAttributes(final Deck deck, Card card) {
         setContentView(R.layout.activity_display_card);
-        cardName = findViewById(R.id.cardName);
+//        cardName = findViewById(R.id.cardName);
 
         String[] buildDescriptors = {"desc", "value", "unit", "higherWins"};
         int[] buildLocation = {R.id.cardAttributeTitle, R.id.cardAttributeValue, R.id.cardAttributeUnit, R.id.cardAttributeHW};
@@ -129,8 +111,31 @@ public class DisplayCardActivity extends AppCompatActivity {
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), listOfDeckAttributes, R.layout.listview_text_x4, buildDescriptors, buildLocation);
         ListView lw = findViewById(R.id.attributes);
         lw.setAdapter(simpleAdapter);
-        cardName.setText(card.getName());
+//        cardName.setText(card.getName());
         setImage(card,deck);
+
+        //
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lasershot);
+
+        Button right = findViewById(R.id.right);
+        Button left = findViewById(R.id.left);
+        final RealmList<Card> cards = deck.getCards();
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setAttributes(deck, getCurrentCard(false, cards));
+                mp.start();
+            }
+        });
+
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setAttributes(deck,getCurrentCard(true,cards));
+                mp.start();
+            }
+        });
     }
 
     public ArrayList<String> getShemaForCard(Deck deck, int i) {

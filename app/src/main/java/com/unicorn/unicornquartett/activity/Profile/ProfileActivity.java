@@ -76,7 +76,6 @@ public class ProfileActivity extends AppCompatActivity {
         final EditText usernameTextView = findViewById(R.id.username);
         TextView registeredTextView = findViewById(R.id.registered);
         TextView dissView = findViewById(R.id.dissView);
-        googlePlayButton = findViewById(R.id.googleButton);
         final Button difficultyButton = findViewById(R.id.difficultyButton);
         CircleImageView circleImageView = findViewById(R.id.profileButton);
         TextView statistics = findViewById(R.id.stats);
@@ -271,7 +270,6 @@ public class ProfileActivity extends AppCompatActivity {
                             .OnClickListener() {
                         public void onClick(DialogInterface dialog, int item) {
                             String diff = diffArray[item];
-                            googlePlayButton.setText(diff);
                             dialog.dismiss();// dismiss the alertbox after chose option
                             user.setDifficulty(diff);
                             realm.commitTransaction();

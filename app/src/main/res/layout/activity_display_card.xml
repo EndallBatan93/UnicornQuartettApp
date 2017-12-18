@@ -10,17 +10,11 @@
         android:id="@+id/cardName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="32dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textStyle="bold" />
 
     <GridLayout
         android:id="@+id/gridLayout"
@@ -44,8 +38,8 @@
 
         <ImageView
             android:id="@+id/card"
-            android:layout_width="wrap_content"
-            android:layout_height="173dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             app:srcCompat="@drawable/geilesau"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
