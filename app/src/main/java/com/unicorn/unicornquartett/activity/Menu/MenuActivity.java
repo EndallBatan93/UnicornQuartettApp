@@ -107,7 +107,6 @@ public class MenuActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
 

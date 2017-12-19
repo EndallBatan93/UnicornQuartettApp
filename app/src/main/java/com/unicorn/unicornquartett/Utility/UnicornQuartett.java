@@ -63,7 +63,7 @@ public class UnicornQuartett extends Application {
         }
         realm.beginTransaction();
 
-        String bikeName = "bikes";
+        String bikeName = "Bikes";
         Deck bikeExists = realm.where(Deck.class).equalTo("name", bikeName).findFirst();
         if (bikeExists == null) {
             Deck bikes = realm.createObject(Deck.class);
@@ -82,7 +82,7 @@ public class UnicornQuartett extends Application {
             bikes.setCards(bikeCards);
         }
 
-        String tuningName = "tuning";
+        String tuningName = "Tuning";
         Deck tuningExists = realm.where(Deck.class).equalTo("name", tuningName).findFirst();
         if (tuningExists == null) {
 
