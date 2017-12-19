@@ -26,7 +26,7 @@ import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.activity.Friends.FriendActivity;
-import com.unicorn.unicornquartett.activity.PlayGame.PlayGameActivity;
+import com.unicorn.unicornquartett.activity.PlayGame.ChooseGameActivity;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.activity.Ranglist.RangListActivity;
 import com.unicorn.unicornquartett.domain.GameResult;
@@ -196,7 +196,7 @@ public class MenuActivity extends AppCompatActivity {
     public void goToPlayGameActivity(View view) {
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
         mp.start();
-        Intent intent = new Intent(this, PlayGameActivity.class);
+        Intent intent = new Intent(this, ChooseGameActivity.class);
         startActivity(intent);
 
     }

@@ -2,21 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.unicorn.unicornquartett">
 
-    <uses-feature android:name="android.permission.camera"
-                  android:required="true" />
+    <uses-feature
+        android:name="android.permission.camera"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".Utility.UnicornQuartett"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".Utility.UnicornQuartett">
-
-
+        android:theme="@style/AppTheme">
         <activity android:name=".activity.Menu.MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,7 +43,7 @@
                 android:value=".activity.Menu.MenuActivity" />
         </activity>
         <activity
-            android:name=".activity.PlayGame.PlayGameActivity"
+            android:name=".activity.PlayGame.ChooseGameActivity"
             android:parentActivityName=".activity.Menu.MenuActivity">
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
@@ -78,6 +78,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Decks.DeckGalleryActivity" />
         </activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.android.fileprovider"
@@ -85,8 +86,11 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
+
+        <activity android:name=".activity.PlayGame.PlayUnicornModeActivity" />
+        <activity android:name=".activity.PlayGame.PlayStandardModeActivity"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".activity.PlayGame.PlayGameActivity">
+    tools:context=".activity.PlayGame.ChooseGameActivity">
     <TextView
         android:id="@+id/textView"
         android:layout_width="101dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/playStandard"
+        android:id="@+id/playUnicorn"
         android:layout_width="156dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/playUnicorn"
+        android:id="@+id/playStandard"
         android:layout_width="156dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
@@ -42,18 +42,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.927"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ToggleButton
-        android:id="@+id/onlineOffline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="44dp"
-        android:layout_marginTop="52dp"
-        android:background="#f269a9"
-        android:text="@string/Online"
-        android:textColor="@android:color/background_light"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -83,13 +71,4 @@
         app:layout_constraintHorizontal_bias="0.739"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/OnlineOfflineText"
-        android:layout_width="87dp"
-        android:layout_height="22dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginTop="108dp"
-        android:text="@string/OfflineMode"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

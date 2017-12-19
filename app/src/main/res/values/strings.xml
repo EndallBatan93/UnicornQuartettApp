@@ -14,4 +14,6 @@
     <string name="createTitle">Enter username:</string>
     <string name="createTitleInput">UnicornHunter69</string>
     <string name="createPhoto">Take or choose a photo</string>
+    <string name="UnicornMode">UnicornMode</string>
+    <string name="StandardMode">StandardMode</string>
 </resources>
