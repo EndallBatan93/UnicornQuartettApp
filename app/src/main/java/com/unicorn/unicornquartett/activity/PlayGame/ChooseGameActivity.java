@@ -98,14 +98,14 @@ public class ChooseGameActivity extends AppCompatActivity {
         }
 
     }
-
     @SuppressLint("ValidFragment")
     private class DeckChooser extends DialogFragment {
         public DeckChooser(final String mode) {
             final User user = realm.where(User.class).findFirst();
             final RealmList<String> decks = user.getDecks();
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activityContext);
-            alertDialog.setSingleChoiceItems(decks.toArray(new String[decks.size()]), -1, new DialogInterface.OnClickListener() {
+            alertDialog.setTitle("Choose your Deck")
+                       .setSingleChoiceItems(decks.toArray(new String[decks.size()]), -1, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                      selectedDeck = decks.get(i);
