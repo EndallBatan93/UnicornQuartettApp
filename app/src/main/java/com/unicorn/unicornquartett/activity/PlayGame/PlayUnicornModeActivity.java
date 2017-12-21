@@ -22,19 +22,16 @@ import io.realm.RealmResults;
 
 public class
 PlayUnicornModeActivity extends AppCompatActivity {
-    TextView profileName;
     Realm realm = Realm.getDefaultInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_unicorn_mode);
-        profileName = findViewById(R.id.userName);
+        setContentView(R.layout.activity_play_game_view);
         User user = getuser();
         Deck deck = getDecks();
         if (user != null) {
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
-            profileName.setText(user.getName());
         }
 
 

@@ -16,4 +16,5 @@
     <string name="createPhoto">Take or choose a photo</string>
     <string name="UnicornMode">UnicornMode</string>
     <string name="StandardMode">StandardMode</string>
+    <string name="Status">Status</string>
 </resources>
