@@ -102,7 +102,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profileButton"
@@ -110,8 +110,21 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:src="@drawable/geilesau"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+
                 app:civ_border_color="@color/card"
                 app:civ_border_width="2dp" />
+
+            <Button
+                android:id="@+id/chooseValueButton"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:background="@color/colorGreen"
+                android:text="@android:string/ok" />
+
         </LinearLayout>
 
     </LinearLayout>

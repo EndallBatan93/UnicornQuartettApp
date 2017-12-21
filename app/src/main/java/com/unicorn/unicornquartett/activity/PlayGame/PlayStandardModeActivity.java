@@ -1,13 +1,21 @@
 package com.unicorn.unicornquartett.activity.PlayGame;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.Util;
@@ -35,7 +43,10 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
     RealmList<Card> teamUser = new RealmList<>();
     RealmList<Card> teamOpponent = new RealmList<>();
-
+    private int currentShemaPosition;
+    private String attrValue;
+    private Context c = this;
+    private TextView status;
     @Override
     public void onBackPressed() {
         //TODO: spielstandspeichern
@@ -46,6 +57,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game_view);
         ListView attributeList = findViewById(R.id.playCardView);
+        status = findViewById(R.id.status);
         ImageView cardImage = findViewById(R.id.cardImage);
         User user = getuser();
         Deck deck = getDecks();
@@ -53,9 +65,8 @@ public class PlayStandardModeActivity extends AppCompatActivity {
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
         }
         createStacks(deck);
-        setAttributes(teamUser.first(),deck);
+        setAttributes(teamUser.first(), deck);
     }
-
 
 
     private Deck getDecks() {
@@ -88,25 +99,25 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         }
         Collections.shuffle(indices);
 
-        for(int i = 0; i<indices.size(); i+=2) {
+        for (int i = 0; i < indices.size(); i += 2) {
             teamOpponent.add(deck.getCards().get(indices.get(i)));
-            teamUser.add(deck.getCards().get(indices.get(i+1)));
+            teamUser.add(deck.getCards().get(indices.get(i + 1)));
 
         }
-
+        status.setText(teamUser.size() + ":" + teamOpponent.size());
     }
 
 
-    public void setAttributes(Card card, Deck deck) {
+    public void setAttributes(final Card card, final Deck deck) {
 
-        String[] buildDescriptors = {"desc", "value", "unit", "higherWins"};
+        String[] buildDescriptors = {"desc", "attrValue", "unit", "higherWins"};
         int[] buildLocation = {R.id.cardAttributeTitle, R.id.cardAttributeValue, R.id.cardAttributeUnit, R.id.cardAttributeHW};
 
-        ArrayList<Map<String, String>> listOfDeckAttributes = new ArrayList<>();
+        final ArrayList<Map<String, String>> listOfDeckAttributes = new ArrayList<>();
         for (int i = 0; i < card.getAttributes().size(); i++) {
             HashMap<String, String> tmpHashmap = new HashMap<>();
-            tmpHashmap.put("value", card.getAttributes().get(i)+"  ");
-            ArrayList<String> shemaForCard = getShemaForCard(deck,i);
+            tmpHashmap.put("attrValue", card.getAttributes().get(i) + "  ");
+            ArrayList<String> shemaForCard = getShemaForCard(deck, i);
             tmpHashmap.put("desc", shemaForCard.get(0));
             tmpHashmap.put("unit", shemaForCard.get(1));
             tmpHashmap.put("higherWins", shemaForCard.get(2));
@@ -114,14 +125,37 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         }
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), listOfDeckAttributes, R.layout.listview_text_x4, buildDescriptors, buildLocation);
-        ListView lw = findViewById(R.id.playCardView);
+        final ListView lw = findViewById(R.id.playCardView);
         lw.setAdapter(simpleAdapter);
-        setImage(card,deck);
+        setImage(card, deck);
+        lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                RealmList<String> attributes = card.getAttributes();
+                attrValue = attributes.get(i);
+                lw.getChildAt(currentShemaPosition).setBackgroundColor(Color.WHITE);
+                currentShemaPosition = i;
+                lw.getChildAt(i).setBackgroundColor(Color.GREEN);
+
+            }
+        });
+
+        Button chooseValue = findViewById(R.id.chooseValueButton);
+        chooseValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView status = findViewById(R.id.status);
+                String winner = compareValues(attrValue, currentShemaPosition, deck);
+                status.setText(teamUser.size() + ":" + teamOpponent.size());
+            }
+        });
     }
+
     public ArrayList<String> getShemaForCard(Deck deck, int i) {
         RealmList<Shema> shemas = deck.getShema();
         Shema shema = shemas.get(i);
-        ArrayList<String> attributeDescriptionList= new ArrayList<>();
+        ArrayList<String> attributeDescriptionList = new ArrayList<>();
         attributeDescriptionList.add(shema.getProperty());
         attributeDescriptionList.add(shema.getUnit());
         attributeDescriptionList.add(shema.getHigherWins().toString());
@@ -142,5 +176,51 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         }
     }
 
+    public String compareValues(String value, int position, Deck deck) {
+        Card opponent = teamOpponent.first();
+        String valueOpponent = opponent.getAttributes().get(position);
+        ArrayList<String> shemaForCard = getShemaForCard(deck, position);
+        String higherWins = shemaForCard.get(2);
+        double playerValue = Double.parseDouble(value);
+        double opponentValue = Double.parseDouble(valueOpponent);
+        String winner="";
+
+        if(playerValue<opponentValue) {
+            if(higherWins.equals("true")) {
+                winner = "opponent";
+            } else {
+                winner = "player";
+            }
+        } else if(opponentValue < playerValue) {
+            if(higherWins.equals("true")) {
+                winner = "player";
+            } else {
+                winner = "opponent";
+            }
+        } else {
+            System.out.println("Fehlt noch");
+        }
+        updateStacks(winner);
+        Toast toast = Toast.makeText(c, winner + ("p"+":" +playerValue+ "/" + "o"+":" +opponentValue),  Toast.LENGTH_LONG);
+        toast.show();
+        return winner;
+    }
+
+    private void updateStacks(String winner) {
+
+
+        if(winner.equals("player")) {
+            Card first = teamOpponent.first();
+            teamUser.add(first);
+            teamOpponent.remove(first);
+            teamUser.move(0,teamUser.size()-1);
+        } else {
+            Card first = teamUser.first();
+            teamOpponent.add(first);
+            teamUser.remove(first);
+            teamOpponent.move(0,teamOpponent.size()-1);
+
+        }
+    }
 }
 
