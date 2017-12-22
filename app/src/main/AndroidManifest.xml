@@ -90,7 +90,8 @@
         </provider>
 
         <activity android:name=".activity.PlayGame.PlayUnicornModeActivity" />
-        <activity android:name=".activity.PlayGame.PlayStandardModeActivity"></activity>
+        <activity android:name=".activity.PlayGame.PlayStandardModeActivity" />
+        <activity android:name=".activity.PlayGame.ShowResultActivity"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 
-public class Game extends RealmObject {
+public class Game extends RealmObject  {
 
     @Index
     private int id;
@@ -13,11 +13,36 @@ public class Game extends RealmObject {
     private String deck;
     private RealmList<Card> usercards;
     private RealmList<Card> opponentCards;
-    private Boolean turnUser;
     private int timeout;
-
+    private String lastWinner;
+    private RealmList<String> values;
+    private RealmList<String> shemas;
     public Game () {
 
+    }
+
+    public RealmList<String> getShemas() {
+        return shemas;
+    }
+
+    public void setShemas(RealmList<String> shemas) {
+        this.shemas = shemas;
+    }
+
+    public String getLastWinner() {
+        return lastWinner;
+    }
+
+    public void setLastWinner(String lastWinner) {
+        this.lastWinner = lastWinner;
+    }
+
+    public RealmList<String> getValues() {
+        return values;
+    }
+
+    public void setValues(RealmList<String> values) {
+        this.values = values;
     }
 
     public int getId() {
@@ -59,15 +84,6 @@ public class Game extends RealmObject {
     public void setOpponentCards(RealmList<Card> opponentCards) {
         this.opponentCards = opponentCards;
     }
-
-    public Boolean getTurnUser() {
-        return turnUser;
-    }
-
-    public void setTurnUser(Boolean turnUser) {
-        this.turnUser = turnUser;
-    }
-
     public int getTimeout() {
         return timeout;
     }

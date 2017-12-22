@@ -2,6 +2,7 @@ package com.unicorn.unicornquartett.activity.PlayGame;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -21,6 +22,7 @@ import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
+import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.Shema;
 import com.unicorn.unicornquartett.domain.User;
 
@@ -47,6 +49,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     private String attrValue;
     private Context c = this;
     private TextView status;
+    private Game game;
     @Override
     public void onBackPressed() {
         //TODO: spielstandspeichern
@@ -64,9 +67,23 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         if (user != null) {
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
         }
-        createStacks(deck);
-        setAttributes(teamUser.first(), deck);
+
+        String runningGame = getIntent().getStringExtra("gameRunning");
+        if((runningGame != null) && runningGame.equals("true")) {
+            Game game = realm.where(Game.class).findFirst();
+            teamUser = game.getUsercards();
+            teamOpponent = game.getOpponentCards();
+            deck = realm.where(Deck.class).equalTo("name",game.getDeck()).findFirst();
+            setAttributes(teamUser.first(), deck);
+            status.setText(teamUser.size() + ":" + teamOpponent.size());
+        } else {
+            createStacks(deck);
+            setAttributes(teamUser.first(), deck);
+        }
+
+
     }
+
 
 
     private Deck getDecks() {
@@ -146,8 +163,14 @@ public class PlayStandardModeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 TextView status = findViewById(R.id.status);
-                String winner = compareValues(attrValue, currentShemaPosition, deck);
                 status.setText(teamUser.size() + ":" + teamOpponent.size());
+
+                realm.beginTransaction();
+                Game round = compareValues(attrValue, currentShemaPosition, deck);
+                realm.commitTransaction();
+
+                Intent intent = new Intent(c, ShowResultActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -176,7 +199,8 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         }
     }
 
-    public String compareValues(String value, int position, Deck deck) {
+    public Game compareValues(String value, int position, Deck deck) {
+
         Card opponent = teamOpponent.first();
         String valueOpponent = opponent.getAttributes().get(position);
         ArrayList<String> shemaForCard = getShemaForCard(deck, position);
@@ -184,6 +208,18 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         double playerValue = Double.parseDouble(value);
         double opponentValue = Double.parseDouble(valueOpponent);
         String winner="";
+
+        if(realm.where(Game.class).findAll().size()== 0) {
+            game = realm.createObject(Game.class);
+        } else {
+            game = realm.where(Game.class).findFirst();
+        }
+        game.setId(1);
+        game.setDeck(deck.getName());
+        game.setOpponentCards(teamOpponent);
+        game.setUsercards(teamUser);
+        RealmList<String> realmList = convertArrayListToRealmList(shemaForCard);
+        game.setShemas(realmList);
 
         if(playerValue<opponentValue) {
             if(higherWins.equals("true")) {
@@ -200,27 +236,22 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         } else {
             System.out.println("Fehlt noch");
         }
-        updateStacks(winner);
-        Toast toast = Toast.makeText(c, winner + ("p"+":" +playerValue+ "/" + "o"+":" +opponentValue),  Toast.LENGTH_LONG);
-        toast.show();
-        return winner;
+        RealmList<String> values = new RealmList<>();
+        values.add(value);
+        values.add(valueOpponent);
+        game.setValues(values);
+        game.setLastWinner(winner);
+        return game;
     }
 
-    private void updateStacks(String winner) {
-
-
-        if(winner.equals("player")) {
-            Card first = teamOpponent.first();
-            teamUser.add(first);
-            teamOpponent.remove(first);
-            teamUser.move(0,teamUser.size()-1);
-        } else {
-            Card first = teamUser.first();
-            teamOpponent.add(first);
-            teamUser.remove(first);
-            teamOpponent.move(0,teamOpponent.size()-1);
-
+    private RealmList<String> convertArrayListToRealmList(ArrayList<String> shemaForCard) {
+        RealmList<String> realmList = new RealmList<>();
+        for (String s : shemaForCard) {
+            realmList.add(s);
         }
+        return realmList;
     }
+
+
 }
 
