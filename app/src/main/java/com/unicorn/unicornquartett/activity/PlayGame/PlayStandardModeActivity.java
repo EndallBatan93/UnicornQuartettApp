@@ -169,12 +169,12 @@ public class PlayStandardModeActivity extends AppCompatActivity {
             });
         } else {
             kiPosition = 2;
-            lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    lw.getChildAt(kiPosition).setBackgroundColor(Color.GREEN);
-                }
-            });
+//            lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                    lw.getChildAt(kiPosition).setBackgroundColor(Color.GREEN);
+//                }
+//            });
             attrValue = attributes.get(kiPosition);
             currentShemaPosition = kiPosition;
             isChoosen = true;
