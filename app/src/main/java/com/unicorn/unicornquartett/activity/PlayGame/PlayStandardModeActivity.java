@@ -49,7 +49,12 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     private String attrValue;
     private Context c = this;
     private TextView status;
+    private TextView turn;
     private Game game;
+    Boolean isChoosen = false;
+    RealmList<String> attributes;
+    int kiPosition;
+
     @Override
     public void onBackPressed() {
         //TODO: spielstandspeichern
@@ -62,25 +67,35 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         ListView attributeList = findViewById(R.id.playCardView);
         status = findViewById(R.id.status);
         ImageView cardImage = findViewById(R.id.cardImage);
+        turn = findViewById(R.id.turn);
         User user = getuser();
         Deck deck = getDecks();
+        String PLAYERSTURN = "Your Turn";
+        String OPPONENTTURN = "Opponent Turn";
 
         String runningGame = getIntent().getStringExtra("gameRunning");
-        if((runningGame != null) && runningGame.equals("true")) {
-            Game game = realm.where(Game.class).findFirst();
+        if ((runningGame != null) && runningGame.equals("true")) {
+            game = realm.where(Game.class).findFirst();
             teamUser = game.getUsercards();
             teamOpponent = game.getOpponentCards();
-            deck = realm.where(Deck.class).equalTo("name",game.getDeck()).findFirst();
+            deck = realm.where(Deck.class).equalTo("name", game.getDeck()).findFirst();
             setAttributes(teamUser.first(), deck);
             status.setText(teamUser.size() + ":" + teamOpponent.size());
+
         } else {
             createStacks(deck);
             setAttributes(teamUser.first(), deck);
+            turn.setText(OPPONENTTURN);
+        }
+
+        if (this.game == null || this.game.getTurn().equals("user")) {
+            turn.setText(PLAYERSTURN);
+        } else {
+            turn.setText(OPPONENTTURN);
         }
 
 
     }
-
 
 
     private Deck getDecks() {
@@ -93,7 +108,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         User user = realm.where(User.class).findFirst();
         return user;
     }
-    
+
     public void createStacks(Deck deck) {
         List<Integer> indices = new ArrayList<>(deck.getCards().size());
         for (int i = 0; i < deck.getCards().size(); i++) {
@@ -126,36 +141,58 @@ public class PlayStandardModeActivity extends AppCompatActivity {
             listOfDeckAttributes.add(tmpHashmap);
         }
 
+
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), listOfDeckAttributes, R.layout.listview_text_x4, buildDescriptors, buildLocation);
         final ListView lw = findViewById(R.id.playCardView);
         lw.setAdapter(simpleAdapter);
         setImage(card, deck);
-        lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                RealmList<String> attributes = card.getAttributes();
-                attrValue = attributes.get(i);
-                lw.getChildAt(currentShemaPosition).setBackgroundColor(Color.WHITE);
-                currentShemaPosition = i;
-                lw.getChildAt(i).setBackgroundColor(Color.GREEN);
 
-            }
-        });
+        final Button chooseValue = findViewById(R.id.chooseValueButton);
+        chooseValue.setBackgroundColor(Color.GRAY);
+        TextView status = findViewById(R.id.status);
+        status.setText(teamUser.size() + ":" + teamOpponent.size());
+        attributes = card.getAttributes();
 
-        Button chooseValue = findViewById(R.id.chooseValueButton);
+        if (game == null || game.getTurn().equals("user")) {
+
+            lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @SuppressLint("ResourceAsColor")
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    attrValue = attributes.get(i);
+                    lw.getChildAt(currentShemaPosition).setBackgroundColor(Color.WHITE);
+                    currentShemaPosition = i;
+                    lw.getChildAt(i).setBackgroundColor(Color.GREEN);
+                    isChoosen = true;
+                    chooseValue.setBackgroundColor(Color.GREEN);
+                }
+            });
+        } else {
+            kiPosition = 2;
+            lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    lw.getChildAt(kiPosition).setBackgroundColor(Color.GREEN);
+                }
+            });
+            attrValue = attributes.get(kiPosition);
+            currentShemaPosition = kiPosition;
+            isChoosen = true;
+        }
         chooseValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView status = findViewById(R.id.status);
-                status.setText(teamUser.size() + ":" + teamOpponent.size());
+                if (isChoosen == true) {
+                    realm.beginTransaction();
+                    Game round = compareValues(attrValue, currentShemaPosition, deck);
+                    realm.commitTransaction();
 
-                realm.beginTransaction();
-                Game round = compareValues(attrValue, currentShemaPosition, deck);
-                realm.commitTransaction();
-
-                Intent intent = new Intent(c, ShowResultActivity.class);
-                startActivity(intent);
+                    Intent intent = new Intent(c, ShowResultActivity.class);
+                    startActivity(intent);
+                    isChoosen = false;
+                } else {
+                    //TODO make smth
+                }
             }
         });
     }
@@ -185,20 +222,35 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     }
 
     public Game compareValues(String value, int position, Deck deck) {
+        Card contrahentCard;
+        if (game == null || game.getTurn().equals("user")) {
+            contrahentCard = teamOpponent.first();
+        } else {
+            contrahentCard = teamUser.first();
+        }
 
-        Card opponent = teamOpponent.first();
-        String valueOpponent = opponent.getAttributes().get(position);
+        String valueOpponent = contrahentCard.getAttributes().get(position);
         ArrayList<String> shemaForCard = getShemaForCard(deck, position);
         String higherWins = shemaForCard.get(2);
         double playerValue = Double.parseDouble(value);
         double opponentValue = Double.parseDouble(valueOpponent);
-        String winner="";
+        String winner = "";
 
-        if(realm.where(Game.class).findAll().size()== 0) {
+        if (realm.where(Game.class).findAll().size() == 0) {
             game = realm.createObject(Game.class);
+            game.setTurn("user");
         } else {
             game = realm.where(Game.class).findFirst();
         }
+
+
+        if (game.getTurn().equals("user") && game.getTurn() != null) {
+
+            game.setTurn("opponent");
+        } else {
+            game.setTurn("user");
+        }
+
         game.setId(1);
         game.setDeck(deck.getName());
         game.setOpponentCards(teamOpponent);
@@ -206,14 +258,14 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         RealmList<String> realmList = convertArrayListToRealmList(shemaForCard);
         game.setShemas(realmList);
 
-        if(playerValue<opponentValue) {
-            if(higherWins.equals("true")) {
+        if (playerValue < opponentValue) {
+            if (higherWins.equals("true")) {
                 winner = "opponent";
             } else {
                 winner = "player";
             }
-        } else if(opponentValue < playerValue) {
-            if(higherWins.equals("true")) {
+        } else if (opponentValue < playerValue) {
+            if (higherWins.equals("true")) {
                 winner = "player";
             } else {
                 winner = "opponent";
@@ -226,6 +278,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         values.add(valueOpponent);
         game.setValues(values);
         game.setLastWinner(winner);
+
         return game;
     }
 

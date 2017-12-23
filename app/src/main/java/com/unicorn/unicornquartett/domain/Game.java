@@ -17,8 +17,18 @@ public class Game extends RealmObject  {
     private String lastWinner;
     private RealmList<String> values;
     private RealmList<String> shemas;
+    private  String turn;
+
     public Game () {
 
+    }
+
+    public String getTurn() {
+        return turn;
+    }
+
+    public void setTurn(String turn) {
+        this.turn = turn;
     }
 
     public RealmList<String> getShemas() {
