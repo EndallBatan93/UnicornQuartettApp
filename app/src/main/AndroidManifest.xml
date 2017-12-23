@@ -17,17 +17,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".activity.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.Menu.MenuActivity">
-
-        </activity>
-
+        <activity android:name=".activity.Menu.MenuActivity"></activity>
         <activity
             android:name=".activity.Ranglist.RangListActivity"
             android:parentActivityName=".activity.Menu.MenuActivity">
@@ -95,7 +92,8 @@
 
         <activity android:name=".activity.PlayGame.PlayUnicornModeActivity" />
         <activity android:name=".activity.PlayGame.PlayStandardModeActivity" />
-        <activity android:name=".activity.PlayGame.ShowResultActivity"></activity>
+        <activity android:name=".activity.PlayGame.ShowResultActivity" />
+        <activity android:name=".activity.PlayGame.EndGameActivity"></activity>
     </application>
 
 </manifest>
