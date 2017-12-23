@@ -81,7 +81,7 @@ public class DisplayCardActivity extends AppCompatActivity {
         RealmList<String> imageIdentifiers = card.getImage().getImageIdentifiers();
         String identifier = imageIdentifiers.first();
         try {
-            InputStream open = getAssets().open(deck.getName() + "/" + identifier);
+            InputStream open = getAssets().open(deck.getName().toLowerCase() + "/" + identifier);
             Drawable fromStream = Drawable.createFromStream(open, null);
             ImageView view = findViewById(R.id.card);
             view.setImageDrawable(fromStream);
@@ -108,7 +108,7 @@ public class DisplayCardActivity extends AppCompatActivity {
             listOfDeckAttributes.add(tmpHashmap);
         }
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), listOfDeckAttributes, R.layout.listview_text_x4, buildDescriptors, buildLocation);
+        SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), listOfDeckAttributes, R.layout.listview_display_card, buildDescriptors, buildLocation);
         ListView lw = findViewById(R.id.attributes);
         lw.setAdapter(simpleAdapter);
 //        cardName.setText(card.getName());

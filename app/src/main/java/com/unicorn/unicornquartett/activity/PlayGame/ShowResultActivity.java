@@ -80,8 +80,10 @@ public class ShowResultActivity extends AppCompatActivity {
         //resultView
         if(game.getLastWinner().equals("player")) {
             winnerLoser.setText("WON");
-        } else {
+        } else if(game.getLastWinner().equals("opponent")) {
             winnerLoser.setText("LOST");
+        } else {
+            winnerLoser.setText("DRAWN");
         }
         status.setText(game.getUsercards().size() + ":" + game.getOpponentCards().size());
     }

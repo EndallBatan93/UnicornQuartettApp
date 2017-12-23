@@ -64,9 +64,6 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         ImageView cardImage = findViewById(R.id.cardImage);
         User user = getuser();
         Deck deck = getDecks();
-        if (user != null) {
-            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
-        }
 
         String runningGame = getIntent().getStringExtra("gameRunning");
         if((runningGame != null) && runningGame.equals("true")) {
@@ -96,19 +93,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         User user = realm.where(User.class).findFirst();
         return user;
     }
-
-    private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
-        Util.verifyStoragePermissions(PlayStandardModeActivity.this);
-        try {
-            File f = new File(absolutePath, imageIdentifier);
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            CircleImageView profileButton = findViewById(R.id.profileButton);
-            profileButton.setImageBitmap(b);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
+    
     public void createStacks(Deck deck) {
         List<Integer> indices = new ArrayList<>(deck.getCards().size());
         for (int i = 0; i < deck.getCards().size(); i++) {
@@ -234,7 +219,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
                 winner = "opponent";
             }
         } else {
-            System.out.println("Fehlt noch");
+            winner = "draw";
         }
         RealmList<String> values = new RealmList<>();
         values.add(value);

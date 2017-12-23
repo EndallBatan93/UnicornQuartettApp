@@ -51,7 +51,14 @@ PlayUnicornModeActivity extends AppCompatActivity {
         Util.verifyStoragePermissions(PlayUnicornModeActivity.this);
         try {
             File f = new File(absolutePath, imageIdentifier);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            options.inSampleSize = 3;
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            int imageHeigth = options.outHeight;
+            int imageWidth = options.outWidth;
+            String imageType = options.outMimeType;
+
             CircleImageView profileButton = findViewById(R.id.profileButton);
             profileButton.setImageBitmap(b);
         } catch (FileNotFoundException e) {

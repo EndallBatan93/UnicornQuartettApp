@@ -85,7 +85,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
             String deckName = deckNames.get(i);
             tmpTitleFromNameMap.put("title", deckName);
             String imageIdentifier = decks.get(i).getCards().first().getImage().getImageIdentifiers().first();
-            String imagePath = deckName+"/"+imageIdentifier;
+            String imagePath = deckName.toLowerCase()+"/"+imageIdentifier;
             Drawable tempDrawable;
             try {
                 InputStream tempInputStream = getAssets().open(imagePath);
