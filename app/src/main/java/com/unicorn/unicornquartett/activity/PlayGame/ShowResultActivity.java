@@ -121,8 +121,8 @@ public class ShowResultActivity extends AppCompatActivity {
         }
         Intent intent = new Intent(this, EndGameActivity.class);
 
-//        if(game.getOpponentCards().isEmpty()) {
-            if(true) {
+        if(game.getOpponentCards().isEmpty()) {
+//            if(true) {
             intent.putExtra("winner", "user");
             startActivity(intent);
         }
