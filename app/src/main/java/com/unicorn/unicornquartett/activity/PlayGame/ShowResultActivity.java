@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -80,10 +81,13 @@ public class ShowResultActivity extends AppCompatActivity {
         //resultView
         if(game.getLastWinner().equals("player")) {
             winnerLoser.setText("WON");
+            winnerLoser.setTextColor(Color.GREEN);
         } else if(game.getLastWinner().equals("opponent")) {
             winnerLoser.setText("LOST");
+            winnerLoser.setTextColor(Color.RED);
         } else {
             winnerLoser.setText("DRAWN");
+            winnerLoser.setTextColor(Color.BLUE);
         }
         status.setText(game.getUsercards().size() + ":" + game.getOpponentCards().size());
     }

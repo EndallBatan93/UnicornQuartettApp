@@ -3,12 +3,10 @@ package com.unicorn.unicornquartett.activity.PlayGame;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -16,19 +14,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.Shema;
 import com.unicorn.unicornquartett.domain.User;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -37,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -85,16 +77,18 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         } else {
             createStacks(deck);
             setAttributes(teamUser.first(), deck);
-            turn.setText(OPPONENTTURN);
         }
 
-        if (this.game == null || this.game.getTurn().equals("user")) {
+        if(game == null) {
             turn.setText(PLAYERSTURN);
         } else {
-            turn.setText(OPPONENTTURN);
+
+            if (game.getTurn().equals("user")) {
+                turn.setText(PLAYERSTURN);
+            } else {
+                turn.setText(OPPONENTTURN);
+            }
         }
-
-
     }
 
 
@@ -165,24 +159,21 @@ public class PlayStandardModeActivity extends AppCompatActivity {
                     lw.getChildAt(i).setBackgroundColor(Color.GREEN);
                     isChoosen = true;
                     chooseValue.setBackgroundColor(Color.GREEN);
+
                 }
             });
         } else {
             kiPosition = 2;
-//            lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                    lw.getChildAt(kiPosition).setBackgroundColor(Color.GREEN);
-//                }
-//            });
-            attrValue = attributes.get(kiPosition);
+            attrValue = teamOpponent.first().getAttributes().get(kiPosition);
             currentShemaPosition = kiPosition;
             isChoosen = true;
+            chooseValue.setBackgroundColor(Color.GREEN);
+            chooseValue.setText("Continue");
         }
         chooseValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isChoosen == true) {
+                if (isChoosen) {
                     realm.beginTransaction();
                     Game round = compareValues(attrValue, currentShemaPosition, deck);
                     realm.commitTransaction();
@@ -190,8 +181,6 @@ public class PlayStandardModeActivity extends AppCompatActivity {
                     Intent intent = new Intent(c, ShowResultActivity.class);
                     startActivity(intent);
                     isChoosen = false;
-                } else {
-                    //TODO make smth
                 }
             }
         });
@@ -238,19 +227,9 @@ public class PlayStandardModeActivity extends AppCompatActivity {
 
         if (realm.where(Game.class).findAll().size() == 0) {
             game = realm.createObject(Game.class);
-            game.setTurn("user");
         } else {
             game = realm.where(Game.class).findFirst();
         }
-
-
-        if (game.getTurn().equals("user") && game.getTurn() != null) {
-
-            game.setTurn("opponent");
-        } else {
-            game.setTurn("user");
-        }
-
         game.setId(1);
         game.setDeck(deck.getName());
         game.setOpponentCards(teamOpponent);
@@ -278,7 +257,15 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         values.add(valueOpponent);
         game.setValues(values);
         game.setLastWinner(winner);
+        if(game.getTurn() == null) {
+            game.setTurn("user");
+        }
 
+        if (game.getTurn().equals("user")) {
+            game.setTurn("opponent");
+        } else if (game.getTurn().equals("opponent")) {
+            game.setTurn("user");
+        }
         return game;
     }
 
