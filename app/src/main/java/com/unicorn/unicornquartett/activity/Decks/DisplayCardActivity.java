@@ -115,7 +115,7 @@ public class DisplayCardActivity extends AppCompatActivity {
         setImage(card,deck);
 
         //
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lasershot);
+//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lasershot);
 
         Button right = findViewById(R.id.right);
         Button left = findViewById(R.id.left);
@@ -124,7 +124,7 @@ public class DisplayCardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setAttributes(deck, getCurrentCard(false, cards));
-                mp.start();
+//                mp.start();
             }
         });
 
@@ -133,7 +133,7 @@ public class DisplayCardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setAttributes(deck,getCurrentCard(true,cards));
-                mp.start();
+//                mp.start();
             }
         });
     }

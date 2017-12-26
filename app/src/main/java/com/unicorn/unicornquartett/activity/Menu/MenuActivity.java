@@ -55,8 +55,8 @@ public class MenuActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.horse);
-        mp.start();
+//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.horse);
+//        mp.start();
         super.onResume();
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         if (!allUsers.isEmpty()) {
@@ -67,12 +67,14 @@ public class MenuActivity extends AppCompatActivity {
     }
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.horse);
-        mp.start();
+//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.horse);
+//        mp.start();
 
 
         // Initializing Varables
@@ -193,40 +195,41 @@ public class MenuActivity extends AppCompatActivity {
 
     // Navigation Methods
     public void goToPlayGameActivity(View view) {
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
-        mp.start();
+//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
+//        mp.start();
         Intent intent = new Intent(this, ChooseGameActivity.class);
         startActivity(intent);
 
     }
 
     public void goToProfileActivity(View view) {
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
-        mp.start();
+//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
+//        mp.start();
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
 
     }
 
     public void goToRangListActivity(View view) {
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
-        mp.start();
+//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
+//        mp.start();
         Intent intent = new Intent(this, RangListActivity.class);
         startActivity(intent);
 
     }
 
     public void goToDeckGalleryActivity(View view) {
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
-        mp.start();
+//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
+//        mp.start();
         Intent intent = new Intent(this, DeckGalleryActivity.class);
         startActivity(intent);
 
     }
 
     public void goToFriendActivity(View view) {
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
-        mp.start();Intent intent = new Intent(this, FriendActivity.class);
+//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
+//        mp.start();
+          Intent intent = new Intent(this, FriendActivity.class);
         startActivity(intent);
 
     }
