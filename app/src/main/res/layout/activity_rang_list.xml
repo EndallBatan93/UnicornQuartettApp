@@ -15,7 +15,7 @@
         android:layout_marginStart="16dp"
         android:src="@drawable/geilesau"
         android:onClick="goToProfileActivity"
-        app:civ_border_color="#FF000000"
+        app:civ_border_color="@color/colorPrimaryDark"
         app:civ_border_width="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
