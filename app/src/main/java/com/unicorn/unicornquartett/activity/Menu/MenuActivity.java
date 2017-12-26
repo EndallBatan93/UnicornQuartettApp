@@ -14,12 +14,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
@@ -27,8 +29,11 @@ import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.activity.Friends.FriendActivity;
 import com.unicorn.unicornquartett.activity.PlayGame.ChooseGameActivity;
+import com.unicorn.unicornquartett.activity.PlayGame.PlayStandardModeActivity;
+import com.unicorn.unicornquartett.activity.PlayGame.PlayUnicornModeActivity;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.activity.Ranglist.RangListActivity;
+import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
 
@@ -48,16 +53,19 @@ public class MenuActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
 
     String mCurrentPhotoPath;
-
     final Context c = this;
     Realm realm = Realm.getDefaultInstance();
     TextView profileName;
+    String theme;
+
 
     @Override
     public void onResume() {
 //        final MediaPlayer mp = MediaPlayer.create(this, R.raw.horse);
 //        mp.start();
         super.onResume();
+
+
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         if (!allUsers.isEmpty()) {
             User user = allUsers.first();
@@ -76,7 +84,7 @@ public class MenuActivity extends AppCompatActivity {
 //        final MediaPlayer mp = MediaPlayer.create(this, R.raw.horse);
 //        mp.start();
 
-
+        new DeckChooser();
         // Initializing Varables
         Button playButton = findViewById(R.id.playbutton);
         Button ranglistButton = findViewById(R.id.ranglisbutton);
@@ -110,7 +118,14 @@ public class MenuActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
+    private void setTheme(String mode) {
+        if(mode.equals("standard")) {
+            //do Nothing
+        } else if (mode.equals("unicorn")){
+            ConstraintLayout layout = findViewById(R.id.menuLayout);
+            layout.setBackground(getDrawable(R.drawable.background));
+        }
+    }
 
     private File createImageFile() throws IOException {
         User user = realm.where(User.class).findFirst();
@@ -336,6 +351,29 @@ public class MenuActivity extends AppCompatActivity {
         return results;
     }
 
+    @SuppressLint("ValidFragment")
+    private class DeckChooser extends DialogFragment {
+        public DeckChooser() {
+            final AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
+            final String[] themes = new String[] {"standard", "unicorn"};
+            alertDialog.setTitle("Choose a theme")
+                    .setSingleChoiceItems(themes, -1, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            setTheme(themes[i]);
+                        }
+                    });
+
+            alertDialog.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            alertDialog.create();
+            alertDialog.show();
+        }
+    }
 
 }
 

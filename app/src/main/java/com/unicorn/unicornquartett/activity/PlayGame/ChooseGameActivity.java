@@ -121,7 +121,7 @@ public class ChooseGameActivity extends AppCompatActivity {
                         activityContext.startActivity(intent);
                     } else {
                         Intent intent = new Intent(activityContext, PlayStandardModeActivity.class);
-                        intent.putExtra("", selectedDeck);
+                        intent.putExtra("selectedDeck", selectedDeck);
                         activityContext.startActivity(intent);
                     }
                 }
