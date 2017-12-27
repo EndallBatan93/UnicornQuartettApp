@@ -22,8 +22,17 @@ public class User extends RealmObject {
     private String imageAbsolutePath;
     private String imageIdentifier;
     private Date date;
-
+    private String theme;
     public User() {
+    }
+
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 
     public Date getDate() {

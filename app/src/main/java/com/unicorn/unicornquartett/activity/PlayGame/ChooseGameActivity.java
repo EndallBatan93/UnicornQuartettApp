@@ -8,14 +8,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.domain.User;
 
 import java.io.File;
@@ -26,8 +27,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
-
-import static android.media.CamcorderProfile.get;
 
 public class ChooseGameActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
@@ -51,6 +50,7 @@ public class ChooseGameActivity extends AppCompatActivity {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<User> all = realm.where(User.class).findAll();
         User user = all.first();
+        setTheme(user.getTheme());
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
 
         Button playStandard = findViewById(R.id.playStandard);
@@ -136,4 +136,25 @@ public class ChooseGameActivity extends AppCompatActivity {
             alertDialog.show();
         }
     }
+    private void setTheme(String mode) {
+        User user = realm.where(User.class).findFirst();
+        if(user != null) {
+            ConstraintLayout layout = findViewById(R.id.playGameLayout);
+            if (mode.equals("standard")) {
+                layout.setBackground(getDrawable(R.drawable.standard));
+            } else if (mode.equals("unicorn")) {
+                layout.setBackground(getDrawable(R.drawable.uniconr));
+            }else if(mode.equals("starwars")) {
+                layout.setBackground(getDrawable(R.drawable.vader));
+            }else if(mode.equals("laserraptor")) {
+                layout.setBackground(getDrawable(R.drawable.raptorsplash));
+            }
+        }
+        assert user != null;
+        realm.beginTransaction();
+        user.setTheme(mode);
+        realm.commitTransaction();
+    }
+
+
 }

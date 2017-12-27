@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -38,10 +39,12 @@ public class FriendActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_friend);
         Realm realm = Realm.getDefaultInstance();
         RealmResults<User> all = realm.where(User.class).findAll();
         User user = all.first();
-        setContentView(R.layout.activity_friend);
+        assert user != null;
+        setTheme(user.getTheme());
         ListView friendList = findViewById(R.id.friendList);
         profileName = findViewById(R.id.userName);
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
@@ -68,6 +71,24 @@ public class FriendActivity extends AppCompatActivity {
         }
 
     }
-
+    private void setTheme(String mode) {
+        User user = realm.where(User.class).findFirst();
+        if (user != null) {
+            ConstraintLayout layout = findViewById(R.id.constraintLayoutFriend);
+            if (mode.equals("standard")) {
+                layout.setBackground(getDrawable(R.drawable.standard));
+            } else if (mode.equals("unicorn")) {
+                layout.setBackground(getDrawable(R.drawable.uniconr));
+            }else if(mode.equals("starwars")) {
+                layout.setBackground(getDrawable(R.drawable.vader));
+            }else if(mode.equals("laserraptor")) {
+                layout.setBackground(getDrawable(R.drawable.raptorsplash));
+            }
+        }
+        assert user != null;
+        realm.beginTransaction();
+        user.setTheme(mode);
+        realm.commitTransaction();
+    }
 
 }

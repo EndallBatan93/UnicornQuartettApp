@@ -92,7 +92,7 @@ public class DisplayCardActivity extends AppCompatActivity {
 
     public void setAttributes(final Deck deck, Card card) {
         setContentView(R.layout.activity_display_card);
-//        cardName = findViewById(R.id.cardName);
+        cardName = findViewById(R.id.cardName);
 
         String[] buildDescriptors = {"desc", "value", "unit", "higherWins"};
         int[] buildLocation = {R.id.cardAttributeTitle, R.id.cardAttributeValue, R.id.cardAttributeUnit, R.id.cardAttributeHW};
@@ -111,7 +111,7 @@ public class DisplayCardActivity extends AppCompatActivity {
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), listOfDeckAttributes, R.layout.listview_display_card, buildDescriptors, buildLocation);
         ListView lw = findViewById(R.id.attributes);
         lw.setAdapter(simpleAdapter);
-//        cardName.setText(card.getName());
+        cardName.setText(card.getName());
         setImage(card,deck);
 
         //

@@ -1,6 +1,7 @@
 package com.unicorn.unicornquartett.activity.Menu;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
@@ -9,19 +10,22 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
@@ -29,11 +33,8 @@ import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.activity.Friends.FriendActivity;
 import com.unicorn.unicornquartett.activity.PlayGame.ChooseGameActivity;
-import com.unicorn.unicornquartett.activity.PlayGame.PlayStandardModeActivity;
-import com.unicorn.unicornquartett.activity.PlayGame.PlayUnicornModeActivity;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.activity.Ranglist.RangListActivity;
-import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
 
@@ -64,27 +65,24 @@ public class MenuActivity extends AppCompatActivity {
 //        final MediaPlayer mp = MediaPlayer.create(this, R.raw.horse);
 //        mp.start();
         super.onResume();
-
-
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         if (!allUsers.isEmpty()) {
             User user = allUsers.first();
+            assert user != null;
+            setTheme(user.getTheme());
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
             profileName.setText(user.getName());
         }
     }
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_menu);
 //        final MediaPlayer mp = MediaPlayer.create(this, R.raw.horse);
 //        mp.start();
-
-        new DeckChooser();
         // Initializing Varables
         Button playButton = findViewById(R.id.playbutton);
         Button ranglistButton = findViewById(R.id.ranglisbutton);
@@ -101,9 +99,9 @@ public class MenuActivity extends AppCompatActivity {
             User user = allUsers.first();
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
             profileName.setText(user.getName());
+            setTheme(user.getTheme());
         }
     }
-
 
 
     // give parameters absolutePath and imageIdentifier and on call set user.absolutePath and user.imageIdentifier
@@ -118,14 +116,7 @@ public class MenuActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    private void setTheme(String mode) {
-        if(mode.equals("standard")) {
-            //do Nothing
-        } else if (mode.equals("unicorn")){
-            ConstraintLayout layout = findViewById(R.id.menuLayout);
-            layout.setBackground(getDrawable(R.drawable.background));
-        }
-    }
+
 
     private File createImageFile() throws IOException {
         User user = realm.where(User.class).findFirst();
@@ -191,7 +182,7 @@ public class MenuActivity extends AppCompatActivity {
 
         }
         realm.commitTransaction();
-//        realm.close();
+        new ThemeChooser();
     }
 
     private String getRealPathFromURI(Uri contentUri) {
@@ -244,7 +235,7 @@ public class MenuActivity extends AppCompatActivity {
     public void goToFriendActivity(View view) {
 //        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
 //        mp.start();
-          Intent intent = new Intent(this, FriendActivity.class);
+        Intent intent = new Intent(this, FriendActivity.class);
         startActivity(intent);
 
     }
@@ -352,10 +343,10 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ValidFragment")
-    private class DeckChooser extends DialogFragment {
-        public DeckChooser() {
+    private class ThemeChooser extends DialogFragment {
+        public ThemeChooser() {
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
-            final String[] themes = new String[] {"standard", "unicorn"};
+            final String[] themes = new String[]{"standard", "unicorn", "starwars", "laserraptor"};
             alertDialog.setTitle("Choose a theme")
                     .setSingleChoiceItems(themes, -1, new DialogInterface.OnClickListener() {
 
@@ -370,12 +361,32 @@ public class MenuActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                 }
             });
+            alertDialog.setCancelable(false);
             alertDialog.create();
             alertDialog.show();
         }
     }
 
-}
 
+    private void setTheme(String mode) {
+        User user = realm.where(User.class).findFirst();
+        if (user != null) {
+            ConstraintLayout layout = findViewById(R.id.menuLayout);
+            if (mode.equals("standard")) {
+                layout.setBackground(getDrawable(R.drawable.standard));
+            } else if (mode.equals("unicorn")) {
+                layout.setBackground(getDrawable(R.drawable.uniconr));
+            } else if(mode.equals("starwars")) {
+                layout.setBackground(getDrawable(R.drawable.vader));
+            }else if(mode.equals("laserraptor")) {
+                layout.setBackground(getDrawable(R.drawable.raptorsplash));
+            }
+        }
+        assert user != null;
+        realm.beginTransaction();
+        user.setTheme(mode);
+        realm.commitTransaction();
+    }
+}
 
 

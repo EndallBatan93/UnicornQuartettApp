@@ -74,6 +74,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
             setAttributes(teamUser.first(), deck);
             status.setText(teamUser.size() + ":" + teamOpponent.size());
 
+            
         } else {
             createStacks(deck);
             setAttributes(teamUser.first(), deck);

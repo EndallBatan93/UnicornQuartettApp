@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blue"
+    android:background="@drawable/standard"
+    android:id="@+id/constraintLayoutFriend"
     tools:context=".activity.Friends.FriendActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"

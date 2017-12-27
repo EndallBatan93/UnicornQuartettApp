@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,10 @@ public class DeckGalleryActivity extends AppCompatActivity {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         final User user = allUsers.first();
+
+
+        assert user != null;
+        setTheme(user.getTheme());
 
         profileName = findViewById(R.id.userName);
         ListView deckListView = findViewById(R.id.decksListView);
@@ -178,5 +183,25 @@ public class DeckGalleryActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DisplayCardActivity.class);
         intent.putExtra("DeckName", deckName);
         startActivity(intent);
+    }
+
+    private void setTheme(String mode) {
+        User user = realm.where(User.class).findFirst();
+        if (user != null) {
+            ConstraintLayout layout = findViewById(R.id.deckGalleryLayout);
+            if (mode.equals("standard")) {
+                layout.setBackground(getDrawable(R.drawable.standard));
+            } else if (mode.equals("unicorn")) {
+                layout.setBackground(getDrawable(R.drawable.uniconr));
+            }else if(mode.equals("starwars")) {
+                layout.setBackground(getDrawable(R.drawable.vader));
+            }else if(mode.equals("laserraptor")) {
+                layout.setBackground(getDrawable(R.drawable.raptorsplash));
+            }
+        }
+        assert user != null;
+        realm.beginTransaction();
+        user.setTheme(mode);
+        realm.commitTransaction();
     }
 }

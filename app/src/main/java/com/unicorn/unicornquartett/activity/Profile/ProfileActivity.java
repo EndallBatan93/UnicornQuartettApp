@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -72,6 +74,9 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         RealmResults<User> all = realm.where(User.class).findAll();
         final User user = all.first();
+
+        assert user != null;
+        setTheme(user.getTheme());
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
         final EditText usernameTextView = findViewById(R.id.username);
         TextView registeredTextView = findViewById(R.id.registered);
@@ -79,6 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
         final Button difficultyButton = findViewById(R.id.difficultyButton);
         CircleImageView circleImageView = findViewById(R.id.profileButton);
         TextView statistics = findViewById(R.id.stats);
+        Button theme = findViewById(R.id.themeChooser);
         Date date = user.getDate();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd:MM:yyyy");
         String dateString = dateFormat.format(date);
@@ -104,7 +110,8 @@ public class ProfileActivity extends AppCompatActivity {
             dissView.setText("Seriously. Much too learn you have KACKNOOB");
 
         } else {
-            dissView.setText("DU SPASSTGLATZE.Deine Mutter ist so fett sie arbeitet im Aufzug als Gegengewicht");
+            dissView.setText("DU SPASSTGLATZE.Deine Mutter ist so fett"+  "\n" +
+                            "sie arbeitet im Aufzug als Gegengewicht");
         }
 
 
@@ -131,6 +138,12 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        theme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ThemeChooser();
+            }
+        });
 
     }
 
@@ -277,6 +290,49 @@ public class ProfileActivity extends AppCompatActivity {
                     });
             AlertDialog createUserDialog = builder.create();
             createUserDialog.show();
+        }
+    }
+    private void setTheme(String mode) {
+        User user = realm.where(User.class).findFirst();
+        if (user != null) {
+            ConstraintLayout layout = findViewById(R.id.profileLayout);
+            if (mode.equals("standard")) {
+                layout.setBackground(getDrawable(R.drawable.standard));
+            } else if (mode.equals("unicorn")) {
+                layout.setBackground(getDrawable(R.drawable.uniconr));
+            }else if(mode.equals("starwars")) {
+                layout.setBackground(getDrawable(R.drawable.vader));
+            }else if(mode.equals("laserraptor")) {
+                layout.setBackground(getDrawable(R.drawable.raptorsplash));
+            }
+        }
+        assert user != null;
+        realm.beginTransaction();
+        user.setTheme(mode);
+        realm.commitTransaction();
+    }
+    @SuppressLint("ValidFragment")
+    private class ThemeChooser extends DialogFragment {
+        public ThemeChooser() {
+            final AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
+            final String[] themes = new String[]{"standard", "unicorn", "starwars", "laserraptor"};
+            alertDialog.setTitle("Choose a theme")
+                    .setSingleChoiceItems(themes, -1, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            setTheme(themes[i]);
+                        }
+                    });
+
+            alertDialog.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            alertDialog.setCancelable(false);
+            alertDialog.create();
+            alertDialog.show();
         }
     }
 }

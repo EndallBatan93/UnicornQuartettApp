@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -43,6 +44,8 @@ public class RangListActivity extends AppCompatActivity {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<User> all = realm.where(User.class).findAll();
         User user = all.first();
+        assert user != null;
+        setTheme(user.getTheme());
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
         ListView rangList = (ListView) findViewById(R.id.ranglistView);
         profileName = findViewById(R.id.userName);
@@ -67,6 +70,25 @@ public class RangListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+
+    private void setTheme(String mode) {
+        User user = realm.where(User.class).findFirst();
+        if (user != null) {
+            ConstraintLayout layout = findViewById(R.id.ranglistLayout);
+            if (mode.equals("standard")) {
+                layout.setBackground(getDrawable(R.drawable.standard));
+            } else if (mode.equals("unicorn")) {
+                layout.setBackground(getDrawable(R.drawable.uniconr));
+            }else if(mode.equals("starwars")) {
+                layout.setBackground(getDrawable(R.drawable.vader));
+            }
+        }
+        assert user != null;
+        realm.beginTransaction();
+        user.setTheme(mode);
+        realm.commitTransaction();
     }
 
 }

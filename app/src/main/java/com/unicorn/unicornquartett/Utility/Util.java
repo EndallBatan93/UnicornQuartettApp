@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class Util {
 
     private Context context;
 
-
+    static Realm realm = Realm.getDefaultInstance();
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -53,5 +54,4 @@ public class Util {
             );
         }
     }
-
 }
