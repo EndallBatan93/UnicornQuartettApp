@@ -39,6 +39,7 @@ public class ChooseGameActivity extends AppCompatActivity {
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         if (!allUsers.isEmpty()) {
             User user = allUsers.first();
+            setTheme(user.getTheme());
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
             profileName.setText(user.getName());
         }
@@ -148,6 +149,10 @@ public class ChooseGameActivity extends AppCompatActivity {
                 layout.setBackground(getDrawable(R.drawable.vader));
             }else if(mode.equals("laserraptor")) {
                 layout.setBackground(getDrawable(R.drawable.raptorsplash));
+            }else if(mode.equals("HoB")) {
+                layout.setBackground(getDrawable(R.drawable.hob));
+            }else if(mode.equals("mbay")) {
+                layout.setBackground(getDrawable(R.drawable.bay));
             }
         }
         assert user != null;

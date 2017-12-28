@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.activity.Friends.FriendActivity;
@@ -42,6 +44,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -49,9 +52,21 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.INTRO_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
+
 public class MenuActivity extends AppCompatActivity {
     private static final int REQUEST_FROM_GALLERY = 2;
     static final int REQUEST_TAKE_PHOTO = 1;
+
+
 
     String mCurrentPhotoPath;
     final Context c = this;
@@ -83,7 +98,7 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_menu);
-//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.horse);
+//
 //        mp.start();
         // Initializing Varables
         Button playButton = findViewById(R.id.playbutton);
@@ -101,7 +116,13 @@ public class MenuActivity extends AppCompatActivity {
             User user = allUsers.first();
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
             profileName.setText(user.getName());
-            setTheme(user.getTheme());
+            if(user.getTheme() != null) {
+                setTheme(user.getTheme());
+                ArrayList<MediaPlayer> themeBasedMP = Util.getThemeBasedMP(c, user.getTheme());
+                Util.setSoundConstants(themeBasedMP);
+                INTRO_SOUND.start();
+            }
+
         }
     }
 
@@ -203,40 +224,35 @@ public class MenuActivity extends AppCompatActivity {
 
     // Navigation Methods
     public void goToPlayGameActivity(View view) {
-//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
-//        mp.start();
+        Button_SOUND.start();
         Intent intent = new Intent(this, ChooseGameActivity.class);
         startActivity(intent);
 
     }
 
     public void goToProfileActivity(View view) {
-//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
-//        mp.start();
+        Fun_SOUND.start();
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
 
     }
 
     public void goToRangListActivity(View view) {
-//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
-//        mp.start();
+        Button_SOUND.start();
         Intent intent = new Intent(this, RangListActivity.class);
         startActivity(intent);
 
     }
 
     public void goToDeckGalleryActivity(View view) {
-//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
-//        mp.start();
+        Button_SOUND.start();
         Intent intent = new Intent(this, DeckGalleryActivity.class);
         startActivity(intent);
 
     }
 
     public void goToFriendActivity(View view) {
-//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lightsaber);
-//        mp.start();
+        Button_SOUND.start();
         Intent intent = new Intent(this, FriendActivity.class);
         startActivity(intent);
 
@@ -348,7 +364,7 @@ public class MenuActivity extends AppCompatActivity {
     private class ThemeChooser extends DialogFragment {
         public ThemeChooser() {
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
-            final String[] themes = new String[]{"standard", "unicorn", "starwars", "laserraptor"};
+            final String[] themes = new String[]{STANDARD_THEME, UNICORN_THEME, STARWARS_THEME, RAPTOR_THEME, HOB_THEME, BAY_THEME, };
             alertDialog.setTitle("Choose a theme")
                     .setSingleChoiceItems(themes, -1, new DialogInterface.OnClickListener() {
 
@@ -374,16 +390,24 @@ public class MenuActivity extends AppCompatActivity {
         User user = realm.where(User.class).findFirst();
         if (user != null) {
             ConstraintLayout layout = findViewById(R.id.menuLayout);
-            if (mode.equals("standard")) {
+            if (mode.equals(STANDARD_THEME)) {
                 layout.setBackground(getDrawable(R.drawable.standard));
-            } else if (mode.equals("unicorn")) {
+            } else if (mode.equals(UNICORN_THEME)) {
                 layout.setBackground(getDrawable(R.drawable.uniconr));
-            } else if(mode.equals("starwars")) {
+            } else if(mode.equals(STARWARS_THEME)) {
                 layout.setBackground(getDrawable(R.drawable.vader));
-            }else if(mode.equals("laserraptor")) {
+            }else if(mode.equals(RAPTOR_THEME)) {
                 layout.setBackground(getDrawable(R.drawable.raptorsplash));
+            }else if(mode.equals(HOB_THEME)) {
+                layout.setBackground(getDrawable(R.drawable.hob));
+            }else if(mode.equals(BAY_THEME)) {
+                layout.setBackground(getDrawable(R.drawable.bay));
             }
+
         }
+
+
+
         assert user != null;
         realm.beginTransaction();
         user.setTheme(mode);

@@ -197,6 +197,10 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 layout.setBackground(getDrawable(R.drawable.vader));
             }else if(mode.equals("laserraptor")) {
                 layout.setBackground(getDrawable(R.drawable.raptorsplash));
+            }else if(mode.equals("HoB")) {
+                layout.setBackground(getDrawable(R.drawable.hob));
+            }else if(mode.equals("mbay")) {
+                layout.setBackground(getDrawable(R.drawable.bay));
             }
         }
         assert user != null;

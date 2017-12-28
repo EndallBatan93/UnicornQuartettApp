@@ -147,7 +147,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void connectToGooglePlay(View view) {
         //tbd
-
     }
 
 
@@ -200,14 +199,16 @@ public class ProfileActivity extends AppCompatActivity {
         View createPhotoDialogView = layoutInflater.inflate(R.layout.dialog_create_photo, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setView(createPhotoDialogView);
-        realm.beginTransaction();
+
         builder.setPositiveButton("Take picture", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        realm.beginTransaction();
                         dispatchTakePictureIntent();
                     }
                 })
                 .setNeutralButton("Choose picture", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        realm.beginTransaction();
                         choosePictureFromGallery();
                     }
                 });
@@ -302,6 +303,10 @@ public class ProfileActivity extends AppCompatActivity {
                 layout.setBackground(getDrawable(R.drawable.vader));
             }else if(mode.equals("laserraptor")) {
                 layout.setBackground(getDrawable(R.drawable.raptorsplash));
+            }else if(mode.equals("HoB")) {
+                layout.setBackground(getDrawable(R.drawable.hob));
+            }else if(mode.equals("mbay")) {
+                layout.setBackground(getDrawable(R.drawable.bay));
             }
         }
         assert user != null;
@@ -313,7 +318,7 @@ public class ProfileActivity extends AppCompatActivity {
     private class ThemeChooser extends DialogFragment {
         public ThemeChooser() {
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
-            final String[] themes = new String[]{"standard", "unicorn", "starwars", "laserraptor"};
+            final String[] themes = new String[]{"standard", "unicorn", "starwars", "laserraptor", "HoB", "mbay"};
             alertDialog.setTitle("Choose a theme")
                     .setSingleChoiceItems(themes, -1, new DialogInterface.OnClickListener() {
 
