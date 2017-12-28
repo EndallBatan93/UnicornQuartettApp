@@ -49,6 +49,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     RealmList<String> attributes;
     int aiPosition;
     ArtificialIntelligence currentAI;
+    String difficulty;
 
     @Override
     public void onBackPressed() {
@@ -65,9 +66,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         turn = findViewById(R.id.turn);
         User user = getuser();
         Deck deck = getDecks();
-        String difficulty = user.getDifficulty();
-
-        currentAI = new ArtificialIntelligence(deck, difficulty);
+        difficulty = user.getDifficulty();
 
         String runningGame = getIntent().getStringExtra("gameRunning");
         if ((runningGame != null) && runningGame.equals("true")) {
@@ -171,9 +170,10 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         }
         // AI is playing
         else {
+            currentAI = new ArtificialIntelligence(deck, difficulty);
             int choosenAttrPosition = currentAI.playCard(teamOpponent.first());
-
             currentShemaPosition = choosenAttrPosition;
+            attrValue = teamOpponent.first().getAttributes().get(choosenAttrPosition);
             isChoosen = true;
             chooseValue.setBackgroundColor(Color.GREEN);
             chooseValue.setText("Continue");

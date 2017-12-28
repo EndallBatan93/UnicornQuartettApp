@@ -20,7 +20,7 @@ public class ArtificialIntelligence {
     Avg avg;
     RealmList<Double> attributesValues;
     RealmList<Boolean> higherWins;
-    RealmList<Double> relativeValues;
+    RealmList<Double> relativeValues = new RealmList<>();
 
     public ArtificialIntelligence(Deck deck, String difficulty) {
         this.difficulty = difficulty;
@@ -45,7 +45,7 @@ public class ArtificialIntelligence {
     }
 
     private int chooseEasy() {
-        int easyPosition = ThreadLocalRandom.current().nextInt(0, relativeValues.size() + 1);
+        int easyPosition = ThreadLocalRandom.current().nextInt(0, relativeValues.size());
         return easyPosition;
     }
 
@@ -68,7 +68,7 @@ public class ArtificialIntelligence {
         }
 
         int[] posList = new int[] { firstPosition, secondPosition };
-        int randomPos = ThreadLocalRandom.current().nextInt(0, posList.length + 1);
+        int randomPos = ThreadLocalRandom.current().nextInt(0, posList.length);
         mediumPosition = posList[randomPos];
         return mediumPosition;
     }
