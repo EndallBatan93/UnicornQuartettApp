@@ -1,0 +1,17 @@
+package com.unicorn.unicornquartett.Utility;
+
+
+import android.media.MediaPlayer;
+
+public class Constants {
+
+    public static final  String UNICORN_THEME = "unicorn";
+    public static final  String STARWARS_THEME = "starwars";
+    public static final  String HOB_THEME = "handOfBlood";
+    public static final  String RAPTOR_THEME = "laserRaptor";
+    public static final  String BAY_THEME = "michaelBay";
+    public static final  String STANDARD_THEME = "standard";
+    public static MediaPlayer INTRO_SOUND = new MediaPlayer();
+    public static MediaPlayer Button_SOUND = new MediaPlayer();
+    public static MediaPlayer Fun_SOUND = new MediaPlayer();
+}
