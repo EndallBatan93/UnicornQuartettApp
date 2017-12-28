@@ -92,6 +92,11 @@ public class ShowResultActivity extends AppCompatActivity {
         status.setText(game.getUsercards().size() + ":" + game.getOpponentCards().size());
     }
 
+    @Override
+    public void onBackPressed() {
+        //TODO Spielstand speichern
+    }
+
     public void setImage(Card card, Deck deck, ImageView view) {
         RealmList<String> imageIdentifiers = card.getImage().getImageIdentifiers();
         String identifier = imageIdentifiers.first();
