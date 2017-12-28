@@ -16,7 +16,6 @@ import io.realm.RealmList;
 public class ArtificialIntelligence {
 
     Realm realm = Realm.getDefaultInstance();
-    Card card;
     String difficulty;
     Avg avg;
     RealmList<Double> attributesValues;
@@ -52,12 +51,41 @@ public class ArtificialIntelligence {
 
     private int chooseMedium() {
         int mediumPosition = 0;
-        return 0;
+        double firstHighestValue = Double.MIN_VALUE, secondHighestValue = Double.MIN_VALUE;
+        int firstPosition = 0, secondPosition = 0;
+
+        for (int i=0; i<relativeValues.size(); i++){
+            if(relativeValues.get(i) > firstHighestValue){
+                secondHighestValue = firstHighestValue;
+                firstHighestValue = relativeValues.get(i);
+                secondPosition = firstPosition;
+                firstPosition = i;
+            }
+            else if (relativeValues.get(i) > secondHighestValue) {
+                secondHighestValue = relativeValues.get(i);
+                secondPosition = i;
+            }
+        }
+
+        int[] posList = new int[] { firstPosition, secondPosition };
+        int randomPos = ThreadLocalRandom.current().nextInt(0, posList.length + 1);
+        mediumPosition = posList[randomPos];
+        return mediumPosition;
     }
 
     private int chooseHard() {
-        int hardPosition;
-        return 0;
+        int hardPosition = 0;
+
+        int limit = relativeValues.size();
+        double max = Double.MIN_VALUE;
+        for (int i = 0; i < limit; i++) {
+            Double value = relativeValues.get(i);
+            if (value > max) {
+                max = value;
+                hardPosition = i;
+            }
+        }
+        return hardPosition;
     }
 
     private void calcRelativeValues(Card card) {
