@@ -69,9 +69,11 @@ public class MenuActivity extends AppCompatActivity {
         if (!allUsers.isEmpty()) {
             User user = allUsers.first();
             assert user != null;
-            setTheme(user.getTheme());
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
             profileName.setText(user.getName());
+            if (user.getTheme() != null) {
+                setTheme(user.getTheme());
+            }
         }
     }
 

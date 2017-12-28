@@ -45,7 +45,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     private Game game;
     Boolean isChoosen = false;
     RealmList<String> attributes;
-    int kiPosition;
+    int aiPosition;
 
     @Override
     public void onBackPressed() {
@@ -74,13 +74,13 @@ public class PlayStandardModeActivity extends AppCompatActivity {
             setAttributes(teamUser.first(), deck);
             status.setText(teamUser.size() + ":" + teamOpponent.size());
 
-            
+
         } else {
             createStacks(deck);
             setAttributes(teamUser.first(), deck);
         }
 
-        if(game == null) {
+        if (game == null) {
             turn.setText(PLAYERSTURN);
         } else {
 
@@ -148,6 +148,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         status.setText(teamUser.size() + ":" + teamOpponent.size());
         attributes = card.getAttributes();
 
+        // User is playing
         if (game == null || game.getTurn().equals("user")) {
 
             lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -163,13 +164,19 @@ public class PlayStandardModeActivity extends AppCompatActivity {
 
                 }
             });
-        } else {
-            kiPosition = 2;
-            attrValue = teamOpponent.first().getAttributes().get(kiPosition);
-            currentShemaPosition = kiPosition;
+        }
+        // AI is playing
+        else {
+
+
+
+            aiPosition = 2;
+            attrValue = teamOpponent.first().getAttributes().get(aiPosition);
+            currentShemaPosition = aiPosition;
             isChoosen = true;
             chooseValue.setBackgroundColor(Color.GREEN);
             chooseValue.setText("Continue");
+
         }
         chooseValue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,7 +265,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         values.add(valueOpponent);
         game.setValues(values);
         game.setLastWinner(winner);
-        if(game.getTurn() == null) {
+        if (game.getTurn() == null) {
             game.setTurn("user");
         }
 

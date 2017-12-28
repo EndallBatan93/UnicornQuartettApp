@@ -2,6 +2,7 @@ package com.unicorn.unicornquartett.Utility;
 
 import android.app.Application;
 
+import com.unicorn.unicornquartett.domain.Avg;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Image;
@@ -35,7 +36,7 @@ public class UnicornQuartett extends Application {
                 .Builder()
                 .deleteRealmIfMigrationNeeded()
                 .name("unicornQuartett")
-               .build();
+                .build();
 
         Realm.setDefaultConfiguration(config);
         Realm realm = Realm.getDefaultInstance();
@@ -102,11 +103,25 @@ public class UnicornQuartett extends Application {
             tuning.setCards(tuningCards);
         }
 
+        // Create avgs of card values
+        Avg tuningAvg = realm.createObject(Avg.class);
+        Deck tuningDeck = realm.where(Deck.class).equalTo("name", tuningName).findFirst();
+        tuningAvg.setAvgDoubles(calcAvgsForDeck(tuningDeck));
+        tuningAvg.setHigherWins(createHigherWinsList(tuningDeck));
+        tuningAvg.setName(tuningName);
+
+        Avg bikesAvg = realm.createObject(Avg.class);
+        Deck bikesDeck = realm.where(Deck.class).equalTo("name", bikeName).findFirst();
+        bikesAvg.setAvgDoubles(calcAvgsForDeck(bikesDeck));
+        bikesAvg.setHigherWins(createHigherWinsList(bikesDeck));
+        bikesAvg.setName(bikeName);
+
+        // Realm commit and close
         realm.commitTransaction();
         realm.close();
     }
 
-    public String loadJSONFromAsset(String filename) {
+    private String loadJSONFromAsset(String filename) {
         String json = null;
         try {
 
@@ -137,7 +152,7 @@ public class UnicornQuartett extends Application {
         realm.commitTransaction();
     }
 
-    public void getShemas(Realm realm, JSONArray listParameter, String deckParameter) throws JSONException {
+    private void getShemas(Realm realm, JSONArray listParameter, String deckParameter) throws JSONException {
         RealmList<Shema> tempShemasList = new RealmList<>();
 
         for (int i = 0; i < listParameter.length(); i++) {
@@ -160,7 +175,7 @@ public class UnicornQuartett extends Application {
         }
     }
 
-    public RealmList<Card> getCards(Realm realm, JSONArray listParameter, RealmList<Shema> shemaParameter) {
+    private RealmList<Card> getCards(Realm realm, JSONArray listParameter, RealmList<Shema> shemaParameter) {
         RealmList<Card> returnCardList = new RealmList<>();
         for (int i = 0; i < listParameter.length(); i++) {
 
@@ -201,4 +216,28 @@ public class UnicornQuartett extends Application {
 
         return returnCardList;
     }
+
+    private RealmList<Double> calcAvgsForDeck(Deck deck) {
+        RealmList<Double> avgListInDouble = new RealmList<>();
+        Double tmpDouble = 0.0;
+        for (int i = 0; i < deck.getShema().size(); i++) {
+            for (int j = 0; j < deck.getCards().size(); j++) {
+                tmpDouble += Double.parseDouble(deck.getCards().get(j).getAttributes().get(i));
+            }
+            Double avgDouble = tmpDouble / (deck.getCards().size());
+            avgListInDouble.add(avgDouble);
+            tmpDouble = 0.0;
+        }
+
+        return avgListInDouble;
+    }
+
+    private RealmList<Boolean> createHigherWinsList(Deck deck) {
+        RealmList<Boolean> higherWins = new RealmList<>();
+        for (int i = 0; i < deck.getShema().size(); i++) {
+            higherWins.add(deck.getShema().get(i).getHigherWins());
+        }
+        return higherWins;
+    }
+
 }
