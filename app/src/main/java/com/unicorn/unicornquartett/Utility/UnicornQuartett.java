@@ -64,16 +64,15 @@ public class UnicornQuartett extends Application {
         }
         realm.beginTransaction();
 
-        String bikeName = "Bikes";
-        Deck bikeExists = realm.where(Deck.class).equalTo("name", bikeName).findFirst();
+        Deck bikeExists = realm.where(Deck.class).equalTo("name", Constants.REALM_BIKE_NAME).findFirst();
         if (bikeExists == null) {
             Deck bikes = realm.createObject(Deck.class);
-            bikes.setName(bikeName);
+            bikes.setName(Constants.REALM_BIKE_NAME);
             bikes.setId(1);
             bikes.setNumberOfCards(32);
             bikes.setLocked(false);
             try {
-                getShemas(realm, bikeShemaArray, "bikes");
+                getShemas(realm, bikeShemaArray, Constants.BIKES);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -83,17 +82,16 @@ public class UnicornQuartett extends Application {
             bikes.setCards(bikeCards);
         }
 
-        String tuningName = "Tuning";
-        Deck tuningExists = realm.where(Deck.class).equalTo("name", tuningName).findFirst();
+        Deck tuningExists = realm.where(Deck.class).equalTo("name", Constants.REALM_TUNING_NAME).findFirst();
         if (tuningExists == null) {
 
             Deck tuning = realm.createObject(Deck.class);
-            tuning.setName(tuningName);
+            tuning.setName(Constants.REALM_TUNING_NAME);
             tuning.setId(2);
             tuning.setLocked(false);
             tuning.setNumberOfCards(32);
             try {
-                getShemas(realm, tuningShemaArray, "tuning");
+                getShemas(realm, tuningShemaArray, Constants.TUNING);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -105,16 +103,16 @@ public class UnicornQuartett extends Application {
 
         // Create avgs of card values
         Avg tuningAvg = realm.createObject(Avg.class);
-        Deck tuningDeck = realm.where(Deck.class).equalTo("name", tuningName).findFirst();
+        Deck tuningDeck = realm.where(Deck.class).equalTo("name", Constants.REALM_TUNING_NAME).findFirst();
         tuningAvg.setAvgDoubles(calcAvgsForDeck(tuningDeck));
         tuningAvg.setHigherWins(createHigherWinsList(tuningDeck));
-        tuningAvg.setName(tuningName);
+        tuningAvg.setName(Constants.REALM_TUNING_NAME);
 
         Avg bikesAvg = realm.createObject(Avg.class);
-        Deck bikesDeck = realm.where(Deck.class).equalTo("name", bikeName).findFirst();
+        Deck bikesDeck = realm.where(Deck.class).equalTo("name", Constants.REALM_BIKE_NAME).findFirst();
         bikesAvg.setAvgDoubles(calcAvgsForDeck(bikesDeck));
         bikesAvg.setHigherWins(createHigherWinsList(bikesDeck));
-        bikesAvg.setName(bikeName);
+        bikesAvg.setName(Constants.REALM_BIKE_NAME);
 
         // Realm commit and close
         realm.commitTransaction();
@@ -168,9 +166,9 @@ public class UnicornQuartett extends Application {
             tempShemasList.add(tempShema);
         }
 
-        if (deckParameter.equals("bikes")) {
+        if (deckParameter.equals(Constants.BIKES)) {
             this.bikeShemas = tempShemasList;
-        } else if (deckParameter.equals("tuning")) {
+        } else if (deckParameter.equals(Constants.TUNING)) {
             this.tuningShemas = tempShemasList;
         }
     }

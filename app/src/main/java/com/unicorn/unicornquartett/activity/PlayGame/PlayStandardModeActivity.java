@@ -16,6 +16,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.Utility.ArtificialIntelligence;
+import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
@@ -46,6 +48,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     Boolean isChoosen = false;
     RealmList<String> attributes;
     int aiPosition;
+    ArtificialIntelligence currentAI;
 
     @Override
     public void onBackPressed() {
@@ -62,8 +65,9 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         turn = findViewById(R.id.turn);
         User user = getuser();
         Deck deck = getDecks();
-        String PLAYERSTURN = "Your Turn";
-        String OPPONENTTURN = "Opponent Turn";
+        String difficulty = user.getDifficulty();
+
+        currentAI = new ArtificialIntelligence(deck, difficulty);
 
         String runningGame = getIntent().getStringExtra("gameRunning");
         if ((runningGame != null) && runningGame.equals("true")) {
@@ -81,13 +85,13 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         }
 
         if (game == null) {
-            turn.setText(PLAYERSTURN);
+            turn.setText(Constants.PLAYERSTURN);
         } else {
 
             if (game.getTurn().equals("user")) {
-                turn.setText(PLAYERSTURN);
+                turn.setText(Constants.PLAYERSTURN);
             } else {
-                turn.setText(OPPONENTTURN);
+                turn.setText(Constants.OPPONENTTURN);
             }
         }
     }
@@ -167,12 +171,9 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         }
         // AI is playing
         else {
+            int choosenAttrPosition = currentAI.playCard(teamOpponent.first());
 
-
-
-            aiPosition = 2;
-            attrValue = teamOpponent.first().getAttributes().get(aiPosition);
-            currentShemaPosition = aiPosition;
+            currentShemaPosition = choosenAttrPosition;
             isChoosen = true;
             chooseValue.setBackgroundColor(Color.GREEN);
             chooseValue.setText("Continue");

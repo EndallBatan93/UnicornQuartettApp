@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
@@ -48,10 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
     Button googlePlayButton;
 
-    String diff1 = "fluffy";
-    String diff2 = "fluffier";
-    String diff3 = "superfluffy";
-    String[] diffArray = new String[]{diff1, diff2, diff3};
+    String[] diffArray = new String[]{Constants.DIFFICULTY_1,Constants.DIFFICULTY_2, Constants.DIFFICULTY_3};
 
     final Context c = this;
 
