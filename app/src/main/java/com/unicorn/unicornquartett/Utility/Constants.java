@@ -31,4 +31,9 @@ public final class Constants {
     public static final String PLAYERSTURN = "Your Turn";
     public static final String OPPONENTTURN = "Opponent Turn";
 
+    // BITMAP SCALINGS
+    public static final int ULTRA_HIGH_FACTOR = 30;
+    public static final int HIGH_FACTOR = 25;
+    public static final int MEDIUM_FACTOR = 10;
+    public static final int LOW_FACTOR = 5;
 }
