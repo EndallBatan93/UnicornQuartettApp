@@ -35,6 +35,8 @@ import java.util.Map;
 import io.realm.Realm;
 import io.realm.RealmList;
 
+import static com.unicorn.unicornquartett.Utility.Constants.*;
+
 public class PlayStandardModeActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
     RealmList<Card> teamUser = new RealmList<>();
@@ -79,13 +81,13 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         }
 
         if (game == null) {
-            turn.setText(Constants.PLAYERSTURN);
+            turn.setText(PLAYERSTURN);
         } else {
 
             if (game.getTurn().equals("user")) {
-                turn.setText(Constants.PLAYERSTURN);
+                turn.setText(PLAYERSTURN);
             } else {
-                turn.setText(Constants.OPPONENTTURN);
+                turn.setText(OPPONENTTURN);
             }
         }
     }
@@ -155,6 +157,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
                 @SuppressLint("ResourceAsColor")
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Fun_SOUND.start();
                     attrValue = attributes.get(i);
                     lw.getChildAt(currentShemaPosition).setBackgroundColor(Color.WHITE);
                     currentShemaPosition = i;

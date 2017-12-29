@@ -13,6 +13,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Shema;
@@ -27,6 +28,8 @@ import java.util.Map;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+
+import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 
 public class DisplayCardActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
@@ -123,6 +126,7 @@ public class DisplayCardActivity extends AppCompatActivity {
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Fun_SOUND.start();
                 setAttributes(deck, getCurrentCard(false, cards));
 //                mp.start();
             }
@@ -132,6 +136,7 @@ public class DisplayCardActivity extends AppCompatActivity {
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Fun_SOUND.start();
                 setAttributes(deck,getCurrentCard(true,cards));
 //                mp.start();
             }

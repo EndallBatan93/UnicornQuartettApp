@@ -156,7 +156,6 @@ public class ShowResultActivity extends AppCompatActivity {
             startActivity(intent);
         }
         else if (game.getUsercards().isEmpty()) {
-
             GameResult gameResult = realm.createObject(GameResult.class);
             gameResult.setWon(false);
             user.getStats().add(gameResult);

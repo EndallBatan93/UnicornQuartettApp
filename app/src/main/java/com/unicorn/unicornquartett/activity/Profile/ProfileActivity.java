@@ -46,7 +46,10 @@ import io.realm.RealmResults;
 
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.INTRO_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
@@ -130,12 +133,15 @@ public class ProfileActivity extends AppCompatActivity {
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Fun_SOUND.start();
                 takePictureDialog();
             }
         });
         usernameTextView.setOnKeyListener(new View.OnKeyListener() {
+
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                Button_SOUND.start();
                 realm.beginTransaction();
                 user.setName(usernameTextView.getText().toString());
                 realm.commitTransaction();
@@ -145,6 +151,7 @@ public class ProfileActivity extends AppCompatActivity {
         difficultyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                INTRO_SOUND.start();
                 new DifficultyChooser();
             }
         });
@@ -152,6 +159,7 @@ public class ProfileActivity extends AppCompatActivity {
         theme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                INTRO_SOUND.start();
                 new ThemeChooser();
             }
         });

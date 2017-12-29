@@ -31,6 +31,8 @@ import io.realm.RealmResults;
 
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
@@ -71,6 +73,7 @@ public class ChooseGameActivity extends AppCompatActivity {
         playStandard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Button_SOUND.start();
                 new DeckChooser("playStandard");
             }
         });
@@ -79,6 +82,7 @@ public class ChooseGameActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                Button_SOUND.start();
                 new DeckChooser("playUnicorn");
             }
         });
@@ -93,6 +97,7 @@ public class ChooseGameActivity extends AppCompatActivity {
     }
 
     public void goToProfileActivity(View view) {
+        Fun_SOUND.start();
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
 
