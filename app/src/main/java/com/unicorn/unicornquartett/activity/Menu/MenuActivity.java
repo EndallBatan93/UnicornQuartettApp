@@ -1,7 +1,6 @@
 package com.unicorn.unicornquartett.activity.Menu;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
@@ -10,18 +9,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.BaseKeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -30,7 +26,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.activity.Friends.FriendActivity;
@@ -52,6 +47,7 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
@@ -61,11 +57,11 @@ import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
+import static com.unicorn.unicornquartett.Utility.Util.*;
 
 public class MenuActivity extends AppCompatActivity {
     private static final int REQUEST_FROM_GALLERY = 2;
     static final int REQUEST_TAKE_PHOTO = 1;
-
 
 
     String mCurrentPhotoPath;
@@ -87,7 +83,8 @@ public class MenuActivity extends AppCompatActivity {
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
             profileName.setText(user.getName());
             if (user.getTheme() != null) {
-                setTheme(user.getTheme());
+                setTheme();
+                INTRO_SOUND.start();
             }
         }
     }
@@ -116,20 +113,17 @@ public class MenuActivity extends AppCompatActivity {
             User user = allUsers.first();
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
             profileName.setText(user.getName());
-            if(user.getTheme() != null) {
-                setTheme(user.getTheme());
-                ArrayList<MediaPlayer> themeBasedMP = Util.getThemeBasedMP(c, user.getTheme());
-                Util.setSoundConstants(themeBasedMP);
+            if (user.getTheme() != null) {
+                initializeTheme(user.getTheme());
                 INTRO_SOUND.start();
             }
-
         }
     }
 
 
     // give parameters absolutePath and imageIdentifier and on call set user.absolutePath and user.imageIdentifier
     private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
-        Util.verifyStoragePermissions(MenuActivity.this);
+        verifyStoragePermissions(MenuActivity.this);
         try {
             File f = new File(absolutePath, imageIdentifier);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
@@ -227,6 +221,7 @@ public class MenuActivity extends AppCompatActivity {
         Button_SOUND.start();
         Intent intent = new Intent(this, ChooseGameActivity.class);
         startActivity(intent);
+
 
     }
 
@@ -364,13 +359,13 @@ public class MenuActivity extends AppCompatActivity {
     private class ThemeChooser extends DialogFragment {
         public ThemeChooser() {
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
-            final String[] themes = new String[]{STANDARD_THEME, UNICORN_THEME, STARWARS_THEME, RAPTOR_THEME, HOB_THEME, BAY_THEME, };
+            final String[] themes = new String[]{STANDARD_THEME, UNICORN_THEME, STARWARS_THEME, RAPTOR_THEME, HOB_THEME, BAY_THEME,};
             alertDialog.setTitle("Choose a theme")
                     .setSingleChoiceItems(themes, -1, new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            setTheme(themes[i]);
+                            initializeTheme(themes[i]);
                         }
                     });
 
@@ -385,34 +380,23 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-
-    private void setTheme(String mode) {
+    private void initializeTheme(String mode) {
         User user = realm.where(User.class).findFirst();
-        if (user != null) {
-            ConstraintLayout layout = findViewById(R.id.menuLayout);
-            if (mode.equals(STANDARD_THEME)) {
-                layout.setBackground(getDrawable(R.drawable.standard));
-            } else if (mode.equals(UNICORN_THEME)) {
-                layout.setBackground(getDrawable(R.drawable.uniconr));
-            } else if(mode.equals(STARWARS_THEME)) {
-                layout.setBackground(getDrawable(R.drawable.vader));
-            }else if(mode.equals(RAPTOR_THEME)) {
-                layout.setBackground(getDrawable(R.drawable.raptorsplash));
-            }else if(mode.equals(HOB_THEME)) {
-                layout.setBackground(getDrawable(R.drawable.hob));
-            }else if(mode.equals(BAY_THEME)) {
-                layout.setBackground(getDrawable(R.drawable.bay));
-            }
-
-        }
-
-
-
+        ArrayList<MediaPlayer> themeBasedMP = getThemeBasedMP(c, user.getTheme());
+        setSoundConstants(themeBasedMP);
+        setBackGroundConstant(mode);
+        setTheme();
         assert user != null;
         realm.beginTransaction();
         user.setTheme(mode);
         realm.commitTransaction();
     }
+
+    private void setTheme() {
+        ConstraintLayout layout = findViewById(R.id.menuLayout);
+        layout.setBackground(getDrawable(BACKGROUND));
+    }
 }
+
 
 

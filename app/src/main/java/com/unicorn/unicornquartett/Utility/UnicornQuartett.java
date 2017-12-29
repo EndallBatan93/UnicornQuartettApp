@@ -19,6 +19,8 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 
+import static com.unicorn.unicornquartett.Utility.Constants.*;
+
 public class UnicornQuartett extends Application {
     private JSONArray bikeListcards;
     private JSONArray tuningListcards;
@@ -31,6 +33,7 @@ public class UnicornQuartett extends Application {
     public void onCreate() {
         super.onCreate();
 
+
         Realm.init(getApplicationContext());
         RealmConfiguration config = new RealmConfiguration
                 .Builder()
@@ -42,7 +45,7 @@ public class UnicornQuartett extends Application {
         Realm realm = Realm.getDefaultInstance();
 
         // IMPORTANT For database testing purposes only
-        clearDatabaseRealm(realm);
+//        clearDatabaseRealm(realm);
 
         String tuningsJSON = this.loadJSONFromAsset("tuning/tuning.json");
         String bikesJSON = this.loadJSONFromAsset("bikes/bikes.json");
@@ -64,15 +67,15 @@ public class UnicornQuartett extends Application {
         }
         realm.beginTransaction();
 
-        Deck bikeExists = realm.where(Deck.class).equalTo("name", Constants.REALM_BIKE_NAME).findFirst();
+        Deck bikeExists = realm.where(Deck.class).equalTo("name", REALM_BIKE_NAME).findFirst();
         if (bikeExists == null) {
             Deck bikes = realm.createObject(Deck.class);
-            bikes.setName(Constants.REALM_BIKE_NAME);
+            bikes.setName(REALM_BIKE_NAME);
             bikes.setId(1);
             bikes.setNumberOfCards(32);
             bikes.setLocked(false);
             try {
-                getShemas(realm, bikeShemaArray, Constants.BIKES);
+                getShemas(realm, bikeShemaArray, BIKES);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -82,16 +85,16 @@ public class UnicornQuartett extends Application {
             bikes.setCards(bikeCards);
         }
 
-        Deck tuningExists = realm.where(Deck.class).equalTo("name", Constants.REALM_TUNING_NAME).findFirst();
+        Deck tuningExists = realm.where(Deck.class).equalTo("name", REALM_TUNING_NAME).findFirst();
         if (tuningExists == null) {
 
             Deck tuning = realm.createObject(Deck.class);
-            tuning.setName(Constants.REALM_TUNING_NAME);
+            tuning.setName(REALM_TUNING_NAME);
             tuning.setId(2);
             tuning.setLocked(false);
             tuning.setNumberOfCards(32);
             try {
-                getShemas(realm, tuningShemaArray, Constants.TUNING);
+                getShemas(realm, tuningShemaArray, TUNING);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -103,16 +106,16 @@ public class UnicornQuartett extends Application {
 
         // Create avgs of card values
         Avg tuningAvg = realm.createObject(Avg.class);
-        Deck tuningDeck = realm.where(Deck.class).equalTo("name", Constants.REALM_TUNING_NAME).findFirst();
+        Deck tuningDeck = realm.where(Deck.class).equalTo("name", REALM_TUNING_NAME).findFirst();
         tuningAvg.setAvgDoubles(calcAvgsForDeck(tuningDeck));
         tuningAvg.setHigherWins(createHigherWinsList(tuningDeck));
-        tuningAvg.setName(Constants.REALM_TUNING_NAME);
+        tuningAvg.setName(REALM_TUNING_NAME);
 
         Avg bikesAvg = realm.createObject(Avg.class);
-        Deck bikesDeck = realm.where(Deck.class).equalTo("name", Constants.REALM_BIKE_NAME).findFirst();
+        Deck bikesDeck = realm.where(Deck.class).equalTo("name", REALM_BIKE_NAME).findFirst();
         bikesAvg.setAvgDoubles(calcAvgsForDeck(bikesDeck));
         bikesAvg.setHigherWins(createHigherWinsList(bikesDeck));
-        bikesAvg.setName(Constants.REALM_BIKE_NAME);
+        bikesAvg.setName(REALM_BIKE_NAME);
 
         // Realm commit and close
         realm.commitTransaction();
@@ -166,9 +169,9 @@ public class UnicornQuartett extends Application {
             tempShemasList.add(tempShema);
         }
 
-        if (deckParameter.equals(Constants.BIKES)) {
+        if (deckParameter.equals(BIKES)) {
             this.bikeShemas = tempShemasList;
-        } else if (deckParameter.equals(Constants.TUNING)) {
+        } else if (deckParameter.equals(TUNING)) {
             this.tuningShemas = tempShemasList;
         }
     }

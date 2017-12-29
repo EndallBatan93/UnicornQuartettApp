@@ -36,6 +36,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
+
 public class DeckGalleryActivity extends AppCompatActivity {
 
     ListView deckListView;
@@ -64,7 +66,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
 
         assert user != null;
-        setTheme(user.getTheme());
+        setTheme();
 
         profileName = findViewById(R.id.userName);
         ListView deckListView = findViewById(R.id.decksListView);
@@ -185,27 +187,8 @@ public class DeckGalleryActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setTheme(String mode) {
-        User user = realm.where(User.class).findFirst();
-        if (user != null) {
-            ConstraintLayout layout = findViewById(R.id.deckGalleryLayout);
-            if (mode.equals("standard")) {
-                layout.setBackground(getDrawable(R.drawable.standard));
-            } else if (mode.equals("unicorn")) {
-                layout.setBackground(getDrawable(R.drawable.uniconr));
-            }else if(mode.equals("starwars")) {
-                layout.setBackground(getDrawable(R.drawable.vader));
-            }else if(mode.equals("laserraptor")) {
-                layout.setBackground(getDrawable(R.drawable.raptorsplash));
-            }else if(mode.equals("HoB")) {
-                layout.setBackground(getDrawable(R.drawable.hob));
-            }else if(mode.equals("mbay")) {
-                layout.setBackground(getDrawable(R.drawable.bay));
-            }
-        }
-        assert user != null;
-        realm.beginTransaction();
-        user.setTheme(mode);
-        realm.commitTransaction();
+    private void setTheme() {
+        ConstraintLayout layout = findViewById(R.id.deckGalleryLayout);
+        layout.setBackground(getDrawable(BACKGROUND));
     }
 }

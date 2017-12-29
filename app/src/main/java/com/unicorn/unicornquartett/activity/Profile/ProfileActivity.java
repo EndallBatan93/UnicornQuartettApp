@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,12 +36,24 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+
+import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
+import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
+import static com.unicorn.unicornquartett.Utility.Util.getThemeBasedMP;
+import static com.unicorn.unicornquartett.Utility.Util.setBackGroundConstant;
+import static com.unicorn.unicornquartett.Utility.Util.setSoundConstants;
 
 public class ProfileActivity extends AppCompatActivity {
     final Realm realm = Realm.getDefaultInstance();
@@ -74,7 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
         final User user = all.first();
 
         assert user != null;
-        setTheme(user.getTheme());
+        setTheme();
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
         final EditText usernameTextView = findViewById(R.id.username);
         TextView registeredTextView = findViewById(R.id.registered);
@@ -291,40 +304,19 @@ public class ProfileActivity extends AppCompatActivity {
             createUserDialog.show();
         }
     }
-    private void setTheme(String mode) {
-        User user = realm.where(User.class).findFirst();
-        if (user != null) {
-            ConstraintLayout layout = findViewById(R.id.profileLayout);
-            if (mode.equals("standard")) {
-                layout.setBackground(getDrawable(R.drawable.standard));
-            } else if (mode.equals("unicorn")) {
-                layout.setBackground(getDrawable(R.drawable.uniconr));
-            }else if(mode.equals("starwars")) {
-                layout.setBackground(getDrawable(R.drawable.vader));
-            }else if(mode.equals("laserraptor")) {
-                layout.setBackground(getDrawable(R.drawable.raptorsplash));
-            }else if(mode.equals("HoB")) {
-                layout.setBackground(getDrawable(R.drawable.hob));
-            }else if(mode.equals("mbay")) {
-                layout.setBackground(getDrawable(R.drawable.bay));
-            }
-        }
-        assert user != null;
-        realm.beginTransaction();
-        user.setTheme(mode);
-        realm.commitTransaction();
-    }
+
+
     @SuppressLint("ValidFragment")
     private class ThemeChooser extends DialogFragment {
         public ThemeChooser() {
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
-            final String[] themes = new String[]{"standard", "unicorn", "starwars", "laserraptor", "HoB", "mbay"};
+            final String[] themes = new String[]{STANDARD_THEME, UNICORN_THEME, STARWARS_THEME, RAPTOR_THEME, HOB_THEME, BAY_THEME, };
             alertDialog.setTitle("Choose a theme")
                     .setSingleChoiceItems(themes, -1, new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            setTheme(themes[i]);
+                            initializeTheme(themes[i]);
                         }
                     });
 
@@ -337,5 +329,22 @@ public class ProfileActivity extends AppCompatActivity {
             alertDialog.create();
             alertDialog.show();
         }
+    }
+
+    private void initializeTheme(String mode) {
+        User user = realm.where(User.class).findFirst();
+        ArrayList<MediaPlayer> themeBasedMP = getThemeBasedMP(c, mode);
+        setSoundConstants(themeBasedMP);
+        setBackGroundConstant(mode);
+        setTheme();
+        assert user != null;
+        realm.beginTransaction();
+        user.setTheme(mode);
+        realm.commitTransaction();
+    }
+
+    private void setTheme() {
+        ConstraintLayout layout = findViewById(R.id.profileLayout);
+        layout.setBackground(getDrawable(BACKGROUND));
     }
 }

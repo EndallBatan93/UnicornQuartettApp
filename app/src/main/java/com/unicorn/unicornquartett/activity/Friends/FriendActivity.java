@@ -23,6 +23,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
+
 public class FriendActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
     TextView profileName;
@@ -44,7 +46,7 @@ public class FriendActivity extends AppCompatActivity {
         RealmResults<User> all = realm.where(User.class).findAll();
         User user = all.first();
         assert user != null;
-        setTheme(user.getTheme());
+        setTheme();
         ListView friendList = findViewById(R.id.friendList);
         profileName = findViewById(R.id.userName);
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
@@ -71,24 +73,9 @@ public class FriendActivity extends AppCompatActivity {
         }
 
     }
-    private void setTheme(String mode) {
-        User user = realm.where(User.class).findFirst();
-        if (user != null) {
-            ConstraintLayout layout = findViewById(R.id.constraintLayoutFriend);
-            if (mode.equals("standard")) {
-                layout.setBackground(getDrawable(R.drawable.standard));
-            } else if (mode.equals("unicorn")) {
-                layout.setBackground(getDrawable(R.drawable.uniconr));
-            }else if(mode.equals("starwars")) {
-                layout.setBackground(getDrawable(R.drawable.vader));
-            }else if(mode.equals("laserraptor")) {
-                layout.setBackground(getDrawable(R.drawable.raptorsplash));
-            }
-        }
-        assert user != null;
-        realm.beginTransaction();
-        user.setTheme(mode);
-        realm.commitTransaction();
+    private void setTheme() {
+        ConstraintLayout layout = findViewById(R.id.constraintLayoutFriend);
+        layout.setBackground(getDrawable(BACKGROUND));
     }
 
 }

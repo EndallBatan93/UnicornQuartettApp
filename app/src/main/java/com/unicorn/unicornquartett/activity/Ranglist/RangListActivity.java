@@ -24,6 +24,8 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
+
 public class RangListActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
     TextView profileName;
@@ -45,7 +47,7 @@ public class RangListActivity extends AppCompatActivity {
         RealmResults<User> all = realm.where(User.class).findAll();
         User user = all.first();
         assert user != null;
-        setTheme(user.getTheme());
+        setTheme();
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
         ListView rangList = (ListView) findViewById(R.id.ranglistView);
         profileName = findViewById(R.id.userName);
@@ -73,28 +75,9 @@ public class RangListActivity extends AppCompatActivity {
     }
 
 
-    private void setTheme(String mode) {
-        User user = realm.where(User.class).findFirst();
-        if (user != null) {
-            ConstraintLayout layout = findViewById(R.id.ranglistLayout);
-            if (mode.equals("standard")) {
-                layout.setBackground(getDrawable(R.drawable.standard));
-            } else if (mode.equals("unicorn")) {
-                layout.setBackground(getDrawable(R.drawable.uniconr));
-            }else if(mode.equals("starwars")) {
-                layout.setBackground(getDrawable(R.drawable.vader));
-            }else if(mode.equals("laserraptor")) {
-                layout.setBackground(getDrawable(R.drawable.raptorsplash));
-            }else if(mode.equals("HoB")) {
-                layout.setBackground(getDrawable(R.drawable.hob));
-            }else if(mode.equals("mbay")) {
-                layout.setBackground(getDrawable(R.drawable.bay));
-            }
-        }
-        assert user != null;
-        realm.beginTransaction();
-        user.setTheme(mode);
-        realm.commitTransaction();
+    private void setTheme() {
+        ConstraintLayout layout = findViewById(R.id.ranglistLayout);
+        layout.setBackground(getDrawable(BACKGROUND));
     }
 
 }

@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.domain.User;
 
@@ -27,6 +28,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+
+import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
+import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
 
 public class ChooseGameActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
@@ -138,28 +147,8 @@ public class ChooseGameActivity extends AppCompatActivity {
         }
     }
     private void setTheme(String mode) {
-        User user = realm.where(User.class).findFirst();
-        if(user != null) {
-            ConstraintLayout layout = findViewById(R.id.playGameLayout);
-            if (mode.equals("standard")) {
-                layout.setBackground(getDrawable(R.drawable.standard));
-            } else if (mode.equals("unicorn")) {
-                layout.setBackground(getDrawable(R.drawable.uniconr));
-            }else if(mode.equals("starwars")) {
-                layout.setBackground(getDrawable(R.drawable.vader));
-            }else if(mode.equals("laserraptor")) {
-                layout.setBackground(getDrawable(R.drawable.raptorsplash));
-            }else if(mode.equals("HoB")) {
-                layout.setBackground(getDrawable(R.drawable.hob));
-            }else if(mode.equals("mbay")) {
-                layout.setBackground(getDrawable(R.drawable.bay));
-            }
+        ConstraintLayout layout = findViewById(R.id.playGameLayout);
+        layout.setBackground(getDrawable(BACKGROUND));
         }
-        assert user != null;
-        realm.beginTransaction();
-        user.setTheme(mode);
-        realm.commitTransaction();
+
     }
-
-
-}

@@ -74,7 +74,7 @@ public class Util {
             case UNICORN_THEME:
                 // Unicorn
                 MediaPlayer horsHeigh = MediaPlayer.create(context, R.raw.horse);
-                MediaPlayer blob = MediaPlayer.create(context, R.raw.blop);
+                MediaPlayer blob = MediaPlayer.create(context, R.raw.kameraden);
                 MediaPlayer magicalExplosion = MediaPlayer.create(context, R.raw.magicalexplosion);
                 unicornMPs.add(horsHeigh);
                 unicornMPs.add(blob);
@@ -143,5 +143,26 @@ public class Util {
         INTRO_SOUND = mediaPlayers.get(2);
     }
 
-
+    public static void setBackGroundConstant(String mode) {
+        switch (mode) {
+            case STANDARD_THEME:
+                BACKGROUND = R.drawable.standard;
+                break;
+            case STARWARS_THEME:
+                BACKGROUND = R.drawable.vader;
+                break;
+            case BAY_THEME:
+                BACKGROUND = R.drawable.bay;
+                break;
+            case UNICORN_THEME:
+                BACKGROUND = R.drawable.uniconr;
+                break;
+            case HOB_THEME:
+                BACKGROUND = R.drawable.hob;
+                break;
+            case RAPTOR_THEME:
+                BACKGROUND = R.drawable.raptorsplash;
+                break;
+        }
+    }
 }
