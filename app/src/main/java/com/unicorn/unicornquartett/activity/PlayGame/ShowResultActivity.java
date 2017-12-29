@@ -106,18 +106,39 @@ public class ShowResultActivity extends AppCompatActivity {
     }
 
     private void updateStacks(String winner, Game game) {
-
+        Card firstPlayerCard = game.getUsercards().first();
+        Card firstOpponentCard = game.getOpponentCards().first();
         if(winner.equals("player")) {
-            Card first = game.getOpponentCards().first();
-            game.getUsercards().add(first);
-            game.getOpponentCards().remove(first);
+            game.getUsercards().add(firstOpponentCard);
+            game.getOpponentCards().remove(firstOpponentCard);
             game.getUsercards().move(0,game.getUsercards().size()-1);
-        } else {
-            Card first = game.getUsercards().first();
-            game.getOpponentCards().add(first);
-            game.getUsercards().remove(first);
-            game.getOpponentCards().move(0,game.getOpponentCards().size()-1);
+            if(game.getDrawnCards() != null && !game.getDrawnCards().isEmpty()){
+                for (Card card : game.getDrawnCards()) {
+                    game.getUsercards().add(card);
+                }
+                game.getDrawnCards().clear();
+                game.setDrawnInRow(0);
+            }
 
+        } else if (winner.equals("opponent")) {
+            game.getOpponentCards().add(firstPlayerCard);
+            game.getUsercards().remove(firstPlayerCard);
+            game.getOpponentCards().move(0,game.getOpponentCards().size()-1);
+            if(game.getDrawnCards() != null && !game.getDrawnCards().isEmpty()){
+                for (Card card : game.getDrawnCards()) {
+                    game.getOpponentCards().add(card);
+                }
+                game.getDrawnCards().clear();
+                game.setDrawnInRow(0);
+            }
+
+        } else if (winner.equals("draw")) {
+            int increasedDrawn = game.getDrawnInRow()+1;
+            game.setDrawnInRow(increasedDrawn);
+            game.getDrawnCards().add(firstPlayerCard);
+            game.getDrawnCards().add(firstOpponentCard);
+            game.getUsercards().remove(firstPlayerCard);
+            game.getOpponentCards().remove(firstOpponentCard);
         }
         checkIfGameIsOver(game);
     }
@@ -125,8 +146,7 @@ public class ShowResultActivity extends AppCompatActivity {
     private void checkIfGameIsOver(Game game) {
         Intent intent = new Intent(this, EndGameActivity.class);
         User user = realm.where(User.class).findFirst();
-//        if(game.getOpponentCards().isEmpty()) {
-        if(true) {
+        if(game.getOpponentCards().isEmpty()) {
 
             GameResult gameResult = realm.createObject(GameResult.class);
             gameResult.setWon(true);
@@ -144,7 +164,6 @@ public class ShowResultActivity extends AppCompatActivity {
             intent.putExtra("winner", "opponent");
             startActivity(intent);
         }
-
-
     }
+
 }

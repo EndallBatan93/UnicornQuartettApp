@@ -17,10 +17,28 @@ public class Game extends RealmObject  {
     private String lastWinner;
     private RealmList<String> values;
     private RealmList<String> shemas;
-    private  String turn;
+    private String turn;
+    private int drawnInRow = 0;
+    private RealmList<Card> drawnCards;
 
     public Game () {
 
+    }
+
+    public RealmList<Card> getDrawnCards() {
+        return drawnCards;
+    }
+
+    public void setDrawnCards(RealmList<Card> drawnCards) {
+        this.drawnCards = drawnCards;
+    }
+
+    public int getDrawnInRow() {
+        return drawnInRow;
+    }
+
+    public void setDrawnInRow(int drawnInRow) {
+        this.drawnInRow = drawnInRow;
     }
 
     public String getTurn() {
