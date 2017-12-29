@@ -2,8 +2,6 @@ package com.unicorn.unicornquartett.activity.PlayGame;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,21 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
-import com.unicorn.unicornquartett.domain.User;
 
-import org.w3c.dom.Text;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -127,11 +117,9 @@ public class ShowResultActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EndGameActivity.class);
 
         if(game.getOpponentCards().isEmpty()) {
-//            if(true) {
             intent.putExtra("winner", "user");
             startActivity(intent);
         }
-//        else if(true) {
         else if (game.getUsercards().isEmpty()) {
             intent.putExtra("winner", "opponent");
             startActivity(intent);

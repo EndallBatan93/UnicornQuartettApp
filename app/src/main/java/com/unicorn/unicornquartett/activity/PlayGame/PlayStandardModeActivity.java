@@ -47,7 +47,6 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     private Game game;
     Boolean isChoosen = false;
     RealmList<String> attributes;
-    int aiPosition;
     ArtificialIntelligence currentAI;
     String difficulty;
 
@@ -60,9 +59,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game_view);
-        ListView attributeList = findViewById(R.id.playCardView);
         status = findViewById(R.id.status);
-        ImageView cardImage = findViewById(R.id.cardImage);
         turn = findViewById(R.id.turn);
         User user = getuser();
         Deck deck = getDecks();
@@ -107,7 +104,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         return user;
     }
 
-    public void createStacks(Deck deck) {
+    private void createStacks(Deck deck) {
         List<Integer> indices = new ArrayList<>(deck.getCards().size());
         for (int i = 0; i < deck.getCards().size(); i++) {
             indices.add(i);
@@ -123,7 +120,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     }
 
 
-    public void setAttributes(final Card card, final Deck deck) {
+    private void setAttributes(final Card card, final Deck deck) {
 
         String[] buildDescriptors = {"desc", "attrValue", "unit", "higherWins"};
         int[] buildLocation = {R.id.cardAttributeTitle, R.id.cardAttributeValue, R.id.cardAttributeUnit, R.id.cardAttributeHW};
@@ -195,7 +192,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         });
     }
 
-    public ArrayList<String> getShemaForCard(Deck deck, int i) {
+    private ArrayList<String> getShemaForCard(Deck deck, int i) {
         RealmList<Shema> shemas = deck.getShema();
         Shema shema = shemas.get(i);
         ArrayList<String> attributeDescriptionList = new ArrayList<>();
@@ -205,7 +202,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         return attributeDescriptionList;
     }
 
-    public void setImage(Card card, Deck deck) {
+    private void setImage(Card card, Deck deck) {
         RealmList<String> imageIdentifiers = card.getImage().getImageIdentifiers();
         String identifier = imageIdentifiers.first();
         try {
@@ -219,7 +216,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         }
     }
 
-    public Game compareValues(String value, int position, Deck deck) {
+    private Game compareValues(String value, int position, Deck deck) {
         Card contrahentCard;
         if (game == null || game.getTurn().equals("user")) {
             contrahentCard = teamOpponent.first();
