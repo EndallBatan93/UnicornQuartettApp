@@ -73,8 +73,6 @@ public class PlayStandardModeActivity extends AppCompatActivity {
             deck = realm.where(Deck.class).equalTo("name", game.getDeck()).findFirst();
             setAttributes(teamUser.first(), deck);
             status.setText(teamUser.size() + ":" + teamOpponent.size());
-
-
         } else {
             createStacks(deck);
             setAttributes(teamUser.first(), deck);
@@ -147,6 +145,8 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         TextView status = findViewById(R.id.status);
         status.setText(teamUser.size() + ":" + teamOpponent.size());
         attributes = card.getAttributes();
+        TextView cardName = findViewById(R.id.playingCardName);
+        cardName.setText(teamUser.first().getName());
 
         // User is playing
         if (game == null || game.getTurn().equals("user")) {

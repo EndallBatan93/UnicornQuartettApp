@@ -382,7 +382,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private void initializeTheme(String mode) {
         User user = realm.where(User.class).findFirst();
-        ArrayList<MediaPlayer> themeBasedMP = getThemeBasedMP(c, user.getTheme());
+        ArrayList<MediaPlayer> themeBasedMP = getThemeBasedMP(c, mode);
         setSoundConstants(themeBasedMP);
         setBackGroundConstant(mode);
         setTheme();
