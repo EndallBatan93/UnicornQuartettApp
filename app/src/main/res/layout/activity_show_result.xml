@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4"
+            android:layout_marginTop="8dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -43,19 +44,30 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/opponentProperty"
-                    android:layout_width="match_parent"
+                    android:id="@+id/opponentCardName"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="32dp"
-                    android:layout_weight="5"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="3"
+                    />
+
+                <TextView
+                    android:id="@+id/opponentProperty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    android:textAlignment="viewEnd"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/opponentValueShow"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="5"
+                    android:layout_weight="1"
                     android:textAlignment="viewEnd"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="32dp"/>
             </LinearLayout>
         </LinearLayout>
@@ -74,15 +86,18 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="32dp"
                 android:layout_weight="5"
+                android:gravity="center"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/status"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="32dp"
                 android:layout_weight="5"
-                android:textAlignment="viewEnd"
-                android:layout_marginEnd="32dp"/>
+                android:gravity="center"
+                android:textSize="24sp" />
         </LinearLayout>
 
 
@@ -92,6 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4"
+            android:layout_marginBottom="8dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -102,19 +118,30 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/playerProperty"
-                    android:layout_width="match_parent"
+                    android:id="@+id/playerCardName"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="32dp"
-                    android:layout_weight="5"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="3"
+                    />
+
+                <TextView
+                    android:id="@+id/playerProperty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    android:textAlignment="viewEnd"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/playerValueShow"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="5"
+                    android:layout_weight="1"
                     android:textAlignment="viewEnd"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="32dp"/>
             </LinearLayout>
 

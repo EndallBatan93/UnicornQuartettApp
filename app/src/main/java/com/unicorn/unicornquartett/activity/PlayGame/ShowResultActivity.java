@@ -32,12 +32,14 @@ public class ShowResultActivity extends AppCompatActivity {
         Game game = realm.where(Game.class).findFirst();
         Deck deck = realm.where(Deck.class).equalTo("name", game.getDeck()).findFirst();
         ImageView opponentImageView = findViewById(R.id.oppentCardImage);
+        TextView opponentCardName = findViewById(R.id.opponentCardName);
         TextView opponentProperty = findViewById(R.id.opponentProperty);
         TextView opponentValue = findViewById(R.id.opponentValueShow);
 
         TextView winnerLoser = findViewById(R.id.winnerOrLoser);
         TextView status = findViewById(R.id.status);
 
+        TextView playerCardName = findViewById(R.id.playerCardName);
         TextView playerProperty = findViewById(R.id.playerProperty);
         TextView playerValue = findViewById(R.id.playerValueShow);
         ImageView playerImageView = findViewById(R.id.playerCardImage);
@@ -55,12 +57,14 @@ public class ShowResultActivity extends AppCompatActivity {
         //opponent
         Card firstOpponentCard = game.getOpponentCards().first();
         setImage(firstOpponentCard,deck,opponentImageView);
+        opponentCardName.setText(game.getOpponentCards().first().getName());
         opponentProperty.setText(game.getShemas().get(0));
         opponentValue.setText(game.getValues().get(1));
 
         //user
         Card firstUserCard = game.getUsercards().first();
         setImage(firstUserCard,deck,playerImageView);
+        playerCardName.setText(game.getUsercards().first().getName());
         playerProperty.setText(game.getShemas().get(0));
         playerValue.setText(game.getValues().get(0));
 
