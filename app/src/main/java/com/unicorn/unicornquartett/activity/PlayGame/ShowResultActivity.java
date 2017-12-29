@@ -15,6 +15,8 @@ import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
+import com.unicorn.unicornquartett.domain.GameResult;
+import com.unicorn.unicornquartett.domain.User;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -105,7 +107,6 @@ public class ShowResultActivity extends AppCompatActivity {
 
     private void updateStacks(String winner, Game game) {
 
-
         if(winner.equals("player")) {
             Card first = game.getOpponentCards().first();
             game.getUsercards().add(first);
@@ -118,13 +119,28 @@ public class ShowResultActivity extends AppCompatActivity {
             game.getOpponentCards().move(0,game.getOpponentCards().size()-1);
 
         }
-        Intent intent = new Intent(this, EndGameActivity.class);
+        checkIfGameIsOver(game);
+    }
 
-        if(game.getOpponentCards().isEmpty()) {
+    private void checkIfGameIsOver(Game game) {
+        Intent intent = new Intent(this, EndGameActivity.class);
+        User user = realm.where(User.class).findFirst();
+//        if(game.getOpponentCards().isEmpty()) {
+        if(true) {
+
+            GameResult gameResult = realm.createObject(GameResult.class);
+            gameResult.setWon(true);
+            user.getStats().add(gameResult);
+
             intent.putExtra("winner", "user");
             startActivity(intent);
         }
         else if (game.getUsercards().isEmpty()) {
+
+            GameResult gameResult = realm.createObject(GameResult.class);
+            gameResult.setWon(false);
+            user.getStats().add(gameResult);
+
             intent.putExtra("winner", "opponent");
             startActivity(intent);
         }

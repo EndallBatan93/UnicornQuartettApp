@@ -19,6 +19,7 @@ import android.view.View;
 
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.activity.Menu.MenuActivity;
+import com.unicorn.unicornquartett.activity.PlayGame.ChooseGameActivity;
 import com.unicorn.unicornquartett.domain.User;
 
 import java.io.File;
