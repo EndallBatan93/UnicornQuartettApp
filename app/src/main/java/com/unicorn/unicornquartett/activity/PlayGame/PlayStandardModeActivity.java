@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.ArtificialIntelligence;
-import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
@@ -39,8 +38,8 @@ import static com.unicorn.unicornquartett.Utility.Constants.*;
 
 public class PlayStandardModeActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
-    RealmList<Card> teamUser = new RealmList<>();
-    RealmList<Card> teamOpponent = new RealmList<>();
+    RealmList<Card> userCards = new RealmList<>();
+    RealmList<Card> opponentCards = new RealmList<>();
     private int currentShemaPosition;
     private String attrValue;
     private Context c = this;
@@ -51,35 +50,73 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     RealmList<String> attributes;
     ArtificialIntelligence currentAI;
     String difficulty;
+    User user;
+    Deck deck;
+    String runningGame;
+
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_play_game_view);
+//    }
 
     @Override
-    public void onBackPressed() {
-        //TODO: spielstandspeichern
+    protected void onResume() {
+        super.onResume();
+        setContentView(R.layout.activity_play_game_view);
+        Game standardGame = realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst();
+        if (standardGame != null) {
+            handleResume();
+        } else {
+            handleInitialization();
+        }
+
+    }
+
+    private void handleResume() {
+        status = findViewById(R.id.status);
+        turn = findViewById(R.id.turn);
+
+        game = realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst();
+        user = game.getUsers().first();
+        difficulty = user.getDifficulty();
+        deck = getDeckFromString(game.getDeck());
+        opponentCards = game.getOpponentCards();
+        userCards = game.getUsercards();
+        setAttributes(userCards.first(), deck);
+        setStatus();
+        setTurn();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_game_view);
+    public void onBackPressed() {
+    }
+
+    private void handleInitialization() {
         status = findViewById(R.id.status);
         turn = findViewById(R.id.turn);
-        User user = getuser();
-        Deck deck = getDecks();
+
+        user = getUser();
+        deck = getDeckFromIntent();
+
         difficulty = user.getDifficulty();
 
-        String runningGame = getIntent().getStringExtra("gameRunning");
+        runningGame = getIntent().getStringExtra("gameRunning");
         if ((runningGame != null) && runningGame.equals("true")) {
-            game = realm.where(Game.class).findFirst();
-            teamUser = game.getUsercards();
-            teamOpponent = game.getOpponentCards();
-            deck = realm.where(Deck.class).equalTo("name", game.getDeck()).findFirst();
-            setAttributes(teamUser.first(), deck);
-            status.setText(teamUser.size() + ":" + teamOpponent.size());
+            game = realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst();
+            userCards = game.getUsercards();
+            opponentCards = game.getOpponentCards();
+            setAttributes(userCards.first(), deck);
+            setStatus();
         } else {
             createStacks(deck);
-            setAttributes(teamUser.first(), deck);
+            setAttributes(userCards.first(), deck);
         }
 
+        setTurn();
+    }
+
+    private void setTurn() {
         if (game == null) {
             turn.setText(PLAYERSTURN);
         } else {
@@ -92,14 +129,22 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         }
     }
 
+    private void setStatus() {
+        status.setText(userCards.size() + ":" + opponentCards.size());
+    }
 
-    private Deck getDecks() {
+
+    private Deck getDeckFromIntent() {
         String selectedDeck = getIntent().getStringExtra("selectedDeck");
         Deck deck = realm.where(Deck.class).equalTo("name", selectedDeck).findFirst();
         return deck;
     }
 
-    private User getuser() {
+    private Deck getDeckFromString(String deckName) {
+        return deck = realm.where(Deck.class).equalTo("name", deckName).findFirst();
+    }
+
+    private User getUser() {
         User user = realm.where(User.class).findFirst();
         return user;
     }
@@ -112,11 +157,11 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         Collections.shuffle(indices);
 
         for (int i = 0; i < indices.size(); i += 2) {
-            teamOpponent.add(deck.getCards().get(indices.get(i)));
-            teamUser.add(deck.getCards().get(indices.get(i + 1)));
+            opponentCards.add(deck.getCards().get(indices.get(i)));
+            userCards.add(deck.getCards().get(indices.get(i + 1)));
 
         }
-        status.setText(teamUser.size() + ":" + teamOpponent.size());
+        setStatus();
     }
 
 
@@ -145,10 +190,10 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         final Button chooseValue = findViewById(R.id.chooseValueButton);
         chooseValue.setBackgroundColor(Color.GRAY);
         TextView status = findViewById(R.id.status);
-        status.setText(teamUser.size() + ":" + teamOpponent.size());
+        status.setText(userCards.size() + ":" + opponentCards.size());
         attributes = card.getAttributes();
         TextView cardName = findViewById(R.id.playingCardName);
-        cardName.setText(teamUser.first().getName());
+        cardName.setText(userCards.first().getName());
 
         // User is playing
         if (game == null || game.getTurn().equals("user")) {
@@ -171,9 +216,9 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         // AI is playing
         else {
             currentAI = new ArtificialIntelligence(deck, difficulty);
-            int choosenAttrPosition = currentAI.playCard(teamOpponent.first());
+            int choosenAttrPosition = currentAI.playCard(opponentCards.first());
             currentShemaPosition = choosenAttrPosition;
-            attrValue = teamOpponent.first().getAttributes().get(choosenAttrPosition);
+            attrValue = opponentCards.first().getAttributes().get(choosenAttrPosition);
             isChoosen = true;
             chooseValue.setBackgroundColor(Color.GREEN);
             chooseValue.setText("Continue");
@@ -222,9 +267,9 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     private Game compareValues(String value, int position, Deck deck) {
         Card contrahentCard;
         if (game == null || game.getTurn().equals("user")) {
-            contrahentCard = teamOpponent.first();
+            contrahentCard = opponentCards.first();
         } else {
-            contrahentCard = teamUser.first();
+            contrahentCard = userCards.first();
         }
 
         String valueOpponent = contrahentCard.getAttributes().get(position);
@@ -234,15 +279,18 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         double opponentValue = Double.parseDouble(valueOpponent);
         String winner = "";
 
-        if (realm.where(Game.class).findAll().size() == 0) {
+        if (realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst() == null) {
             game = realm.createObject(Game.class);
+            game.setId(1);
         } else {
-            game = realm.where(Game.class).findFirst();
+            game = realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst();
         }
-        game.setId(1);
         game.setDeck(deck.getName());
-        game.setOpponentCards(teamOpponent);
-        game.setUsercards(teamUser);
+        game.setOpponentCards(opponentCards);
+        game.setUsercards(userCards);
+        RealmList<User> userList = new RealmList<>();
+        userList.add(user);
+        game.setUsers(userList);
         RealmList<String> realmList = convertArrayListToRealmList(shemaForCard);
         game.setShemas(realmList);
 

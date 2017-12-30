@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
+import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.User;
 
 import java.io.File;
@@ -27,66 +28,85 @@ import java.io.FileNotFoundException;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmList;
-import io.realm.RealmResults;
 
+import static com.unicorn.unicornquartett.R.id.profileUserName;
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
-import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
-import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
-import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
-import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
-import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
-import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
 
 public class ChooseGameActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
     TextView profileName;
     final Context activityContext = this;
     String selectedDeck;
-    @Override
-    public void onResume() {
-        super.onResume();
-        RealmResults<User> allUsers = realm.where(User.class).findAll();
-        if (!allUsers.isEmpty()) {
-            User user = allUsers.first();
-            setTheme(user.getTheme());
-            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
-            profileName.setText(user.getName());
-        }
-    }
+    User user;
+    Game unicornGame;
+    Game standardGame;
+    Button playStandard;
+    Button playUnicorn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game);
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<User> all = realm.where(User.class).findAll();
-        User user = all.first();
-        setTheme(user.getTheme());
-        loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
 
-        Button playStandard = findViewById(R.id.playStandard);
-        Button playUnicorn = findViewById(R.id.playUnicorn);
+        handleInitialization();
 
-        setUserName(user);
+    }
+
+    @SuppressLint("WrongViewCast")
+    @Override
+    public void onResume() {
+        super.onResume();
+        setContentView(R.layout.activity_play_game);
+
+        handleInitialization();
+    }
+
+    private void handleInitialization() {
+        user = realm.where(User.class).findFirst();
+        if (user != null) {
+            setTheme(user.getTheme());
+            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+            setUserName(user);
+        }
+        unicornGame = realm.where(Game.class).equalTo("id", 2).findFirst();
+        standardGame = realm.where(Game.class).equalTo("id", 1).findFirst();
+        playStandard = findViewById(R.id.playStandard);
+        playUnicorn = findViewById(R.id.playUnicorn);
+
+        if (unicornGame != null) {
+            playUnicorn.setText(R.string.resumeUnicorn);
+        } else if (standardGame != null) {
+            playStandard.setText(R.string.resumeStandard);
+        }
 
         playStandard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Button_SOUND.start();
-                new DeckChooser("playStandard");
+                if (standardGame == null) {
+                    new DeckChooser("playStandard");
+                } else {
+                    Intent intent = new Intent(activityContext, PlayStandardModeActivity.class);
+                    activityContext.startActivity(intent);
+                }
             }
         });
 
-        playUnicorn.setOnClickListener(new View.OnClickListener(){
+        playUnicorn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 Button_SOUND.start();
-                new DeckChooser("playUnicorn");
+                if (unicornGame == null) {
+                    new DeckChooser("playUnicorn");
+                } else {
+                    Intent intent = new Intent(activityContext, PlayUnicornModeActivity.class);
+                    activityContext.startActivity(intent);
+                }
             }
         });
-
     }
 
     public void setUserName(User user) {
@@ -102,6 +122,7 @@ public class ChooseGameActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
     private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
         try {
             File f = new File(absolutePath, imageIdentifier);
@@ -129,6 +150,7 @@ public class ChooseGameActivity extends AppCompatActivity {
         }
 
     }
+
     @SuppressLint("ValidFragment")
     private class DeckChooser extends DialogFragment {
         public DeckChooser(final String mode) {
@@ -136,24 +158,20 @@ public class ChooseGameActivity extends AppCompatActivity {
             final RealmList<String> decks = user.getDecks();
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activityContext);
             alertDialog.setTitle("Choose your Deck")
-                       .setSingleChoiceItems(decks.toArray(new String[decks.size()]), -1, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                     selectedDeck = decks.get(i);
-                }
-            });
+                    .setSingleChoiceItems(decks.toArray(new String[decks.size()]), -1, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            selectedDeck = decks.get(i);
+                        }
+                    });
 
             alertDialog.setPositiveButton("Play", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (mode.equals("playUnicorn")) {
-                        Intent intent = new Intent(activityContext,PlayUnicornModeActivity.class);
-                        intent.putExtra("selectedDeck", selectedDeck);
-                        activityContext.startActivity(intent);
+                        startGameActivity("unicorn");
                     } else {
-                        Intent intent = new Intent(activityContext, PlayStandardModeActivity.class);
-                        intent.putExtra("selectedDeck", selectedDeck);
-                        activityContext.startActivity(intent);
+                        startGameActivity("standard");
                     }
                 }
             });
@@ -167,9 +185,22 @@ public class ChooseGameActivity extends AppCompatActivity {
             alertDialog.show();
         }
     }
+
+    private void startGameActivity(String game) {
+        Intent intent;
+        if (game.equals("unicorn")) {
+            intent = new Intent(activityContext, PlayUnicornModeActivity.class);
+        } else {
+            intent = new Intent(activityContext, PlayStandardModeActivity.class);
+
+        }
+        intent.putExtra("selectedDeck", selectedDeck);
+        activityContext.startActivity(intent);
+    }
+
     private void setTheme(String mode) {
         ConstraintLayout layout = findViewById(R.id.playGameLayout);
         layout.setBackground(getDrawable(BACKGROUND));
-        }
-
     }
+
+}

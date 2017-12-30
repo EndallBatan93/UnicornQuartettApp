@@ -147,7 +147,6 @@ public class ShowResultActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EndGameActivity.class);
         User user = realm.where(User.class).findFirst();
         if(game.getOpponentCards().isEmpty()) {
-
             GameResult gameResult = realm.createObject(GameResult.class);
             gameResult.setWon(true);
             user.getStats().add(gameResult);
@@ -159,7 +158,7 @@ public class ShowResultActivity extends AppCompatActivity {
             GameResult gameResult = realm.createObject(GameResult.class);
             gameResult.setWon(false);
             user.getStats().add(gameResult);
-
+            game.deleteFromRealm();
             intent.putExtra("winner", "opponent");
             startActivity(intent);
         }

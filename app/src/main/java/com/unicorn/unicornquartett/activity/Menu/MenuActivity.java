@@ -33,6 +33,7 @@ import com.unicorn.unicornquartett.activity.Friends.FriendActivity;
 import com.unicorn.unicornquartett.activity.PlayGame.ChooseGameActivity;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.activity.Ranglist.RangListActivity;
+import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
 
@@ -104,9 +105,18 @@ public class MenuActivity extends AppCompatActivity {
         Button deckButotn = findViewById(R.id.deckbutton);
         Button friendButton = findViewById(R.id.friendButton);
         profileName = findViewById(R.id.userName);
-
+        Game unicorn = realm.where(Game.class).equalTo("id", 2).findFirst();
+        Game standard = realm.where(Game.class).equalTo("id", 1).findFirst();
         RealmResults<User> allUsers = realm.where(User.class).findAll();
 
+        if (unicorn != null && standard != null) {
+            playButton.setText(R.string.PlayGame2);
+        } else if (unicorn != null) {
+            playButton.setText(R.string.PlayGame1);
+        } else if (standard != null) {
+            playButton.setText(R.string.PlayGame1);
+
+        }
         if (allUsers.isEmpty()) {
             new CreateUserDialogFragment();
 

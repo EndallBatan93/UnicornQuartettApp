@@ -30,6 +30,8 @@ public final class Constants {
     // GAME
     public static final String PLAYERSTURN = "Your Turn";
     public static final String OPPONENTTURN = "Opponent Turn";
+    public static final int STANDARD_GAME = 1;
+    public static final int UNICORN_GAME = 2;
 
     // BITMAP SCALINGS
     public static final int ULTRA_HIGH_FACTOR = 30;

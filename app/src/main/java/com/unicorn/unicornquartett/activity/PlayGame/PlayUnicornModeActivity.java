@@ -3,12 +3,10 @@ package com.unicorn.unicornquartett.activity.PlayGame;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -19,17 +17,12 @@ import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.ArtificialIntelligence;
-import com.unicorn.unicornquartett.Utility.Constants;
-import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.Shema;
 import com.unicorn.unicornquartett.domain.User;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -38,11 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmList;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.OPPONENTTURN;
@@ -64,9 +54,11 @@ PlayUnicornModeActivity extends AppCompatActivity {
     ArtificialIntelligence currentAI;
     String difficulty;
 
+    // game id 1 = Standard
+    // game id 2 = Unicorn
+
     @Override
     public void onBackPressed() {
-        //TODO: spielstandspeichern
     }
 
     @Override
@@ -81,7 +73,7 @@ PlayUnicornModeActivity extends AppCompatActivity {
 
         String runningGame = getIntent().getStringExtra("gameRunning");
         if ((runningGame != null) && runningGame.equals("true")) {
-            game = realm.where(Game.class).findFirst();
+            game = realm.where(Game.class).equalTo("id",2).findFirst();
             teamUser = game.getUsercards();
             teamOpponent = game.getOpponentCards();
             deck = realm.where(Deck.class).equalTo("name", game.getDeck()).findFirst();
@@ -246,12 +238,13 @@ PlayUnicornModeActivity extends AppCompatActivity {
         double opponentValue = Double.parseDouble(valueOpponent);
         String winner = "";
 
-        if (realm.where(Game.class).findAll().size() == 0) {
+
+        if (realm.where(Game.class).equalTo("id", 2).findFirst() == null) {
             game = realm.createObject(Game.class);
+            game.setId(2);
         } else {
-            game = realm.where(Game.class).findFirst();
+            game = realm.where(Game.class).equalTo("id", 2).findFirst();
         }
-        game.setId(1);
         game.setDeck(deck.getName());
         game.setOpponentCards(teamOpponent);
         game.setUsercards(teamUser);
