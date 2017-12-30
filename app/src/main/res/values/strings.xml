@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">UnicornQuartett</string>
     <string name="PlayGame">Play</string>
-    <string name="PlayGame1">Play (1)</string>
-    <string name="PlayGame2">Play (2)</string>
     <string name="RangList">Ranglist</string>
     <string name="Friend">Friends</string>
     <string name="DeckGallery">Deck Gallery</string>
@@ -20,6 +18,7 @@
     <string name="StandardMode">StandardMode</string>
     <string name="Load">Loading content</string>
     <string name="Status">Status</string>
+    <string name="supriseButton">Suprise</string>
     <string name="resumeUnicorn">Resume Unicorn</string>
     <string name="resumeStandard">Resume Standard</string>
 </resources>
