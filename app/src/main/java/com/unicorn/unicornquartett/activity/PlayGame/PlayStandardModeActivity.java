@@ -228,6 +228,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
                     realm.commitTransaction();
 
                     Intent intent = new Intent(c, ShowResultActivity.class);
+                    intent.putExtra(GAME_CATEGORY, STANDARD);
                     startActivity(intent);
                     isChoosen = false;
                 }
@@ -276,7 +277,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
 
         if (realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst() == null) {
             game = realm.createObject(Game.class);
-            game.setId(1);
+            game.setId(STANDARD_GAME);
         } else {
             game = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
         }

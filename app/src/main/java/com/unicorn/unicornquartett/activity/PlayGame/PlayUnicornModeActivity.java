@@ -34,16 +34,12 @@ import java.util.Map;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
-import static com.unicorn.unicornquartett.Utility.Constants.OPPONENTTURN;
-import static com.unicorn.unicornquartett.Utility.Constants.PLAYERSTURN;
-import static com.unicorn.unicornquartett.Utility.Constants.SELECTED_DECK;
+import static com.unicorn.unicornquartett.Utility.Constants.*;
 
-public class
-PlayUnicornModeActivity extends AppCompatActivity {
+public class PlayUnicornModeActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
-    RealmList<Card> teamUser = new RealmList<>();
-    RealmList<Card> teamOpponent = new RealmList<>();
+    RealmList<Card> userCards = new RealmList<>();
+    RealmList<Card> opponentCards = new RealmList<>();
     private int currentShemaPosition;
     private String attrValue;
     private Context c = this;
@@ -54,42 +50,72 @@ PlayUnicornModeActivity extends AppCompatActivity {
     RealmList<String> attributes;
     ArtificialIntelligence currentAI;
     String difficulty;
+    User user;
+    Deck deck;
+    String runningGame;
 
-    // game id 1 = Standard
-    // game id 2 = Unicorn
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setContentView(R.layout.unicorn_mode_play_view);
+        Game unicornGame = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findFirst();
+        if (unicornGame != null) {
+            handleResume();
+        } else {
+            handleInitialization();
+        }
+
+    }
+
+    private void handleResume() {
+        status = findViewById(R.id.status);
+        turn = findViewById(R.id.turn);
+
+        game = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findFirst();
+        user = game.getUsers().first();
+        difficulty = user.getDifficulty();
+        deck = getDeckFromString(game.getDeck());
+        opponentCards = game.getOpponentCards();
+        userCards = game.getUsercards();
+        setAttributes(userCards.first(), deck);
+        setStatus();
+        setTurn();
+    }
 
     @Override
     public void onBackPressed() {
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_game_view);
+    private void handleInitialization() {
         status = findViewById(R.id.status);
         turn = findViewById(R.id.turn);
-        User user = getuser();
-        Deck deck = getDecks();
+
+        user = getUser();
+        deck = getDeckFromIntent();
+
         difficulty = user.getDifficulty();
 
-        String runningGame = getIntent().getStringExtra("gameRunning");
+        runningGame = getIntent().getStringExtra(GAME_RUNNING);
         if ((runningGame != null) && runningGame.equals("true")) {
-            game = realm.where(Game.class).equalTo("id",2).findFirst();
-            teamUser = game.getUsercards();
-            teamOpponent = game.getOpponentCards();
-            deck = realm.where(Deck.class).equalTo("name", game.getDeck()).findFirst();
-            setAttributes(teamUser.first(), deck);
-            status.setText(teamUser.size() + ":" + teamOpponent.size());
+            game = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findFirst();
+            userCards = game.getUsercards();
+            opponentCards = game.getOpponentCards();
+            setAttributes(userCards.first(), deck);
+            setStatus();
         } else {
             createStacks(deck);
-            setAttributes(teamUser.first(), deck);
+            setAttributes(userCards.first(), deck);
         }
 
+        setTurn();
+    }
+
+    private void setTurn() {
         if (game == null) {
             turn.setText(PLAYERSTURN);
         } else {
 
-            if (game.getTurn().equals("user")) {
+            if (game.getTurn().equals(USER)) {
                 turn.setText(PLAYERSTURN);
             } else {
                 turn.setText(OPPONENTTURN);
@@ -97,14 +123,22 @@ PlayUnicornModeActivity extends AppCompatActivity {
         }
     }
 
+    private void setStatus() {
+        status.setText(userCards.size() + ":" + opponentCards.size());
+    }
 
-    private Deck getDecks() {
+
+    private Deck getDeckFromIntent() {
         String selectedDeck = getIntent().getStringExtra(SELECTED_DECK);
         Deck deck = realm.where(Deck.class).equalTo("name", selectedDeck).findFirst();
         return deck;
     }
 
-    private User getuser() {
+    private Deck getDeckFromString(String deckName) {
+        return deck = realm.where(Deck.class).equalTo("name", deckName).findFirst();
+    }
+
+    private User getUser() {
         User user = realm.where(User.class).findFirst();
         return user;
     }
@@ -117,11 +151,11 @@ PlayUnicornModeActivity extends AppCompatActivity {
         Collections.shuffle(indices);
 
         for (int i = 0; i < indices.size(); i += 2) {
-            teamOpponent.add(deck.getCards().get(indices.get(i)));
-            teamUser.add(deck.getCards().get(indices.get(i + 1)));
+            opponentCards.add(deck.getCards().get(indices.get(i)));
+            userCards.add(deck.getCards().get(indices.get(i + 1)));
 
         }
-        status.setText(teamUser.size() + ":" + teamOpponent.size());
+        setStatus();
     }
 
 
@@ -150,13 +184,13 @@ PlayUnicornModeActivity extends AppCompatActivity {
         final Button chooseValue = findViewById(R.id.chooseValueButton);
         chooseValue.setBackgroundColor(Color.GRAY);
         TextView status = findViewById(R.id.status);
-        status.setText(teamUser.size() + ":" + teamOpponent.size());
+        status.setText(userCards.size() + ":" + opponentCards.size());
         attributes = card.getAttributes();
         TextView cardName = findViewById(R.id.playingCardName);
-        cardName.setText(teamUser.first().getName());
+        cardName.setText(userCards.first().getName());
 
         // User is playing
-        if (game == null || game.getTurn().equals("user")) {
+        if (game == null || game.getTurn().equals(USER)) {
 
             lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @SuppressLint("ResourceAsColor")
@@ -176,14 +210,15 @@ PlayUnicornModeActivity extends AppCompatActivity {
         // AI is playing
         else {
             currentAI = new ArtificialIntelligence(deck, difficulty);
-            int choosenAttrPosition = currentAI.playCard(teamOpponent.first());
+            int choosenAttrPosition = currentAI.playCard(opponentCards.first());
             currentShemaPosition = choosenAttrPosition;
-            attrValue = teamOpponent.first().getAttributes().get(choosenAttrPosition);
+            attrValue = opponentCards.first().getAttributes().get(choosenAttrPosition);
             isChoosen = true;
             chooseValue.setBackgroundColor(Color.GREEN);
             chooseValue.setText("Continue");
 
         }
+
         chooseValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,6 +228,7 @@ PlayUnicornModeActivity extends AppCompatActivity {
                     realm.commitTransaction();
 
                     Intent intent = new Intent(c, ShowResultActivity.class);
+                    intent.putExtra(GAME_CATEGORY, UNICORN);
                     startActivity(intent);
                     isChoosen = false;
                 }
@@ -226,10 +262,10 @@ PlayUnicornModeActivity extends AppCompatActivity {
 
     private Game compareValues(String value, int position, Deck deck) {
         Card contrahentCard;
-        if (game == null || game.getTurn().equals("user")) {
-            contrahentCard = teamOpponent.first();
+        if (game == null || game.getTurn().equals(USER)) {
+            contrahentCard = opponentCards.first();
         } else {
-            contrahentCard = teamUser.first();
+            contrahentCard = userCards.first();
         }
 
         String valueOpponent = contrahentCard.getAttributes().get(position);
@@ -239,33 +275,35 @@ PlayUnicornModeActivity extends AppCompatActivity {
         double opponentValue = Double.parseDouble(valueOpponent);
         String winner = "";
 
-
-        if (realm.where(Game.class).equalTo("id", 2).findFirst() == null) {
+        if (realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findFirst() == null) {
             game = realm.createObject(Game.class);
-            game.setId(2);
+            game.setId(UNICORN_GAME);
         } else {
-            game = realm.where(Game.class).equalTo("id", 2).findFirst();
+            game = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findFirst();
         }
         game.setDeck(deck.getName());
-        game.setOpponentCards(teamOpponent);
-        game.setUsercards(teamUser);
+        game.setOpponentCards(opponentCards);
+        game.setUsercards(userCards);
+        RealmList<User> userList = new RealmList<>();
+        userList.add(user);
+        game.setUsers(userList);
         RealmList<String> realmList = convertArrayListToRealmList(shemaForCard);
         game.setShemas(realmList);
 
         if (playerValue < opponentValue) {
             if (higherWins.equals("true")) {
-                winner = "opponent";
+                winner = OPPONENT;
             } else {
-                winner = "player";
+                winner = PLAYER;
             }
         } else if (opponentValue < playerValue) {
             if (higherWins.equals("true")) {
-                winner = "player";
+                winner = PLAYER;
             } else {
-                winner = "opponent";
+                winner = OPPONENT;
             }
         } else {
-            winner = "draw";
+            winner = DRAW;
         }
         RealmList<String> values = new RealmList<>();
         values.add(value);
@@ -273,13 +311,13 @@ PlayUnicornModeActivity extends AppCompatActivity {
         game.setValues(values);
         game.setLastWinner(winner);
         if (game.getTurn() == null) {
-            game.setTurn("user");
+            game.setTurn(USER);
         }
 
-        if (game.getTurn().equals("user")) {
-            game.setTurn("opponent");
-        } else if (game.getTurn().equals("opponent")) {
-            game.setTurn("user");
+        if (game.getTurn().equals(USER)) {
+            game.setTurn(OPPONENT);
+        } else if (game.getTurn().equals(OPPONENT)) {
+            game.setTurn(USER);
         }
         return game;
     }
@@ -294,3 +332,4 @@ PlayUnicornModeActivity extends AppCompatActivity {
 
 
 }
+

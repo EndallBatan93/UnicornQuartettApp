@@ -41,6 +41,7 @@ public final class Constants {
     public static final String SELECTED_DECK = "selectedDeck";
     public static final String UNICORN = "unicorn";
     public static final String STANDARD = "standard";
+    public static final String GAME_CATEGORY = "category";
 
     // BITMAP SCALINGS
     public static final int ULTRA_HIGH_FACTOR = 30;
