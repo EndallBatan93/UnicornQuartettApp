@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
@@ -23,6 +24,8 @@ import java.io.InputStream;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+
+import static com.unicorn.unicornquartett.Utility.Constants.*;
 
 public class ShowResultActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
@@ -51,7 +54,7 @@ public class ShowResultActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, PlayStandardModeActivity.class);
-                intent.putExtra("gameRunning", "true");
+                intent.putExtra(GAME_RUNNING, "true");
                 startActivity(intent);
             }
         });
@@ -75,10 +78,10 @@ public class ShowResultActivity extends AppCompatActivity {
         realm.commitTransaction();
 
         //resultView
-        if(game.getLastWinner().equals("player")) {
+        if(game.getLastWinner().equals(PLAYER)) {
             winnerLoser.setText("WON");
             winnerLoser.setTextColor(Color.GREEN);
-        } else if(game.getLastWinner().equals("opponent")) {
+        } else if(game.getLastWinner().equals(OPPONENT)) {
             winnerLoser.setText("LOST");
             winnerLoser.setTextColor(Color.RED);
         } else {
@@ -108,7 +111,7 @@ public class ShowResultActivity extends AppCompatActivity {
     private void updateStacks(String winner, Game game) {
         Card firstPlayerCard = game.getUsercards().first();
         Card firstOpponentCard = game.getOpponentCards().first();
-        if(winner.equals("player")) {
+        if(winner.equals(PLAYER)) {
             game.getUsercards().add(firstOpponentCard);
             game.getOpponentCards().remove(firstOpponentCard);
             game.getUsercards().move(0,game.getUsercards().size()-1);
@@ -120,7 +123,7 @@ public class ShowResultActivity extends AppCompatActivity {
                 game.setDrawnInRow(0);
             }
 
-        } else if (winner.equals("opponent")) {
+        } else if (winner.equals(OPPONENT)) {
             game.getOpponentCards().add(firstPlayerCard);
             game.getUsercards().remove(firstPlayerCard);
             game.getOpponentCards().move(0,game.getOpponentCards().size()-1);
@@ -132,7 +135,7 @@ public class ShowResultActivity extends AppCompatActivity {
                 game.setDrawnInRow(0);
             }
 
-        } else if (winner.equals("draw")) {
+        } else if (winner.equals(DRAW)) {
             int increasedDrawn = game.getDrawnInRow()+1;
             game.setDrawnInRow(increasedDrawn);
             game.getDrawnCards().add(firstPlayerCard);
@@ -151,7 +154,7 @@ public class ShowResultActivity extends AppCompatActivity {
             gameResult.setWon(true);
             user.getStats().add(gameResult);
 
-            intent.putExtra("winner", "user");
+            intent.putExtra(WINNER, USER);
             startActivity(intent);
         }
         else if (game.getUsercards().isEmpty()) {
@@ -159,7 +162,7 @@ public class ShowResultActivity extends AppCompatActivity {
             gameResult.setWon(false);
             user.getStats().add(gameResult);
             game.deleteFromRealm();
-            intent.putExtra("winner", "opponent");
+            intent.putExtra(WINNER, OPPONENT);
             startActivity(intent);
         }
     }

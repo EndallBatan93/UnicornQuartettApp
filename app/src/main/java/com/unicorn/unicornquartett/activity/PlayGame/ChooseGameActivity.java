@@ -30,6 +30,7 @@ import io.realm.Realm;
 import io.realm.RealmList;
 
 import static com.unicorn.unicornquartett.R.id.profileUserName;
+import static com.unicorn.unicornquartett.Utility.Constants.*;
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
@@ -70,8 +71,8 @@ public class ChooseGameActivity extends AppCompatActivity {
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
             setUserName(user);
         }
-        unicornGame = realm.where(Game.class).equalTo("id", 2).findFirst();
-        standardGame = realm.where(Game.class).equalTo("id", 1).findFirst();
+        unicornGame = realm.where(Game.class).equalTo(REALM_ID, 2).findFirst();
+        standardGame = realm.where(Game.class).equalTo(REALM_ID, 1).findFirst();
         playStandard = findViewById(R.id.playStandard);
         playUnicorn = findViewById(R.id.playUnicorn);
 
@@ -130,17 +131,17 @@ public class ChooseGameActivity extends AppCompatActivity {
             int height = b.getHeight();
             int width = b.getWidth();
             if (height > 4000 || width > 4000) {
-                height = height / Constants.ULTRA_HIGH_FACTOR;
-                width = width / Constants.ULTRA_HIGH_FACTOR;
+                height = height / ULTRA_HIGH_FACTOR;
+                width = width / ULTRA_HIGH_FACTOR;
             } else if (height > 2000 || width > 2000) {
-                height = height / Constants.HIGH_FACTOR;
-                width = width / Constants.HIGH_FACTOR;
+                height = height / HIGH_FACTOR;
+                width = width / HIGH_FACTOR;
             } else if (height > 1000 || width > 1000) {
-                height = height / Constants.MEDIUM_FACTOR;
-                width = width / Constants.MEDIUM_FACTOR;
+                height = height / MEDIUM_FACTOR;
+                width = width / MEDIUM_FACTOR;
             } else if (height > 700 || width > 700) {
-                height = height / Constants.LOW_FACTOR;
-                width = width / Constants.LOW_FACTOR;
+                height = height / LOW_FACTOR;
+                width = width / LOW_FACTOR;
             }
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, width, height, true);
             CircleImageView profileButton = findViewById(R.id.profileButton);
@@ -169,9 +170,9 @@ public class ChooseGameActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (mode.equals("playUnicorn")) {
-                        startGameActivity("unicorn");
+                        startGameActivity(UNICORN);
                     } else {
-                        startGameActivity("standard");
+                        startGameActivity(STANDARD);
                     }
                 }
             });
@@ -188,13 +189,13 @@ public class ChooseGameActivity extends AppCompatActivity {
 
     private void startGameActivity(String game) {
         Intent intent;
-        if (game.equals("unicorn")) {
+        if (game.equals(UNICORN)) {
             intent = new Intent(activityContext, PlayUnicornModeActivity.class);
         } else {
             intent = new Intent(activityContext, PlayStandardModeActivity.class);
 
         }
-        intent.putExtra("selectedDeck", selectedDeck);
+        intent.putExtra(selectedDeck, selectedDeck);
         activityContext.startActivity(intent);
     }
 

@@ -11,9 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.activity.Menu.MenuActivity;
 
 import io.realm.Realm;
+
+import static com.unicorn.unicornquartett.Utility.Constants.*;
 
 public class EndGameActivity extends AppCompatActivity {
 
@@ -25,7 +28,7 @@ public class EndGameActivity extends AppCompatActivity {
         final Context context = this;
         TextView endText = findViewById(R.id.endText);
         TextView endText2 = findViewById(R.id.endText2);
-        String winner = getIntent().getStringExtra("winner");
+        String winner = getIntent().getStringExtra(WINNER);
         LinearLayout linearLayout = findViewById(R.id.mainEndGameLayout);
         if (winner.equals("user")) {
             endText.setText("You have won");

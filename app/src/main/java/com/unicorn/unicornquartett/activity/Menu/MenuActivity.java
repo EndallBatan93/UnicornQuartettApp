@@ -49,15 +49,19 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static com.unicorn.unicornquartett.Utility.Constants.*;
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.HIGH_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.INTRO_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.MEDIUM_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.ULTRA_HIGH_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
 import static com.unicorn.unicornquartett.Utility.Util.*;
 
@@ -141,17 +145,17 @@ public class MenuActivity extends AppCompatActivity {
             int height = b.getHeight();
             int width = b.getWidth();
             if (height > 4000 || width > 4000) {
-                height = height / Constants.ULTRA_HIGH_FACTOR;
-                width = width / Constants.ULTRA_HIGH_FACTOR;
+                height = height / ULTRA_HIGH_FACTOR;
+                width = width / ULTRA_HIGH_FACTOR;
             } else if (height > 2000 || width > 2000) {
-                height = height / Constants.HIGH_FACTOR;
-                width = width / Constants.HIGH_FACTOR;
+                height = height / HIGH_FACTOR;
+                width = width / HIGH_FACTOR;
             } else if (height > 1000 || width > 1000) {
-                height = height / Constants.MEDIUM_FACTOR;
-                width = width / Constants.MEDIUM_FACTOR;
+                height = height / MEDIUM_FACTOR;
+                width = width / MEDIUM_FACTOR;
             } else if (height > 700 || width > 700) {
-                height = height / Constants.LOW_FACTOR;
-                width = width / Constants.LOW_FACTOR;
+                height = height / LOW_FACTOR;
+                width = width / LOW_FACTOR;
             }
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, width, height, true);
             CircleImageView profileButton = findViewById(R.id.profileButton);

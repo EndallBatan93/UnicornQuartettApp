@@ -37,6 +37,7 @@ import io.realm.RealmList;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.OPPONENTTURN;
 import static com.unicorn.unicornquartett.Utility.Constants.PLAYERSTURN;
+import static com.unicorn.unicornquartett.Utility.Constants.SELECTED_DECK;
 
 public class
 PlayUnicornModeActivity extends AppCompatActivity {
@@ -98,7 +99,7 @@ PlayUnicornModeActivity extends AppCompatActivity {
 
 
     private Deck getDecks() {
-        String selectedDeck = getIntent().getStringExtra("selectedDeck");
+        String selectedDeck = getIntent().getStringExtra(SELECTED_DECK);
         Deck deck = realm.where(Deck.class).equalTo("name", selectedDeck).findFirst();
         return deck;
     }

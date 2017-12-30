@@ -54,17 +54,11 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     Deck deck;
     String runningGame;
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_play_game_view);
-//    }
-
     @Override
     protected void onResume() {
         super.onResume();
         setContentView(R.layout.activity_play_game_view);
-        Game standardGame = realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst();
+        Game standardGame = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
         if (standardGame != null) {
             handleResume();
         } else {
@@ -77,7 +71,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         status = findViewById(R.id.status);
         turn = findViewById(R.id.turn);
 
-        game = realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst();
+        game = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
         user = game.getUsers().first();
         difficulty = user.getDifficulty();
         deck = getDeckFromString(game.getDeck());
@@ -101,9 +95,9 @@ public class PlayStandardModeActivity extends AppCompatActivity {
 
         difficulty = user.getDifficulty();
 
-        runningGame = getIntent().getStringExtra("gameRunning");
+        runningGame = getIntent().getStringExtra(GAME_RUNNING);
         if ((runningGame != null) && runningGame.equals("true")) {
-            game = realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst();
+            game = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
             userCards = game.getUsercards();
             opponentCards = game.getOpponentCards();
             setAttributes(userCards.first(), deck);
@@ -121,7 +115,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
             turn.setText(PLAYERSTURN);
         } else {
 
-            if (game.getTurn().equals("user")) {
+            if (game.getTurn().equals(USER)) {
                 turn.setText(PLAYERSTURN);
             } else {
                 turn.setText(OPPONENTTURN);
@@ -135,7 +129,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
 
 
     private Deck getDeckFromIntent() {
-        String selectedDeck = getIntent().getStringExtra("selectedDeck");
+        String selectedDeck = getIntent().getStringExtra(SELECTED_DECK);
         Deck deck = realm.where(Deck.class).equalTo("name", selectedDeck).findFirst();
         return deck;
     }
@@ -196,7 +190,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         cardName.setText(userCards.first().getName());
 
         // User is playing
-        if (game == null || game.getTurn().equals("user")) {
+        if (game == null || game.getTurn().equals(USER)) {
 
             lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @SuppressLint("ResourceAsColor")
@@ -224,6 +218,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
             chooseValue.setText("Continue");
 
         }
+
         chooseValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -266,7 +261,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
 
     private Game compareValues(String value, int position, Deck deck) {
         Card contrahentCard;
-        if (game == null || game.getTurn().equals("user")) {
+        if (game == null || game.getTurn().equals(USER)) {
             contrahentCard = opponentCards.first();
         } else {
             contrahentCard = userCards.first();
@@ -279,11 +274,11 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         double opponentValue = Double.parseDouble(valueOpponent);
         String winner = "";
 
-        if (realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst() == null) {
+        if (realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst() == null) {
             game = realm.createObject(Game.class);
             game.setId(1);
         } else {
-            game = realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst();
+            game = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
         }
         game.setDeck(deck.getName());
         game.setOpponentCards(opponentCards);
@@ -296,18 +291,18 @@ public class PlayStandardModeActivity extends AppCompatActivity {
 
         if (playerValue < opponentValue) {
             if (higherWins.equals("true")) {
-                winner = "opponent";
+                winner = OPPONENT;
             } else {
-                winner = "player";
+                winner = PLAYER;
             }
         } else if (opponentValue < playerValue) {
             if (higherWins.equals("true")) {
-                winner = "player";
+                winner = PLAYER;
             } else {
-                winner = "opponent";
+                winner = OPPONENT;
             }
         } else {
-            winner = "draw";
+            winner = DRAW;
         }
         RealmList<String> values = new RealmList<>();
         values.add(value);
@@ -315,13 +310,13 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         game.setValues(values);
         game.setLastWinner(winner);
         if (game.getTurn() == null) {
-            game.setTurn("user");
+            game.setTurn(USER);
         }
 
-        if (game.getTurn().equals("user")) {
-            game.setTurn("opponent");
-        } else if (game.getTurn().equals("opponent")) {
-            game.setTurn("user");
+        if (game.getTurn().equals(USER)) {
+            game.setTurn(OPPONENT);
+        } else if (game.getTurn().equals(OPPONENT)) {
+            game.setTurn(USER);
         }
         return game;
     }

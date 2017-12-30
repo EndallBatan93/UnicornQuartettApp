@@ -9,6 +9,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import io.realm.Realm;
 import io.realm.RealmList;
 
+import static com.unicorn.unicornquartett.Utility.Constants.DIFFICULTY_1;
+import static com.unicorn.unicornquartett.Utility.Constants.DIFFICULTY_2;
+
 /**
  * Created by max on 28.12.17.
  */
@@ -32,10 +35,10 @@ public class ArtificialIntelligence {
     public int playCard (Card card){
         int attributePosition = 0;
         calcRelativeValues(card);
-        if (difficulty.equals(Constants.DIFFICULTY_1)) {
+        if (difficulty.equals(DIFFICULTY_1)) {
             attributePosition = chooseEasy();
         }
-        else if (difficulty.equals(Constants.DIFFICULTY_2)) {
+        else if (difficulty.equals(DIFFICULTY_2)) {
             attributePosition = chooseMedium();
         }
         else {
