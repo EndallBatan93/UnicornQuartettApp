@@ -14,9 +14,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.ArtificialIntelligence;
+import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
@@ -30,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -45,6 +48,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
     private Context c = this;
     private TextView status;
     private TextView turn;
+    private TextView supriseInfo;
     private Game game;
     Boolean isChoosen = false;
     RealmList<String> attributes;
@@ -53,6 +57,11 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
     User user;
     Deck deck;
     String runningGame;
+    Intent intent;
+    int muliplyIndex = -1;
+    private boolean multiplyUser = false;
+    private boolean multiplyOpponent = false;
+    ImageView supriseButton;
 
     @Override
     protected void onResume() {
@@ -70,6 +79,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
     private void handleResume() {
         status = findViewById(R.id.status);
         turn = findViewById(R.id.turn);
+        supriseInfo = findViewById(R.id.supriseInfo);
 
         game = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findFirst();
         user = game.getUsers().first();
@@ -89,6 +99,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
     private void handleInitialization() {
         status = findViewById(R.id.status);
         turn = findViewById(R.id.turn);
+        supriseInfo = findViewById(R.id.supriseInfo);
 
         user = getUser();
         deck = getDeckFromIntent();
@@ -160,7 +171,9 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
 
 
     private void setAttributes(final Card card, final Deck deck) {
-
+        intent = new Intent(c, ShowResultActivity.class);
+        intent.putExtra(MULTIPLY, USER);
+        //TODO
         String[] buildDescriptors = {"desc", "attrValue", "unit", "higherWins"};
         int[] buildLocation = {R.id.cardAttributeTitle, R.id.cardAttributeValue, R.id.cardAttributeUnit, R.id.cardAttributeHW};
 
@@ -183,15 +196,33 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
 
         final Button chooseValue = findViewById(R.id.chooseValueButton);
         chooseValue.setBackgroundColor(Color.GRAY);
+         supriseButton = findViewById(R.id.supriseButton);
         TextView status = findViewById(R.id.status);
         status.setText(userCards.size() + ":" + opponentCards.size());
         attributes = card.getAttributes();
         TextView cardName = findViewById(R.id.playingCardName);
         cardName.setText(userCards.first().getName());
+        supriseButton.setImageDrawable(getDrawable(R.drawable.suprisedeactivated));
 
+        if(game != null && game.getUserStreak() >= 3 && game.getTurn().equals(USER)) {
+            supriseButton.setImageDrawable(getDrawable(R.drawable.suprise));
+            Toast toast = Toast.makeText(c, "You have a suprise ", Toast.LENGTH_SHORT);
+            toast.show();
+            supriseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+//                    int evenIndex = ThreadLocalRandom.current().nextInt(0, 3);
+                    int evenIndex = 0;
+                    randomUnicornEvent(evenIndex, USER);
+                }
+            });
+            realm.beginTransaction();
+            game.setUserStreak(0);
+            realm.commitTransaction();
+        }
         // User is playing
         if (game == null || game.getTurn().equals(USER)) {
-
             lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @SuppressLint("ResourceAsColor")
                 @Override
@@ -203,12 +234,16 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
                     lw.getChildAt(i).setBackgroundColor(Color.GREEN);
                     isChoosen = true;
                     chooseValue.setBackgroundColor(Color.GREEN);
-
                 }
             });
+
+
         }
         // AI is playing
         else {
+            if (game.getOpponentStreak() == 3) {
+//                triggerRandomUnicornEvent();
+            }
             currentAI = new ArtificialIntelligence(deck, difficulty);
             int choosenAttrPosition = currentAI.playCard(opponentCards.first());
             currentShemaPosition = choosenAttrPosition;
@@ -227,7 +262,6 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
                     Game round = compareValues(attrValue, currentShemaPosition, deck);
                     realm.commitTransaction();
 
-                    Intent intent = new Intent(c, ShowResultActivity.class);
                     intent.putExtra(GAME_CATEGORY, UNICORN);
                     startActivity(intent);
                     isChoosen = false;
@@ -235,6 +269,36 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void randomUnicornEvent(int evenIndex ,String who) {
+
+        switch (evenIndex) {
+            case 0:
+                mulitplyAttributeValue(who);
+                break;
+            case 1:
+//                instantWin();
+                break;
+            case 2:
+//                switchCards();
+                break;
+            case 3:
+//                switchCardsWithOpponent();
+                break;
+        }
+    }
+
+    private void mulitplyAttributeValue(String who) {
+        if (who.equals(USER)) {
+            supriseInfo.setText("*5");
+            supriseInfo.setTextColor(Color.BLACK);
+            multiplyUser = true;
+            intent.putExtra(MULTIPLY, USER);
+        } else if (who.equals(OPPONENT)) {
+            multiplyOpponent = true;
+        }
+    }
+
 
     private ArrayList<String> getShemaForCard(Deck deck, int i) {
         RealmList<Shema> shemas = deck.getShema();
@@ -290,19 +354,38 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
         RealmList<String> realmList = convertArrayListToRealmList(shemaForCard);
         game.setShemas(realmList);
 
+        if(multiplyUser) {
+            playerValue = playerValue * 5;
+            multiplyUser = false;
+        }
+
+        if(multiplyOpponent) {
+            opponentValue = opponentValue * 5;
+            multiplyOpponent = false;
+        }
         if (playerValue < opponentValue) {
             if (higherWins.equals("true")) {
                 winner = OPPONENT;
+                game.setOpponentStreak(game.getUserStreak()+1);
+                game.setUserStreak(0);
             } else {
                 winner = PLAYER;
+                game.setUserStreak(game.getUserStreak()+1);
+                game.setOpponentStreak(0);
             }
         } else if (opponentValue < playerValue) {
             if (higherWins.equals("true")) {
                 winner = PLAYER;
+                game.setUserStreak(game.getUserStreak()+1);
+                game.setOpponentStreak(0);
             } else {
                 winner = OPPONENT;
+                game.setOpponentStreak(game.getUserStreak()+1);
+                game.setUserStreak(0);
             }
         } else {
+            game.setOpponentStreak(0);
+            game.setUserStreak(0);
             winner = DRAW;
         }
         RealmList<String> values = new RealmList<>();
@@ -319,6 +402,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
         } else if (game.getTurn().equals(OPPONENT)) {
             game.setTurn(USER);
         }
+
         return game;
     }
 

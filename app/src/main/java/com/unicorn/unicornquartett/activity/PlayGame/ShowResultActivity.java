@@ -33,6 +33,7 @@ public class ShowResultActivity extends AppCompatActivity {
     Game game;
     Deck deck;
     Intent intent;
+    String multiply;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,19 +75,30 @@ public class ShowResultActivity extends AppCompatActivity {
             }
         });
 
+        //some unicorn stuff
+        multiply = getIntent().getStringExtra(MULTIPLY);
+
         //opponent
         Card firstOpponentCard = game.getOpponentCards().first();
         setImage(firstOpponentCard, deck, opponentImageView);
         opponentCardName.setText(game.getOpponentCards().first().getName());
         opponentProperty.setText(game.getShemas().get(0));
-        opponentValue.setText(game.getValues().get(1));
+        Double opponentCardValue = Double.parseDouble(game.getValues().get(1));
+        if(multiply != null && multiply.equals(OPPONENT)){
+            opponentCardValue = opponentCardValue * 5.0;
+        }
+        opponentValue.setText(opponentCardValue.toString());
 
         //user
         Card firstUserCard = game.getUsercards().first();
         setImage(firstUserCard, deck, playerImageView);
         playerCardName.setText(game.getUsercards().first().getName());
         playerProperty.setText(game.getShemas().get(0));
-        playerValue.setText(game.getValues().get(0));
+        Double playerCardValue = Double.parseDouble(game.getValues().get(0));
+        if(multiply != null && multiply.equals(USER)){
+            playerCardValue = playerCardValue * 5.0;
+        }
+        playerValue.setText(playerCardValue.toString());
 
         realm.beginTransaction();
         updateStacks(game.getLastWinner(), game);

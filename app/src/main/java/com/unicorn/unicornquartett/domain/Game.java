@@ -20,9 +20,26 @@ public class Game extends RealmObject  {
     private String turn;
     private int drawnInRow = 0;
     private RealmList<Card> drawnCards;
-
+    private int userStreak = 0;
+    private int opponentStreak = 0;
     public Game () {
 
+    }
+
+    public int getOpponentStreak() {
+        return opponentStreak;
+    }
+
+    public void setOpponentStreak(int opponentStreak) {
+        this.opponentStreak = opponentStreak;
+    }
+
+    public int getUserStreak() {
+        return userStreak;
+    }
+
+    public void setUserStreak(int userStreak) {
+        this.userStreak = userStreak;
     }
 
     public RealmList<Card> getDrawnCards() {
