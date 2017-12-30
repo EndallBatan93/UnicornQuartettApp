@@ -172,7 +172,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
 
     private void setAttributes(final Card card, final Deck deck) {
         intent = new Intent(c, ShowResultActivity.class);
-        intent.putExtra(MULTIPLY, USER);
+        intent.putExtra(INSTANT_WIN, USER);
         //TODO
         String[] buildDescriptors = {"desc", "attrValue", "unit", "higherWins"};
         int[] buildLocation = {R.id.cardAttributeTitle, R.id.cardAttributeValue, R.id.cardAttributeUnit, R.id.cardAttributeHW};
@@ -213,7 +213,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
                 public void onClick(View view) {
 
 //                    int evenIndex = ThreadLocalRandom.current().nextInt(0, 3);
-                    int evenIndex = 0;
+                    int evenIndex = 1;
                     randomUnicornEvent(evenIndex, USER);
                 }
             });
@@ -277,7 +277,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
                 mulitplyAttributeValue(who);
                 break;
             case 1:
-//                instantWin();
+                instantWin(who);
                 break;
             case 2:
 //                switchCards();
@@ -285,6 +285,14 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
             case 3:
 //                switchCardsWithOpponent();
                 break;
+        }
+    }
+
+    private void instantWin(String who) {
+        if (who.equals(USER)){
+            intent.putExtra(INSTANT_WIN, USER);
+        } else if (who.equals(OPPONENT)){
+            intent.putExtra(INSTANT_WIN, OPPONENT);
         }
     }
 
@@ -296,6 +304,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
             intent.putExtra(MULTIPLY, USER);
         } else if (who.equals(OPPONENT)) {
             multiplyOpponent = true;
+            intent.putExtra(MULTIPLY, OPPONENT);
         }
     }
 

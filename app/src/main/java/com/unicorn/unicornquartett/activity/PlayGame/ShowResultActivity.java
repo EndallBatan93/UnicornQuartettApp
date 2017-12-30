@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
@@ -24,6 +23,7 @@ import java.io.InputStream;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 
 import static com.unicorn.unicornquartett.Utility.Constants.*;
 
@@ -32,8 +32,12 @@ public class ShowResultActivity extends AppCompatActivity {
     String category;
     Game game;
     Deck deck;
-    Intent intent;
+    Intent playIntent;
+    Intent finishIntent;
     String multiply;
+    String instantWin;
+    User user;
+    RealmResults<Game> gamesToDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,81 +45,102 @@ public class ShowResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_result);
         final Context context = this;
 
-        ImageView opponentImageView = findViewById(R.id.oppentCardImage);
-        TextView opponentCardName = findViewById(R.id.opponentCardName);
-        TextView opponentProperty = findViewById(R.id.opponentProperty);
-        TextView opponentValue = findViewById(R.id.opponentValueShow);
-
-        TextView winnerLoser = findViewById(R.id.winnerOrLoser);
-        TextView status = findViewById(R.id.status);
-
-        TextView playerCardName = findViewById(R.id.playerCardName);
-        TextView playerProperty = findViewById(R.id.playerProperty);
-        TextView playerValue = findViewById(R.id.playerValueShow);
-        ImageView playerImageView = findViewById(R.id.playerCardImage);
-
-        LinearLayout mainResultLayout = findViewById(R.id.resultMainLayout);
-
-        category = getIntent().getStringExtra(GAME_CATEGORY);
-        if (category.equals(STANDARD)) {
-            game = realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst();
-            intent = new Intent(context, PlayStandardModeActivity.class);
-            intent.putExtra(GAME_RUNNING, "true");
-        } else if (category.equals(UNICORN)) {
-            game = realm.where(Game.class).equalTo("id", UNICORN_GAME).findFirst();
-            intent = new Intent(context, PlayUnicornModeActivity.class);
-            intent.putExtra(GAME_RUNNING, "true");
-        }
-        deck = realm.where(Deck.class).equalTo("name", game.getDeck()).findFirst();
-
-        mainResultLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(intent);
-            }
-        });
+        finishIntent = new Intent(this, EndGameActivity.class);
+        user = realm.where(User.class).findFirst();
 
         //some unicorn stuff
         multiply = getIntent().getStringExtra(MULTIPLY);
+        instantWin = getIntent().getStringExtra(INSTANT_WIN);
+        category = getIntent().getStringExtra(GAME_CATEGORY);
 
-        //opponent
-        Card firstOpponentCard = game.getOpponentCards().first();
-        setImage(firstOpponentCard, deck, opponentImageView);
-        opponentCardName.setText(game.getOpponentCards().first().getName());
-        opponentProperty.setText(game.getShemas().get(0));
-        Double opponentCardValue = Double.parseDouble(game.getValues().get(1));
-        if(multiply != null && multiply.equals(OPPONENT)){
-            opponentCardValue = opponentCardValue * 5.0;
+        if (category != null && category.equals(STANDARD)) {
+            game = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
+            gamesToDelete = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findAll();
+        } else if (category != null && category.equals(UNICORN)) {
+            game = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findFirst();
+            gamesToDelete = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findAll();
         }
-        opponentValue.setText(opponentCardValue.toString());
 
-        //user
-        Card firstUserCard = game.getUsercards().first();
-        setImage(firstUserCard, deck, playerImageView);
-        playerCardName.setText(game.getUsercards().first().getName());
-        playerProperty.setText(game.getShemas().get(0));
-        Double playerCardValue = Double.parseDouble(game.getValues().get(0));
-        if(multiply != null && multiply.equals(USER)){
-            playerCardValue = playerCardValue * 5.0;
-        }
-        playerValue.setText(playerCardValue.toString());
-
-        realm.beginTransaction();
-        updateStacks(game.getLastWinner(), game);
-        realm.commitTransaction();
-
-        //resultView
-        if (game.getLastWinner().equals(PLAYER)) {
-            winnerLoser.setText("WON");
-            winnerLoser.setTextColor(Color.GREEN);
-        } else if (game.getLastWinner().equals(OPPONENT)) {
-            winnerLoser.setText("LOST");
-            winnerLoser.setTextColor(Color.RED);
+        if (instantWin != null && instantWin.equals(USER)) {
+            createUserWonGame(user);
+        } else if (instantWin != null && instantWin.equals(OPPONENT)) {
+            createOpponentWonGame(user);
         } else {
-            winnerLoser.setText("DRAWN");
-            winnerLoser.setTextColor(Color.BLUE);
+
+            // View
+            ImageView opponentImageView = findViewById(R.id.oppentCardImage);
+            TextView opponentCardName = findViewById(R.id.opponentCardName);
+            TextView opponentProperty = findViewById(R.id.opponentProperty);
+            TextView opponentValue = findViewById(R.id.opponentValueShow);
+
+            TextView winnerLoser = findViewById(R.id.winnerOrLoser);
+            TextView status = findViewById(R.id.status);
+
+            TextView playerCardName = findViewById(R.id.playerCardName);
+            TextView playerProperty = findViewById(R.id.playerProperty);
+            TextView playerValue = findViewById(R.id.playerValueShow);
+            ImageView playerImageView = findViewById(R.id.playerCardImage);
+
+            LinearLayout mainResultLayout = findViewById(R.id.resultMainLayout);
+
+            if (category.equals(STANDARD)) {
+                game = realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst();
+                playIntent = new Intent(context, PlayStandardModeActivity.class);
+                playIntent.putExtra(GAME_RUNNING, "true");
+            } else if (category.equals(UNICORN)) {
+                game = realm.where(Game.class).equalTo("id", UNICORN_GAME).findFirst();
+                playIntent = new Intent(context, PlayUnicornModeActivity.class);
+                playIntent.putExtra(GAME_RUNNING, "true");
+            }
+            deck = realm.where(Deck.class).equalTo("name", game.getDeck()).findFirst();
+
+            mainResultLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(playIntent);
+                }
+            });
+
+
+            //opponent
+            Card firstOpponentCard = game.getOpponentCards().first();
+            setImage(firstOpponentCard, deck, opponentImageView);
+            opponentCardName.setText(game.getOpponentCards().first().getName());
+            opponentProperty.setText(game.getShemas().get(0));
+            Double opponentCardValue = Double.parseDouble(game.getValues().get(1));
+            if (multiply != null && multiply.equals(OPPONENT)) {
+                opponentCardValue = opponentCardValue * 5.0;
+            }
+            opponentValue.setText(opponentCardValue.toString());
+
+            //user
+            Card firstUserCard = game.getUsercards().first();
+            setImage(firstUserCard, deck, playerImageView);
+            playerCardName.setText(game.getUsercards().first().getName());
+            playerProperty.setText(game.getShemas().get(0));
+            Double playerCardValue = Double.parseDouble(game.getValues().get(0));
+            if (multiply != null && multiply.equals(USER)) {
+                playerCardValue = playerCardValue * 5.0;
+            }
+            playerValue.setText(playerCardValue.toString());
+
+            realm.beginTransaction();
+            updateStacks(game.getLastWinner(), game);
+            realm.commitTransaction();
+
+            //resultView
+            if (game.getLastWinner().equals(PLAYER)) {
+                winnerLoser.setText("WON");
+                winnerLoser.setTextColor(Color.GREEN);
+            } else if (game.getLastWinner().equals(OPPONENT)) {
+                winnerLoser.setText("LOST");
+                winnerLoser.setTextColor(Color.RED);
+            } else {
+                winnerLoser.setText("DRAWN");
+                winnerLoser.setTextColor(Color.BLUE);
+            }
+            status.setText(game.getUsercards().size() + ":" + game.getOpponentCards().size());
         }
-        status.setText(game.getUsercards().size() + ":" + game.getOpponentCards().size());
     }
 
     @Override
@@ -174,23 +199,33 @@ public class ShowResultActivity extends AppCompatActivity {
     }
 
     private void checkIfGameIsOver(Game game) {
-        Intent intent = new Intent(this, EndGameActivity.class);
-        User user = realm.where(User.class).findFirst();
         if (game.getOpponentCards().isEmpty()) {
-            GameResult gameResult = realm.createObject(GameResult.class);
-            gameResult.setWon(true);
-            user.getStats().add(gameResult);
-
-            intent.putExtra(WINNER, USER);
-            startActivity(intent);
+            createUserWonGame(user);
         } else if (game.getUsercards().isEmpty()) {
-            GameResult gameResult = realm.createObject(GameResult.class);
-            gameResult.setWon(false);
-            user.getStats().add(gameResult);
-            game.deleteFromRealm();
-            intent.putExtra(WINNER, OPPONENT);
-            startActivity(intent);
+            createOpponentWonGame(user);
         }
+    }
+
+    private void createUserWonGame(User user) {
+        realm.beginTransaction();
+        GameResult gameResult = realm.createObject(GameResult.class);
+        gameResult.setWon(true);
+        user.getStats().add(gameResult);
+        gamesToDelete.deleteAllFromRealm();
+        realm.commitTransaction();
+        finishIntent.putExtra(WINNER, USER);
+        startActivity(finishIntent);
+    }
+
+    private void createOpponentWonGame(User user) {
+        realm.beginTransaction();
+        GameResult gameResult = realm.createObject(GameResult.class);
+        gameResult.setWon(false);
+        user.getStats().add(gameResult);
+        gamesToDelete.deleteAllFromRealm();
+        realm.commitTransaction();
+        finishIntent.putExtra(WINNER, OPPONENT);
+        startActivity(finishIntent);
     }
 
 }

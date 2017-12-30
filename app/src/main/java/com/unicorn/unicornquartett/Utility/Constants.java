@@ -53,7 +53,8 @@ public final class Constants {
     public static final String REALM_ID = "id";
 
     // UNICORN MODE
-    public static final String MULTIPLY = "MultiplyTrue" ;
+    public static final String MULTIPLY = "multiply" ;
+    public static final String INSTANT_WIN = "win";
 
 
 }
