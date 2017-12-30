@@ -172,8 +172,6 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
 
     private void setAttributes(final Card card, final Deck deck) {
         intent = new Intent(c, ShowResultActivity.class);
-        intent.putExtra(INSTANT_WIN, USER);
-        //TODO
         String[] buildDescriptors = {"desc", "attrValue", "unit", "higherWins"};
         int[] buildLocation = {R.id.cardAttributeTitle, R.id.cardAttributeValue, R.id.cardAttributeUnit, R.id.cardAttributeHW};
 
@@ -204,7 +202,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
         cardName.setText(userCards.first().getName());
         supriseButton.setImageDrawable(getDrawable(R.drawable.suprisedeactivated));
 
-        if(game != null && game.getUserStreak() >= 3 && game.getTurn().equals(USER)) {
+        if(game != null && game.getUserStreak() >= 3 && game.getTurn().equals(USER)){
             supriseButton.setImageDrawable(getDrawable(R.drawable.suprise));
             Toast toast = Toast.makeText(c, "You have a suprise ", Toast.LENGTH_SHORT);
             toast.show();
@@ -213,7 +211,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
                 public void onClick(View view) {
 
 //                    int evenIndex = ThreadLocalRandom.current().nextInt(0, 3);
-                    int evenIndex = 1;
+                    int evenIndex = 2;
                     randomUnicornEvent(evenIndex, USER);
                 }
             });
@@ -280,7 +278,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
                 instantWin(who);
                 break;
             case 2:
-//                switchCards();
+                switchCards(who);
                 break;
             case 3:
 //                switchCardsWithOpponent();
@@ -288,10 +286,23 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
         }
     }
 
+    private void switchCards(String who) {
+        realm.beginTransaction();
+        Card first = userCards.first();
+        userCards.move(0,userCards.size()-1);
+        game.setUsercards(userCards);
+        realm.commitTransaction();
+        this.setAttributes(game.getUsercards().first(),deck);
+        Toast toast = Toast.makeText(c, "You get a new card from your deck ", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
     private void instantWin(String who) {
         if (who.equals(USER)){
             intent.putExtra(INSTANT_WIN, USER);
+            supriseInfo.setText("Win");
         } else if (who.equals(OPPONENT)){
+            supriseInfo.setText("Lost");
             intent.putExtra(INSTANT_WIN, OPPONENT);
         }
     }
