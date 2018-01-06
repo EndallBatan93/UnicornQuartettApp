@@ -253,11 +253,10 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
         }
         // AI is playing
         else {
-//            if(game != null && game.getOpponentStreak() >= 3 && game.getTurn().equals(OPPONENT)){
-//                int evenIndex = ThreadLocalRandom.current().nextInt(0, 3);
-//                randomUserTriggeredUnicornEvent(evenIndex, OPPONENT);
-//                System.out.println("# # # " +evenIndex);
-//            }
+            if(game != null && game.getOpponentStreak() >= 3 && game.getTurn().equals(OPPONENT)){
+                int evenIndex = ThreadLocalRandom.current().nextInt(0, 3);
+                randomUserTriggeredUnicornEvent(evenIndex, OPPONENT);
+            }
             currentAI = new ArtificialIntelligence(deck, difficulty);
             int choosenAttrPosition = currentAI.playCard(opponentCards.first());
             currentShemaPosition = choosenAttrPosition;
