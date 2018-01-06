@@ -26,10 +26,8 @@ import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
-import com.unicorn.unicornquartett.activity.Friends.FriendActivity;
 import com.unicorn.unicornquartett.activity.PlayGame.ChooseGameActivity;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
-import com.unicorn.unicornquartett.activity.Ranglist.RangListActivity;
 import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
@@ -267,21 +265,27 @@ public class MenuActivity extends AppCompatActivity {
 
     public void goToRangListActivity(View view) {
         Button_SOUND.start();
-        Intent intent = new Intent(this, RangListActivity.class);
-        startActivity(intent);
+        final AlertDialog.Builder rangListDialog = new AlertDialog.Builder(this);
+        rangListDialog.setTitle("Rang List\n");
+        rangListDialog.setMessage("This content will be available for only 29.99$ soon.\n");
+        rangListDialog.create();
+        rangListDialog.show();
+
+    }
+
+    public void goToFriendActivity(View view) {
+        Button_SOUND.start();
+        final AlertDialog.Builder friendDialog = new AlertDialog.Builder(this);
+        friendDialog.setTitle("Friend List\n");
+        friendDialog.setMessage("This content will be available for only 39.99$ soon.\n");
+        friendDialog.create();
+        friendDialog.show();
 
     }
 
     public void goToDeckGalleryActivity(View view) {
         Button_SOUND.start();
         Intent intent = new Intent(this, DeckGalleryActivity.class);
-        startActivity(intent);
-
-    }
-
-    public void goToFriendActivity(View view) {
-        Button_SOUND.start();
-        Intent intent = new Intent(this, FriendActivity.class);
         startActivity(intent);
 
     }

@@ -273,9 +273,8 @@ public class ShowResultActivity extends AppCompatActivity {
     private class RandomEventTriggeredDialog extends DialogFragment {
         public RandomEventTriggeredDialog(final String text) {
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-//            alertDialog.setView(random_event_triggered);
-//            alertDialog.setTitle("Ups!Random Event Triggered");
-            alertDialog.setTitle(text);
+            alertDialog.setTitle("Random Event appeared:");
+            alertDialog.setMessage(text);
             alertDialog.create();
             alertDialog.show();
         }
