@@ -11,7 +11,7 @@
         android:id="@+id/createUserTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chooose a name nigga"
+        android:text="Chooose a username:"
         android:textAppearance="?android:attr/textAppearanceLarge"
         tools:text="@string/createTitle" />
 

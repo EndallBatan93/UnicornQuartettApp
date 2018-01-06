@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.Utility.Constants;
+import com.unicorn.unicornquartett.activity.Menu.MenuActivity;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.User;
@@ -29,11 +29,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-import static com.unicorn.unicornquartett.R.id.profileUserName;
-import static com.unicorn.unicornquartett.Utility.Constants.*;
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.HIGH_FACTOR;
+import static com.unicorn.unicornquartett.Utility.Constants.LOW_FACTOR;
+import static com.unicorn.unicornquartett.Utility.Constants.MEDIUM_FACTOR;
+import static com.unicorn.unicornquartett.Utility.Constants.REALM_ID;
+import static com.unicorn.unicornquartett.Utility.Constants.SELECTED_DECK;
+import static com.unicorn.unicornquartett.Utility.Constants.STANDARD;
+import static com.unicorn.unicornquartett.Utility.Constants.ULTRA_HIGH_FACTOR;
+import static com.unicorn.unicornquartett.Utility.Constants.UNICORN;
 
 public class ChooseGameActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
@@ -64,6 +70,12 @@ public class ChooseGameActivity extends AppCompatActivity {
         handleInitialization();
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
+    }
+
     private void handleInitialization() {
         user = realm.where(User.class).findFirst();
         if (user != null) {
@@ -78,7 +90,8 @@ public class ChooseGameActivity extends AppCompatActivity {
 
         if (unicornGame != null) {
             playUnicorn.setText(R.string.resumeUnicorn);
-        } else if (standardGame != null) {
+        }
+        if (standardGame != null) {
             playStandard.setText(R.string.resumeStandard);
         }
 

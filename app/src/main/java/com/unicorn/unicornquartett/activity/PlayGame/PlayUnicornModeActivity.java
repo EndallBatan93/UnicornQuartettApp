@@ -111,8 +111,9 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent(c, ChooseGameActivity.class);
+        startActivity(intent);
     }
-
     private void handleInitialization() {
         status = findViewById(R.id.status);
         turn = findViewById(R.id.turn);

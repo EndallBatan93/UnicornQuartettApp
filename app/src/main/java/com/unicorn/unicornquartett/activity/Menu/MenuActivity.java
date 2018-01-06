@@ -17,7 +17,6 @@ import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.BaseKeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -26,8 +25,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.Utility.Constants;
-import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.activity.Friends.FriendActivity;
 import com.unicorn.unicornquartett.activity.PlayGame.ChooseGameActivity;
@@ -49,7 +46,6 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-import static com.unicorn.unicornquartett.Utility.Constants.*;
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
@@ -57,13 +53,17 @@ import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.HIGH_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.INTRO_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.LOW_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.MEDIUM_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.ULTRA_HIGH_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
-import static com.unicorn.unicornquartett.Utility.Util.*;
+import static com.unicorn.unicornquartett.Utility.Util.getThemeBasedMP;
+import static com.unicorn.unicornquartett.Utility.Util.setBackGroundConstant;
+import static com.unicorn.unicornquartett.Utility.Util.setSoundConstants;
+import static com.unicorn.unicornquartett.Utility.Util.verifyStoragePermissions;
 
 public class MenuActivity extends AppCompatActivity {
     private static final int REQUEST_FROM_GALLERY = 2;
@@ -79,8 +79,6 @@ public class MenuActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.horse);
-//        mp.start();
         super.onResume();
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         if (!allUsers.isEmpty()) {
@@ -93,6 +91,10 @@ public class MenuActivity extends AppCompatActivity {
                 INTRO_SOUND.start();
             }
         }
+    }
+
+    public void onBackPressed() {
+        //nothin
     }
 
 

@@ -76,21 +76,6 @@ public class ShowResultActivity extends AppCompatActivity {
         category = getIntent().getStringExtra(GAME_CATEGORY);
         String randomEvent = getIntent().getStringExtra(RANDOM_EVENT_TRIGGERED);
 //        new RandomEventTriggeredDialog("rest");
-        switch (randomEvent) {
-            case NONE:
-                break;
-            case SWITCH_STACKS:
-                new RandomEventTriggeredDialog("Ups! Switched the card stacks?!\n");
-                break;
-            case SWITCH_WINNER:
-                new RandomEventTriggeredDialog("Ups! Switched the winner ????!!!!\n");
-                break;
-            case EVEN_STACKS:
-                new RandomEventTriggeredDialog("Ups!? Evened the ods :D\n");
-                break;
-        }
-
-
 
         if (category != null && category.equals(STANDARD)) {
             game = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
@@ -98,6 +83,19 @@ public class ShowResultActivity extends AppCompatActivity {
         } else if (category != null && category.equals(UNICORN)) {
             game = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findFirst();
             gamesToDelete = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findAll();
+            switch (randomEvent) {
+                case NONE:
+                    break;
+                case SWITCH_STACKS:
+                    new RandomEventTriggeredDialog("Ups! Switched the card stacks?!\n");
+                    break;
+                case SWITCH_WINNER:
+                    new RandomEventTriggeredDialog("Ups! Switched the winner ????!!!!\n");
+                    break;
+                case EVEN_STACKS:
+                    new RandomEventTriggeredDialog("Ups!? Evened the ods :D\n");
+                    break;
+            }
         }
 
         if (instantWin != null && instantWin.equals(USER)) {

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,7 +33,19 @@ import java.util.Map;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-import static com.unicorn.unicornquartett.Utility.Constants.*;
+import static com.unicorn.unicornquartett.Utility.Constants.DRAW;
+import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.GAME_CATEGORY;
+import static com.unicorn.unicornquartett.Utility.Constants.GAME_RUNNING;
+import static com.unicorn.unicornquartett.Utility.Constants.OPPONENT;
+import static com.unicorn.unicornquartett.Utility.Constants.OPPONENTTURN;
+import static com.unicorn.unicornquartett.Utility.Constants.PLAYER;
+import static com.unicorn.unicornquartett.Utility.Constants.PLAYERSTURN;
+import static com.unicorn.unicornquartett.Utility.Constants.REALM_ID;
+import static com.unicorn.unicornquartett.Utility.Constants.SELECTED_DECK;
+import static com.unicorn.unicornquartett.Utility.Constants.STANDARD;
+import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_GAME;
+import static com.unicorn.unicornquartett.Utility.Constants.USER;
 
 public class PlayStandardModeActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
@@ -84,6 +95,8 @@ public class PlayStandardModeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent(c, ChooseGameActivity.class);
+        startActivity(intent);
     }
 
     private void handleInitialization() {
