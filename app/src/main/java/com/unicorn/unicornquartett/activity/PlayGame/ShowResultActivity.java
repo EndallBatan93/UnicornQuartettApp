@@ -1,31 +1,20 @@
 package com.unicorn.unicornquartett.activity.PlayGame;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
@@ -39,8 +28,25 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-import static com.unicorn.unicornquartett.R.layout.random_event_triggered;
-import static com.unicorn.unicornquartett.Utility.Constants.*;
+import static com.unicorn.unicornquartett.Utility.Constants.DRAW;
+import static com.unicorn.unicornquartett.Utility.Constants.EVEN_STACKS;
+import static com.unicorn.unicornquartett.Utility.Constants.GAME_CATEGORY;
+import static com.unicorn.unicornquartett.Utility.Constants.GAME_RUNNING;
+import static com.unicorn.unicornquartett.Utility.Constants.INSTANT_WIN;
+import static com.unicorn.unicornquartett.Utility.Constants.MULTIPLY;
+import static com.unicorn.unicornquartett.Utility.Constants.NONE;
+import static com.unicorn.unicornquartett.Utility.Constants.OPPONENT;
+import static com.unicorn.unicornquartett.Utility.Constants.PLAYER;
+import static com.unicorn.unicornquartett.Utility.Constants.RANDOM_EVENT_TRIGGERED;
+import static com.unicorn.unicornquartett.Utility.Constants.REALM_ID;
+import static com.unicorn.unicornquartett.Utility.Constants.STANDARD;
+import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_GAME;
+import static com.unicorn.unicornquartett.Utility.Constants.SWITCH_STACKS;
+import static com.unicorn.unicornquartett.Utility.Constants.SWITCH_WINNER;
+import static com.unicorn.unicornquartett.Utility.Constants.UNICORN;
+import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_GAME;
+import static com.unicorn.unicornquartett.Utility.Constants.USER;
+import static com.unicorn.unicornquartett.Utility.Constants.WINNER;
 
 public class ShowResultActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
@@ -74,13 +80,13 @@ public class ShowResultActivity extends AppCompatActivity {
             case NONE:
                 break;
             case SWITCH_STACKS:
-                new RandomEventTriggeredDialog("Ups! Switched the card stacks?!");
+                new RandomEventTriggeredDialog("Ups! Switched the card stacks?!\n");
                 break;
             case SWITCH_WINNER:
-                new RandomEventTriggeredDialog("Ups! Switched the winner ????!!!!)");
+                new RandomEventTriggeredDialog("Ups! Switched the winner ????!!!!\n");
                 break;
             case EVEN_STACKS:
-                new RandomEventTriggeredDialog("Ups!? Evened the ods :D");
+                new RandomEventTriggeredDialog("Ups!? Evened the ods :D\n");
                 break;
         }
 

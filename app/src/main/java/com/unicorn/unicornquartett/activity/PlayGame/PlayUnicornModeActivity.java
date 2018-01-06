@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.NetworkOnMainThreadException;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.ArtificialIntelligence;
-import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
@@ -37,19 +35,23 @@ import java.util.concurrent.ThreadLocalRandom;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-import static com.unicorn.unicornquartett.Utility.Constants.*;
 import static com.unicorn.unicornquartett.Utility.Constants.DRAW;
+import static com.unicorn.unicornquartett.Utility.Constants.EVEN_STACKS;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.GAME_CATEGORY;
 import static com.unicorn.unicornquartett.Utility.Constants.GAME_RUNNING;
 import static com.unicorn.unicornquartett.Utility.Constants.INSTANT_WIN;
 import static com.unicorn.unicornquartett.Utility.Constants.MULTIPLY;
+import static com.unicorn.unicornquartett.Utility.Constants.NONE;
 import static com.unicorn.unicornquartett.Utility.Constants.OPPONENT;
 import static com.unicorn.unicornquartett.Utility.Constants.OPPONENTTURN;
 import static com.unicorn.unicornquartett.Utility.Constants.PLAYER;
 import static com.unicorn.unicornquartett.Utility.Constants.PLAYERSTURN;
+import static com.unicorn.unicornquartett.Utility.Constants.RANDOM_EVENT_TRIGGERED;
 import static com.unicorn.unicornquartett.Utility.Constants.REALM_ID;
 import static com.unicorn.unicornquartett.Utility.Constants.SELECTED_DECK;
+import static com.unicorn.unicornquartett.Utility.Constants.SWITCH_STACKS;
+import static com.unicorn.unicornquartett.Utility.Constants.SWITCH_WINNER;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_GAME;
 import static com.unicorn.unicornquartett.Utility.Constants.USER;
@@ -219,7 +221,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
 
         if (game != null && game.getUserStreak() >= 3 && game.getTurn().equals(USER)) {
             supriseButton.setImageDrawable(getDrawable(R.drawable.suprise));
-            Toast toast = Toast.makeText(c, "You have a suprise ", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(c, "You have a suprise ", Toast.LENGTH_LONG);
             toast.show();
             supriseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -277,9 +279,13 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
 
                     intent.putExtra(GAME_CATEGORY, UNICORN);
 
-                    int randomEventIndex = ThreadLocalRandom.current().nextInt(0, 3);
-                    randomRandomlyTriggeredUnicornEvent(randomEventIndex, round);
-
+                    int chanceToRandomStuff = ThreadLocalRandom.current().nextInt(0, 9);
+                    if(chanceToRandomStuff < 3) {
+                        int randomEventIndex = ThreadLocalRandom.current().nextInt(0, 2);
+                        randomRandomlyTriggeredUnicornEvent(randomEventIndex, round);
+                    } else {
+                        intent.putExtra(RANDOM_EVENT_TRIGGERED, NONE);
+                    }
                     startActivity(intent);
                     isChoosen = false;
                 }
@@ -300,9 +306,6 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
             case 2:
                 resetStacks();
                 // HigherWins becomes LowerWins
-                break;
-            case 3:
-                intent.putExtra(RANDOM_EVENT_TRIGGERED, NONE);
                 break;
         }
     }
@@ -399,7 +402,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
 
 
         this.setAttributes(userCards.first(), deck);
-        Toast toast = Toast.makeText(c, "You switched cards with your opponent ", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(c, "You switched cards with your opponent ", Toast.LENGTH_LONG);
         toast.show();
     }
 
@@ -411,7 +414,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
             game.setUsercards(userCards);
             realm.commitTransaction();
             this.setAttributes(game.getUsercards().first(), deck);
-            Toast toast = Toast.makeText(c, "You get a new card from your deck ", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(c, "You get a new card from your deck ", Toast.LENGTH_LONG);
             toast.show();
         } else if (who.equals(OPPONENT)) {
             realm.beginTransaction();
@@ -420,7 +423,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
             game.setOpponentCards(opponentCards);
             realm.commitTransaction();
             this.setAttributes(game.getOpponentCards().first(), deck);
-            Toast toast = Toast.makeText(c, "Opponent got a new Card", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(c, "Opponent got a new Card", Toast.LENGTH_LONG);
             toast.show();
         }
     }
