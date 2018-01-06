@@ -6,7 +6,6 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,7 +25,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
@@ -44,16 +42,22 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-import static com.unicorn.unicornquartett.Utility.Constants.*;
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.DIFFICULTY_1;
+import static com.unicorn.unicornquartett.Utility.Constants.DIFFICULTY_2;
+import static com.unicorn.unicornquartett.Utility.Constants.DIFFICULTY_3;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.HIGH_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.INTRO_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.LOW_FACTOR;
+import static com.unicorn.unicornquartett.Utility.Constants.MEDIUM_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.ULTRA_HIGH_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
 import static com.unicorn.unicornquartett.Utility.Util.getThemeBasedMP;
 import static com.unicorn.unicornquartett.Utility.Util.setBackGroundConstant;
@@ -120,15 +124,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         statistics.setText("won: "+won +" || lost: " +lost);
         if(won > lost) {
-            dissView.setText("Such Wow. Get youself an icecream." + "\n" +
-                    " Just jizzed in my pants");
+            dissView.setText("Such Wow. Get youself an icecream. Just jizzed in my pants.");
         } else if(won == lost) {
-            dissView.setText("Seriously. Much too learn you have" + "\n" +
-                    " KACKNOOB");
+            dissView.setText("Seriously. Much too learn you have dimwit.");
 
         } else {
-            dissView.setText("DU SPASSTGLATZE." + "\n"+ "Deine Mutter ist so fett"+  "\n" +
-                            "sie arbeitet im Aufzug als Gegengewicht");
+            dissView.setText("You should just throw your phone away and cry.");
         }
 
 
