@@ -12,7 +12,8 @@
         android:layout_width="200dp"
         android:scaleType="fitXY"
         android:contentDescription="@string/app_name"
-        android:padding="10dp" />
+        android:padding="2dp"
+        android:background="#FFFFFF"/>
 
     <TextView
         android:id="@+id/vwiatImageTitle"
