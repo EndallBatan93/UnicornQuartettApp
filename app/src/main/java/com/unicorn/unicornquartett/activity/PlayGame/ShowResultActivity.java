@@ -66,7 +66,7 @@ public class ShowResultActivity extends AppCompatActivity {
         instantWin = getIntent().getStringExtra(INSTANT_WIN);
         category = getIntent().getStringExtra(GAME_CATEGORY);
         String randomEvent = getIntent().getStringExtra(RANDOM_EVENT_TRIGGERED);
-        new RandomEventTriggeredDialog("rest");
+//        new RandomEventTriggeredDialog("rest");
         switch (randomEvent) {
             case NONE:
                 break;

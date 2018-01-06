@@ -253,9 +253,11 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
         }
         // AI is playing
         else {
-            if (game.getOpponentStreak() == 3) {
-//                triggerRandomUnicornEvent();
-            }
+//            if(game != null && game.getOpponentStreak() >= 3 && game.getTurn().equals(OPPONENT)){
+//                int evenIndex = ThreadLocalRandom.current().nextInt(0, 3);
+//                randomUserTriggeredUnicornEvent(evenIndex, OPPONENT);
+//                System.out.println("# # # " +evenIndex);
+//            }
             currentAI = new ArtificialIntelligence(deck, difficulty);
             int choosenAttrPosition = currentAI.playCard(opponentCards.first());
             currentShemaPosition = choosenAttrPosition;
@@ -318,6 +320,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
             realm.beginTransaction();
             for(int i = 0; i <= difference; i++) {
                 userCards.add(opponentCards.get(i));
+                opponentCards.remove(i);
             }
             realm.commitTransaction();
         } else if (userStackSize > opponentStackSize) {
@@ -325,6 +328,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
             difference = userStackSize - opponentStackSize;
             for(int i = 0; i <= difference;i++) {
                 opponentCards.add(userCards.get(i));
+                userCards.remove(i);
             }
             realm.commitTransaction();
         }
