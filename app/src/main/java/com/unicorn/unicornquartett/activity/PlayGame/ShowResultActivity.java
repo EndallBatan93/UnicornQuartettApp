@@ -15,6 +15,8 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,6 +39,7 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static com.unicorn.unicornquartett.R.layout.random_event_triggered;
 import static com.unicorn.unicornquartett.Utility.Constants.*;
 
 public class ShowResultActivity extends AppCompatActivity {
@@ -71,10 +74,13 @@ public class ShowResultActivity extends AppCompatActivity {
             case NONE:
                 break;
             case SWITCH_STACKS:
+                new RandomEventTriggeredDialog("Ups! Switched the card stacks?!");
                 break;
             case SWITCH_WINNER:
+                new RandomEventTriggeredDialog("Ups! Switched the winner ????!!!!)");
                 break;
             case EVEN_STACKS:
+                new RandomEventTriggeredDialog("Ups!? Evened the ods :D");
                 break;
         }
 
@@ -261,14 +267,13 @@ public class ShowResultActivity extends AppCompatActivity {
 
     @SuppressLint("ValidFragment")
     private class RandomEventTriggeredDialog extends DialogFragment {
-        public RandomEventTriggeredDialog(final String mode) {
+        public RandomEventTriggeredDialog(final String text) {
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-            alertDialog.setView(R.layout.random_event_triggered);
-//            alertDialog.setMessage("Ups!Random Event Triggered");
+//            alertDialog.setView(random_event_triggered);
+//            alertDialog.setTitle("Ups!Random Event Triggered");
+            alertDialog.setTitle(text);
             alertDialog.create();
             alertDialog.show();
         }
     }
-
-
 }
