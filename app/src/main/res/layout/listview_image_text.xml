@@ -8,9 +8,9 @@
 
     <ImageView
         android:id="@+id/vwiatImage"
-        android:layout_height="250px"
-        android:layout_width="300px"
-
+        android:layout_height="match_parent"
+        android:layout_width="200dp"
+        android:scaleType="fitXY"
         android:contentDescription="@string/app_name"
         android:padding="10dp" />
 
