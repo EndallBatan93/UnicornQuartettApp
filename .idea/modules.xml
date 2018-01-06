@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/UnicornQuartett.iml" filepath="$PROJECT_DIR$/UnicornQuartett.iml" />
       <module fileurl="file://C:\GitRepos\MobileApp\UnicornQuartettApp\UnicornQuartett.iml" filepath="C:\GitRepos\MobileApp\UnicornQuartettApp\UnicornQuartett.iml" />
-      <module fileurl="file://$PROJECT_DIR$/UnicornQuartettApp.iml" filepath="$PROJECT_DIR$/UnicornQuartettApp.iml" />
       <module fileurl="file://C:\Users\EndallBatan\AndroidStudioProjects\UnicornQuartett\UnicornQuartettApp.iml" filepath="C:\Users\EndallBatan\AndroidStudioProjects\UnicornQuartett\UnicornQuartettApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

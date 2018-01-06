@@ -50,6 +50,7 @@
             android:layout_height="60dp"
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/cardAttributeHW"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textColor="@color/colorAccent" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

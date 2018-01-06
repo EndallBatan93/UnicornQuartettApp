@@ -10,6 +10,7 @@
         android:id="@+id/vwiatImage"
         android:layout_height="250px"
         android:layout_width="300px"
+
         android:contentDescription="@string/app_name"
         android:padding="10dp" />
 
@@ -21,7 +22,7 @@
         android:gravity="center"
         android:text=''
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:textSize="30sp"
         android:textStyle="bold" />
 

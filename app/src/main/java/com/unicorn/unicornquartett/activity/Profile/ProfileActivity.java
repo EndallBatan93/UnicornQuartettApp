@@ -120,12 +120,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         statistics.setText("won: "+won +" || lost: " +lost);
         if(won > lost) {
-            dissView.setText("Such Wow. Get youself an icecream. Just jizzed in my pants");
+            dissView.setText("Such Wow. Get youself an icecream." + "\n" +
+                    " Just jizzed in my pants");
         } else if(won == lost) {
-            dissView.setText("Seriously. Much too learn you have KACKNOOB");
+            dissView.setText("Seriously. Much too learn you have" + "\n" +
+                    " KACKNOOB");
 
         } else {
-            dissView.setText("DU SPASSTGLATZE.Deine Mutter ist so fett"+  "\n" +
+            dissView.setText("DU SPASSTGLATZE." + "\n"+ "Deine Mutter ist so fett"+  "\n" +
                             "sie arbeitet im Aufzug als Gegengewicht");
         }
 
