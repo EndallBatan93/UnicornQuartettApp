@@ -21,15 +21,15 @@ public final class Constants {
     public static final String REALM_TUNING_NAME = "Tuning";
     public static final String BIKES = "bikes";
     public static final String TUNING = "tuning";
-
     // DIFFICULTY
     public static final String DIFFICULTY_1 = "fluffy";
     public static final String DIFFICULTY_2 = "fluffier";
-    public static final String DIFFICULTY_3 = "superfluffy";
 
+    public static final String DIFFICULTY_3 = "superfluffy";
     // GAME
     public static final String PLAYERSTURN = "Your Turn";
     public static final String OPPONENTTURN = "Opponent Turn";
+
     public static final int STANDARD_GAME = 1;
     public static final int UNICORN_GAME = 2;
     public static final String OPPONENT = "opponent";
@@ -42,6 +42,12 @@ public final class Constants {
     public static final String UNICORN = "unicorn";
     public static final String STANDARD = "standard";
     public static final String GAME_CATEGORY = "category";
+    public static final String SWITCH_STACKS = "switch_stacks";
+    public static final String RANDOM_EVENT_TRIGGERED = "randomEventTriggered";
+    public static final String SWITCH_WINNER = "switchedWinner";
+    public static final String EVEN_STACKS = "evenStacks";
+    public static final String NONE = "none";
+
 
     // BITMAP SCALINGS
     public static final int ULTRA_HIGH_FACTOR = 30;

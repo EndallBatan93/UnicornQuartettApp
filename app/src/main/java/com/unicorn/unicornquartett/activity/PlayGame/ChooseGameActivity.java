@@ -165,7 +165,6 @@ public class ChooseGameActivity extends AppCompatActivity {
                             selectedDeck = decks.get(i);
                         }
                     });
-
             alertDialog.setPositiveButton("Play", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {

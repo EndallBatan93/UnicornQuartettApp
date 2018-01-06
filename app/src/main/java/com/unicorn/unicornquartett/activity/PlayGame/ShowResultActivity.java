@@ -1,17 +1,29 @@
 package com.unicorn.unicornquartett.activity.PlayGame;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
@@ -38,6 +50,7 @@ public class ShowResultActivity extends AppCompatActivity {
     String instantWin;
     User user;
     RealmResults<Game> gamesToDelete;
+    Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +65,20 @@ public class ShowResultActivity extends AppCompatActivity {
         multiply = getIntent().getStringExtra(MULTIPLY);
         instantWin = getIntent().getStringExtra(INSTANT_WIN);
         category = getIntent().getStringExtra(GAME_CATEGORY);
+        String randomEvent = getIntent().getStringExtra(RANDOM_EVENT_TRIGGERED);
+        new RandomEventTriggeredDialog("rest");
+        switch (randomEvent) {
+            case NONE:
+                break;
+            case SWITCH_STACKS:
+                break;
+            case SWITCH_WINNER:
+                break;
+            case EVEN_STACKS:
+                break;
+        }
+
+
 
         if (category != null && category.equals(STANDARD)) {
             game = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
@@ -129,15 +156,19 @@ public class ShowResultActivity extends AppCompatActivity {
             realm.commitTransaction();
 
             //resultView
-            if (game.getLastWinner().equals(PLAYER)) {
-                winnerLoser.setText("WON");
-                winnerLoser.setTextColor(Color.GREEN);
-            } else if (game.getLastWinner().equals(OPPONENT)) {
-                winnerLoser.setText("LOST");
-                winnerLoser.setTextColor(Color.RED);
-            } else {
-                winnerLoser.setText("DRAWN");
-                winnerLoser.setTextColor(Color.BLUE);
+            switch (game.getLastWinner()) {
+                case PLAYER:
+                    winnerLoser.setText("WON");
+                    winnerLoser.setTextColor(Color.GREEN);
+                    break;
+                case OPPONENT:
+                    winnerLoser.setText("LOST");
+                    winnerLoser.setTextColor(Color.RED);
+                    break;
+                default:
+                    winnerLoser.setText("DRAWN");
+                    winnerLoser.setTextColor(Color.BLUE);
+                    break;
             }
             status.setText(game.getUsercards().size() + ":" + game.getOpponentCards().size());
         }
@@ -227,5 +258,17 @@ public class ShowResultActivity extends AppCompatActivity {
         finishIntent.putExtra(WINNER, OPPONENT);
         startActivity(finishIntent);
     }
+
+    @SuppressLint("ValidFragment")
+    private class RandomEventTriggeredDialog extends DialogFragment {
+        public RandomEventTriggeredDialog(final String mode) {
+            final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+            alertDialog.setView(R.layout.random_event_triggered);
+//            alertDialog.setMessage("Ups!Random Event Triggered");
+            alertDialog.create();
+            alertDialog.show();
+        }
+    }
+
 
 }

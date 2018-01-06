@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.NetworkOnMainThreadException;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.ArtificialIntelligence;
+import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Game;
@@ -35,6 +37,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import io.realm.Realm;
 import io.realm.RealmList;
 
+import static com.unicorn.unicornquartett.Utility.Constants.*;
 import static com.unicorn.unicornquartett.Utility.Constants.DRAW;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.GAME_CATEGORY;
@@ -214,7 +217,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
         cardName.setText(userCards.first().getName());
         supriseButton.setImageDrawable(getDrawable(R.drawable.suprisedeactivated));
 
-        if(game != null && game.getUserStreak() >= 3 && game.getTurn().equals(USER)){
+        if (game != null && game.getUserStreak() >= 3 && game.getTurn().equals(USER)) {
             supriseButton.setImageDrawable(getDrawable(R.drawable.suprise));
             Toast toast = Toast.makeText(c, "You have a suprise ", Toast.LENGTH_SHORT);
             toast.show();
@@ -223,7 +226,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
                 public void onClick(View view) {
 
                     int evenIndex = ThreadLocalRandom.current().nextInt(0, 3);
-                    randomUnicornEvent(evenIndex, USER);
+                    randomUserTriggeredUnicornEvent(evenIndex, USER);
                 }
             });
             realm.beginTransaction();
@@ -272,6 +275,10 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
                     realm.commitTransaction();
 
                     intent.putExtra(GAME_CATEGORY, UNICORN);
+
+                    int randomEventIndex = ThreadLocalRandom.current().nextInt(0, 3);
+                    randomRandomlyTriggeredUnicornEvent(randomEventIndex, round);
+
                     startActivity(intent);
                     isChoosen = false;
                 }
@@ -279,7 +286,80 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
         });
     }
 
-    private void randomUnicornEvent(int evenIndex, String who) {
+    private void randomRandomlyTriggeredUnicornEvent(int randomEventIndex, Game game) {
+        switch (randomEventIndex) {
+            case 0:
+                switchStacks();
+                // Stapel tauschen
+                break;
+            case 1:
+                switchWinner(game);
+                //  Gewinner wird vertauscht
+                break;
+            case 2:
+                resetStacks();
+                // HigherWins becomes LowerWins
+                break;
+            case 3:
+                intent.putExtra(RANDOM_EVENT_TRIGGERED, NONE);
+                break;
+        }
+    }
+
+    private void resetStacks() {
+        RealmList<Card> tmpUserCards = this.userCards;
+        RealmList<Card> tmpOpponentCards = this.opponentCards;
+        int userStackSize = tmpUserCards.size();
+        int opponentStackSize = tmpOpponentCards.size();
+        int difference = 0;
+
+        if (userStackSize < opponentStackSize) {
+            difference = opponentStackSize - userStackSize;
+            realm.beginTransaction();
+            for(int i = 0; i <= difference; i++) {
+                userCards.add(opponentCards.get(i));
+            }
+            realm.commitTransaction();
+        } else if (userStackSize > opponentStackSize) {
+            realm.beginTransaction();
+            difference = userStackSize - opponentStackSize;
+            for(int i = 0; i <= difference;i++) {
+                opponentCards.add(userCards.get(i));
+            }
+            realm.commitTransaction();
+        }
+        intent.putExtra(RANDOM_EVENT_TRIGGERED, EVEN_STACKS);
+    }
+
+
+    private void switchWinner(Game game) {
+        String lastWinner = game.getLastWinner();
+        String newWinner = "";
+        if (!lastWinner.equals(DRAW)) {
+            realm.beginTransaction();
+            if (lastWinner.equals(PLAYER)) {
+                newWinner = OPPONENT;
+            } else if (lastWinner.equals(OPPONENT)) {
+                newWinner = PLAYER;
+            }
+            game.setLastWinner(newWinner);
+            realm.commitTransaction();
+            intent.putExtra(RANDOM_EVENT_TRIGGERED, SWITCH_WINNER);
+        }
+    }
+
+    private void switchStacks() {
+        realm.beginTransaction();
+        RealmList<Card> tmpuserCards = this.userCards;
+        RealmList<Card> tmpopponentCards = this.opponentCards;
+
+        userCards = tmpopponentCards;
+        opponentCards = tmpuserCards;
+        realm.commitTransaction();
+        intent.putExtra(RANDOM_EVENT_TRIGGERED, SWITCH_STACKS);
+    }
+
+    private void randomUserTriggeredUnicornEvent(int evenIndex, String who) {
 
         switch (evenIndex) {
             case 0:
@@ -315,7 +395,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
         realm.commitTransaction();
 
 
-        this.setAttributes(userCards.first(),deck);
+        this.setAttributes(userCards.first(), deck);
         Toast toast = Toast.makeText(c, "You switched cards with your opponent ", Toast.LENGTH_SHORT);
         toast.show();
     }
