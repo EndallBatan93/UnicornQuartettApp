@@ -3,6 +3,7 @@ package com.unicorn.unicornquartett.activity.Menu;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.app.VoiceInteractor;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +25,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.activity.PlayGame.ChooseGameActivity;
@@ -44,6 +52,7 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static com.android.volley.Request.Method.*;
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
@@ -102,6 +111,7 @@ public class MenuActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_menu);
 //
+        sendRequestToRestFullWebService();
 //        mp.start();
         // Initializing Varables
         Button playButton = findViewById(R.id.playbutton);
@@ -133,6 +143,26 @@ public class MenuActivity extends AppCompatActivity {
                 INTRO_SOUND.start();
             }
         }
+    }
+
+    private void sendRequestToRestFullWebService() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://www.google.de";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        System.out.println(response.substring(0, 500));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("That didn't work!");
+            }
+        });
+        queue.add(stringRequest);
     }
 
 
