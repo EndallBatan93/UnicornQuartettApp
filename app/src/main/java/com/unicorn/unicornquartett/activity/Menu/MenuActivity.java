@@ -18,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -25,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
@@ -46,6 +48,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -147,21 +151,33 @@ public class MenuActivity extends AppCompatActivity {
 
     private void sendRequestToRestFullWebService() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://www.google.de";
+        String url = "http://quartett.af-mba.dbis.info/decks/";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        System.out.println(response.substring(0, 500));
+                        System.out.println(response);
+
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("That didn't work!");
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String credentials = "student:afmba";
+                String auth = "Basic "+ "c3R1ZGVudDphZm1iYQ==";
+                headers.put("Content-Type", "application/json");
+                headers.put("Content-Type", "multipart/form/data");
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
         queue.add(stringRequest);
     }
 
