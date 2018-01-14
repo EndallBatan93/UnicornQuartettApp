@@ -3,7 +3,6 @@ package com.unicorn.unicornquartett.activity.Menu;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.app.VoiceInteractor;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +17,6 @@ import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -28,10 +26,11 @@ import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.unicorn.unicornquartett.R;
@@ -41,6 +40,8 @@ import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,7 +57,6 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-import static com.android.volley.Request.Method.*;
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
@@ -91,32 +91,18 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        RealmResults<User> allUsers = realm.where(User.class).findAll();
-        if (!allUsers.isEmpty()) {
-            User user = allUsers.first();
-            assert user != null;
-            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
-            profileName.setText(user.getName());
-            if (user.getTheme() != null) {
-                setTheme();
-                INTRO_SOUND.start();
-            }
-        }
+        resumeLogicMenu();
     }
-
     public void onBackPressed() {
-        //nothin
-    }
 
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_menu);
-//
-        sendRequestToRestFullWebService();
-//        mp.start();
+
         // Initializing Varables
         Button playButton = findViewById(R.id.playbutton);
         Button ranglistButton = findViewById(R.id.ranglisbutton);
@@ -127,14 +113,13 @@ public class MenuActivity extends AppCompatActivity {
         Game standard = realm.where(Game.class).equalTo("id", 1).findFirst();
         RealmResults<User> allUsers = realm.where(User.class).findAll();
 
-        if (unicorn != null && standard != null) {
-            playButton.setText(R.string.PlayGame2);
-        } else if (unicorn != null) {
-            playButton.setText(R.string.PlayGame1);
-        } else if (standard != null) {
-            playButton.setText(R.string.PlayGame1);
+        sendStringRequestToRestFullWebService();
+        checkForRunningGames(playButton, unicorn, standard);
 
-        }
+        checkForOrLoadUser(allUsers);
+    }
+
+    private void checkForOrLoadUser(RealmResults<User> allUsers) {
         if (allUsers.isEmpty()) {
             new CreateUserDialogFragment();
 
@@ -149,24 +134,35 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    private void sendRequestToRestFullWebService() {
-        RequestQueue queue = Volley.newRequestQueue(this);
+    private void checkForRunningGames(Button playButton, Game unicorn, Game standard) {
+        if (unicorn != null && standard != null) {
+            playButton.setText(R.string.PlayGame2);
+        } else if (unicorn != null) {
+            playButton.setText(R.string.PlayGame1);
+        } else if (standard != null) {
+            playButton.setText(R.string.PlayGame1);
+
+        }
+    }
+
+    private void sendStringRequestToRestFullWebService() {
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
         String url = "http://quartett.af-mba.dbis.info/decks/";
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        System.out.println(response);
-
+                    public void onResponse(JSONObject response) {
+                        JSONObject returnedJson = response;
                     }
                 }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("That didn't work!");
-            }
-        }) {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -178,7 +174,61 @@ public class MenuActivity extends AppCompatActivity {
                 return headers;
             }
         };
-        queue.add(stringRequest);
+
+        requestQueue.add(jsObjRequest);
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+//        String url = "http://quartett.af-mba.dbis.info/decks/";
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        // Display the first 500 characters of the response string.
+//                        System.out.println(response);
+//
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                System.out.println("That didn't work!");
+//            }
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> headers = new HashMap<>();
+//                String credentials = "student:afmba";
+//                String auth = "Basic "+ "c3R1ZGVudDphZm1iYQ==";
+//                headers.put("Content-Type", "application/json");
+//                headers.put("Content-Type", "multipart/form/data");
+//                headers.put("Authorization", auth);
+//                return headers;
+//            }
+//        };
+//        requestQueue.add(stringRequest);
+    }
+
+    private void imageRequestToRestFullWebService() {
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        String url = "http://quartett.af-mba.dbis.info/decks/125/cards/370/images";
+        ImageRequest imageRequest = new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        Bitmap bitmap = response;
+                    }
+                }, 0, 0, null, null){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String credentials = "student:afmba";
+                String auth = "Basic "+ "c3R1ZGVudDphZm1iYQ==";
+                headers.put("Content-Type", "application/json");
+                headers.put("Content-Type", "multipart/form/data");
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+
+        requestQueue.add(imageRequest);
     }
 
 
@@ -473,6 +523,20 @@ public class MenuActivity extends AppCompatActivity {
     private void setTheme() {
         ConstraintLayout layout = findViewById(R.id.menuLayout);
         layout.setBackground(getDrawable(BACKGROUND));
+    }
+
+    private void resumeLogicMenu() {
+        RealmResults<User> allUsers = realm.where(User.class).findAll();
+        if (!allUsers.isEmpty()) {
+            User user = allUsers.first();
+            assert user != null;
+            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+            profileName.setText(user.getName());
+            if (user.getTheme() != null) {
+                setTheme();
+                INTRO_SOUND.start();
+            }
+        }
     }
 }
 
