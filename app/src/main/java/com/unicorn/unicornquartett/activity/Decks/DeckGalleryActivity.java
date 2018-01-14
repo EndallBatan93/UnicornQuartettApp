@@ -18,11 +18,23 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
+import com.unicorn.unicornquartett.domain.CardDTO;
 import com.unicorn.unicornquartett.domain.Deck;
+import com.unicorn.unicornquartett.domain.DeckDTO;
 import com.unicorn.unicornquartett.domain.User;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,19 +44,25 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
-import static com.unicorn.unicornquartett.Utility.Constants.*;
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
+import static com.unicorn.unicornquartett.Utility.Constants.HIGH_FACTOR;
+import static com.unicorn.unicornquartett.Utility.Constants.LOW_FACTOR;
+import static com.unicorn.unicornquartett.Utility.Constants.MEDIUM_FACTOR;
+import static com.unicorn.unicornquartett.Utility.Constants.ULTRA_HIGH_FACTOR;
 
 public class DeckGalleryActivity extends AppCompatActivity {
 
     ListView deckListView;
-    Realm realm = Realm.getDefaultInstance();
+    final Realm realm = Realm.getDefaultInstance();
     TextView profileName;
+
     @Override
     public void onResume() {
         super.onResume();
@@ -55,7 +73,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
             profileName.setText(user.getName());
         }
     }
-
 
 
     @Override
@@ -73,8 +90,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
         profileName = findViewById(R.id.userName);
         ListView deckListView = findViewById(R.id.decksListView);
 
-        assert user != null;
-        profileName.setText(user.getName());
+        setUserName(user);
         final RealmResults<Deck> decks = realm.where(Deck.class).findAll();
 
         List<String> deckNames = new ArrayList<String>();
@@ -87,42 +103,130 @@ public class DeckGalleryActivity extends AppCompatActivity {
             }
         }
 
-        List<ListViewItem> listOfDeckItems = new ArrayList<>();
-        for (int i = 0; i <decks.size(); i++){
-
-            HashMap<String, String> tmpTitleFromNameMap = new HashMap<>();
-            String deckName = deckNames.get(i);
-            tmpTitleFromNameMap.put("title", deckName);
-            String imageIdentifier = decks.get(i).getCards().first().getImage().getImageIdentifiers().first();
-            String imagePath = deckName.toLowerCase()+"/"+imageIdentifier;
-            Drawable tempDrawable;
-            try {
-                InputStream tempInputStream = getAssets().open(imagePath);
-                tempDrawable = Drawable.createFromStream(tempInputStream, null);
-                ListViewItem tmpListViewItem = new ListViewItem(tmpTitleFromNameMap,tempDrawable);
-                listOfDeckItems.add(tmpListViewItem);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        List<ListViewItem> listOfDeckItems = setImages(decks, deckNames);
 
         CustomAdapter customAdapter = new CustomAdapter(getBaseContext(), listOfDeckItems);
         deckListView.setAdapter(customAdapter);
         deckListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Deck deckIdentity = decks.get(position);
-                goToDisplayCardActivity(view, deckIdentity.getName());
+                if (decks.get(position).getCards().isEmpty()) {
+                    downloadDeck(decks.get(position));
+                } else {
+
+                    Deck deckIdentity = decks.get(position);
+                    goToDisplayCardActivity(view, deckIdentity.getName());
+                }
             }
         });
 
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
 
     }
+
+    private void downloadDeck(Deck deck) {
+        final RequestQueue requestQueue = Volley.newRequestQueue(this);
+        getCardNames(deck.getId(), requestQueue);
+    }
+
+
+    private void getCardNames(int id, RequestQueue requestQueue) {
+        String url = "http://quartett.af-mba.dbis.info/decks/" + id + "/cards/";
+        final RealmList<CardDTO> cardDTOList = new RealmList<>();
+        final int dtoID = id;
+        JsonArrayRequest jsArrReqeust = new JsonArrayRequest
+
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        JSONArray returnedJson = response;
+                        for (int i = 0; i < returnedJson.length(); i++) {
+                            try {
+                                Gson gson = new Gson();
+                                CardDTO card = gson.fromJson(returnedJson.get(i).toString(), CardDTO.class);
+                                realm.beginTransaction();
+                                CardDTO realmCard = realm.createObject(CardDTO.class);
+                                realmCard.setId(card.getId());
+                                realmCard.setName(card.getName());
+                                realm.commitTransaction();
+                                cardDTOList.add(realmCard);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        saveCardDTO(dtoID, cardDTOList);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        System.out.println("sth went wrong");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String credentials = "student:afmba";
+                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
+                headers.put("Content-Type", "application/json");
+                headers.put("Content-Type", "multipart/form/data");
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+
+        requestQueue.add(jsArrReqeust);
+    }
+
+    private void saveCardDTO(int dtoID, RealmList<CardDTO> cardDTOList) {
+        realm.beginTransaction();
+        DeckDTO deckDTO = realm.where(DeckDTO.class).equalTo("id", dtoID).findFirst();
+        deckDTO.setListOfCardsDTO(cardDTOList);
+        realm.commitTransaction();
+    }
+
+    @NonNull
+    private List<ListViewItem> setImages(RealmResults<Deck> decks, List<String> deckNames) {
+        List<ListViewItem> listOfDeckItems = new ArrayList<>();
+        for (int i = 0; i < decks.size(); i++) {
+
+            HashMap<String, String> tmpTitleFromNameMap = new HashMap<>();
+            String deckName = deckNames.get(i);
+            tmpTitleFromNameMap.put("title", deckName);
+            if (!decks.get(i).getCards().isEmpty()) {
+
+
+                String imageIdentifier = decks.get(i).getCards().first().getImage().getImageIdentifiers().first();
+                String imagePath = deckName.toLowerCase() + "/" + imageIdentifier;
+                Drawable tempDrawable;
+                try {
+                    InputStream tempInputStream = getAssets().open(imagePath);
+                    tempDrawable = Drawable.createFromStream(tempInputStream, null);
+                    ListViewItem tmpListViewItem = new ListViewItem(tmpTitleFromNameMap, tempDrawable);
+                    listOfDeckItems.add(tmpListViewItem);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                ListViewItem tmpListViewItem = new ListViewItem(tmpTitleFromNameMap, getDrawable(R.drawable.deckplatzhalter));
+                listOfDeckItems.add(tmpListViewItem);
+            }
+        }
+        return listOfDeckItems;
+    }
+
+    private void setUserName(User user) {
+        assert user != null;
+        profileName.setText(user.getName());
+    }
+
     public void goToProfileActivity(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
+
     private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
         try {
             File f = new File(absolutePath, imageIdentifier);
@@ -186,8 +290,8 @@ public class DeckGalleryActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
-            if(view==null)
-                view =((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.listview_image_text,null);
+            if (view == null)
+                view = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.listview_image_text, null);
             final ListViewItem item = getItem(position);
             TextView title = view.findViewById(R.id.vwiatImageTitle);
             ImageView image = view.findViewById(R.id.vwiatImage);
@@ -199,6 +303,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
             return view;
         }
     }
+
     public void goToDisplayCardActivity(View view, String deckName) {
         Intent intent = new Intent(this, DisplayCardActivity.class);
         intent.putExtra("DeckName", deckName);

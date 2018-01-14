@@ -225,6 +225,9 @@ public class MenuActivity extends AppCompatActivity {
                 //checkIfDeckIsUpToDate()
             } else {
                 realm.beginTransaction();
+                DeckDTO deckDTO = realm.createObject(DeckDTO.class);
+                deckDTO.setId(downloadableDeck.getId());
+                deckDTO.setName(downloadableDeck.getName());
                 Deck emptyDeck = realm.createObject(Deck.class);
                 emptyDeck.setId(downloadableDeck.getId());
                 emptyDeck.setName(downloadableDeck.getName());
