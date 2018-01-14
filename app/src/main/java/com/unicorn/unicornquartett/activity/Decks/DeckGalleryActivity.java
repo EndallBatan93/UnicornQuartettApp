@@ -68,6 +68,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
     RequestQueue requestQueue;
     RequestQueue.RequestFinishedListener shemaListener;
     RequestQueue.RequestFinishedListener attributeListener;
+    RequestQueue.RequestFinishedListener iamgeListener;
     int idInCardDTOList;
     int endPositionInCardDTOList;
 
@@ -157,14 +158,36 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 if (idInCardDTOList != endPositionInCardDTOList){
                     getAttributesForCard(deck);
                 } else {
+                    idInCardDTOList = 0;
+                    RealmList<CardDTO> listOfCard = realm.where(CardDTOList.class).equalTo("deckID", deck.getId()).findFirst().getListOfCardDTO();
+                    endPositionInCardDTOList = listOfCard.size();
+                    loadImagesForCards();
+                }
+            }
+        };
+        requestQueue.addRequestFinishedListener(attributeListener);
+    }
+
+    private void loadImagesForCards() {
+        requestQueue.removeRequestFinishedListener(attributeListener);
+
+        iamgeListener = new RequestQueue.RequestFinishedListener() {
+            @Override
+            public void onRequestFinished(Request request) {
+                if (idInCardDTOList != endPositionInCardDTOList){
+                    //doImageLoadYouStück
+                } else {
                     idInCardDTOList = -1;
                     endPositionInCardDTOList = -2;
                     doSomethingOther();
                 }
             }
         };
-        requestQueue.addRequestFinishedListener(attributeListener);
+        requestQueue.addRequestFinishedListener(iamgeListener);
+
     }
+
+    private void doSomethingOther(){}
 
     private void getAttributesForCard(Deck deck) {
         final int deckID = deck.getId();
@@ -198,13 +221,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String credentials = "student:afmba";
-                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
-                headers.put("Content-Type", "application/json");
-                headers.put("Content-Type", "multipart/form/data");
-                headers.put("Authorization", auth);
-                return headers;
+                return DeckGalleryActivity.this.getHeaders();
             }
         };
 
@@ -213,16 +230,23 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     }
 
+    @NonNull
+    private Map<String, String> getHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        String credentials = "student:afmba";
+        String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
+        headers.put("Content-Type", "application/json");
+        headers.put("Content-Type", "multipart/form/data");
+        headers.put("Authorization", auth);
+        return headers;
+    }
+
     private void createValueListForCard(RealmList<Double> valueList, int deckID) {
         CardDTO cardDTO = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst().getListOfCardDTO().get(idInCardDTOList);
         realm.beginTransaction();
         cardDTO.setValueList(valueList);
         realm.commitTransaction();
         idInCardDTOList += 1;
-    }
-
-    private void doSomethingOther() {
-        requestQueue.removeRequestFinishedListener(attributeListener);
     }
 
     private void getShemaForDeck(Deck deck) {
@@ -262,13 +286,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String credentials = "student:afmba";
-                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
-                headers.put("Content-Type", "application/json");
-                headers.put("Content-Type", "multipart/form/data");
-                headers.put("Authorization", auth);
-                return headers;
+                return DeckGalleryActivity.this.getHeaders();
             }
         };
 
@@ -330,13 +348,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String credentials = "student:afmba";
-                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
-                headers.put("Content-Type", "application/json");
-                headers.put("Content-Type", "multipart/form/data");
-                headers.put("Authorization", auth);
-                return headers;
+                return DeckGalleryActivity.this.getHeaders();
             }
         };
 
