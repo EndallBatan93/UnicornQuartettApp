@@ -30,18 +30,21 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.activity.PlayGame.ChooseGameActivity;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
+import com.unicorn.unicornquartett.domain.Deck;
+import com.unicorn.unicornquartett.domain.DeckDTO;
 import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,6 +53,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -86,13 +90,14 @@ public class MenuActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
     TextView profileName;
     String theme;
-
+    List<DeckDTO> downloadableDecks = new ArrayList<>();
 
     @Override
     public void onResume() {
         super.onResume();
         resumeLogicMenu();
     }
+
     public void onBackPressed() {
 
     }
@@ -113,7 +118,8 @@ public class MenuActivity extends AppCompatActivity {
         Game standard = realm.where(Game.class).equalTo("id", 1).findFirst();
         RealmResults<User> allUsers = realm.where(User.class).findAll();
 
-        sendStringRequestToRestFullWebService();
+        getDownloadableDecks();
+
         checkForRunningGames(playButton, unicorn, standard);
 
         checkForOrLoadUser(allUsers);
@@ -145,22 +151,31 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    private void sendStringRequestToRestFullWebService() {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+    private void getDownloadableDecks() {
+        final RequestQueue requestQueue = Volley.newRequestQueue(this);
         String url = "http://quartett.af-mba.dbis.info/decks/";
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
+        JsonArrayRequest jsArrReqeust = new JsonArrayRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        JSONObject returnedJson = response;
+                    public void onResponse(JSONArray response) {
+                        JSONArray returnedJson = response;
+                        for (int i = 0; i < returnedJson.length(); i++){
+                            Gson gson = new Gson();
+                            try {
+                                DeckDTO deckDTO = gson.fromJson(returnedJson.get(i).toString(), DeckDTO.class);
+                                downloadableDecks.add(deckDTO);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } createNewDecksIfAvailable(downloadableDecks);
+
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-
+                        System.out.println("sth went wrong");
                     }
                 }){
             @Override
@@ -175,35 +190,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         };
 
-        requestQueue.add(jsObjRequest);
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//        String url = "http://quartett.af-mba.dbis.info/decks/";
-//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        // Display the first 500 characters of the response string.
-//                        System.out.println(response);
-//
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                System.out.println("That didn't work!");
-//            }
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> headers = new HashMap<>();
-//                String credentials = "student:afmba";
-//                String auth = "Basic "+ "c3R1ZGVudDphZm1iYQ==";
-//                headers.put("Content-Type", "application/json");
-//                headers.put("Content-Type", "multipart/form/data");
-//                headers.put("Authorization", auth);
-//                return headers;
-//            }
-//        };
-//        requestQueue.add(stringRequest);
+        requestQueue.add(jsArrReqeust);
     }
 
     private void imageRequestToRestFullWebService() {
@@ -220,7 +207,7 @@ public class MenuActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 String credentials = "student:afmba";
-                String auth = "Basic "+ "c3R1ZGVudDphZm1iYQ==";
+                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
                 headers.put("Content-Type", "application/json");
                 headers.put("Content-Type", "multipart/form/data");
                 headers.put("Authorization", auth);
@@ -231,6 +218,20 @@ public class MenuActivity extends AppCompatActivity {
         requestQueue.add(imageRequest);
     }
 
+    private void createNewDecksIfAvailable(List<DeckDTO> downloadableDecks) {
+        for (DeckDTO downloadableDeck : downloadableDecks) {
+            Deck tmpDeck = realm.where(Deck.class).equalTo("id", downloadableDeck.getId()).findFirst();
+            if (tmpDeck != null) {
+                //checkIfDeckIsUpToDate()
+            } else {
+                realm.beginTransaction();
+                Deck emptyDeck = realm.createObject(Deck.class);
+                emptyDeck.setId(downloadableDeck.getId());
+                emptyDeck.setName(downloadableDeck.getName());
+                realm.commitTransaction();
+            }
+        }
+    }
 
     // give parameters absolutePath and imageIdentifier and on call set user.absolutePath and user.imageIdentifier
     private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
@@ -537,6 +538,10 @@ public class MenuActivity extends AppCompatActivity {
                 INTRO_SOUND.start();
             }
         }
+    }
+
+    public interface VolleyCallback{
+        void onSuccess(List<DeckDTO> result);
     }
 }
 

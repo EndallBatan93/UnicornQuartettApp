@@ -1,7 +1,5 @@
 package com.unicorn.unicornquartett.domain;
 
-import java.util.Map;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
@@ -12,9 +10,13 @@ public class Deck extends RealmObject {
     private String name;
     private int numberOfCards;
     private RealmList<Card> cards;
-    private Boolean locked;
+    private Boolean isDownloaded = false;
     private RealmList<Shema>shema;
 
+    public Deck(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public Deck () {
 
@@ -52,12 +54,12 @@ public class Deck extends RealmObject {
         this.cards = cards;
     }
 
-    public Boolean getLocked() {
-        return locked;
+    public Boolean getIsDownloaded() {
+        return isDownloaded;
     }
 
-    public void setLocked(Boolean locked) {
-        this.locked = locked;
+    public void setIsDownloaded(Boolean isDownloaded) {
+        this.isDownloaded = isDownloaded;
     }
 
     public RealmList<Shema> getShema() {

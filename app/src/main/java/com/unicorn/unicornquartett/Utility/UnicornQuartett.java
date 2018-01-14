@@ -19,7 +19,10 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmList;
 
-import static com.unicorn.unicornquartett.Utility.Constants.*;
+import static com.unicorn.unicornquartett.Utility.Constants.BIKES;
+import static com.unicorn.unicornquartett.Utility.Constants.REALM_BIKE_NAME;
+import static com.unicorn.unicornquartett.Utility.Constants.REALM_TUNING_NAME;
+import static com.unicorn.unicornquartett.Utility.Constants.TUNING;
 
 public class UnicornQuartett extends Application {
     private JSONArray bikeListcards;
@@ -45,7 +48,7 @@ public class UnicornQuartett extends Application {
         Realm realm = Realm.getDefaultInstance();
 
         // IMPORTANT For database testing purposes only
-//        clearDatabaseRealm(realm);
+        clearDatabaseRealm(realm);
 
         String tuningsJSON = this.loadJSONFromAsset("tuning/tuning.json");
         String bikesJSON = this.loadJSONFromAsset("bikes/bikes.json");
@@ -71,9 +74,9 @@ public class UnicornQuartett extends Application {
         if (bikeExists == null) {
             Deck bikes = realm.createObject(Deck.class);
             bikes.setName(REALM_BIKE_NAME);
-            bikes.setId(1);
+            bikes.setId(125);
             bikes.setNumberOfCards(32);
-            bikes.setLocked(false);
+            bikes.setIsDownloaded(false);
             try {
                 getShemas(realm, bikeShemaArray, BIKES);
             } catch (JSONException e) {
@@ -90,8 +93,8 @@ public class UnicornQuartett extends Application {
 
             Deck tuning = realm.createObject(Deck.class);
             tuning.setName(REALM_TUNING_NAME);
-            tuning.setId(2);
-            tuning.setLocked(false);
+            tuning.setId(11);
+            tuning.setIsDownloaded(false);
             tuning.setNumberOfCards(32);
             try {
                 getShemas(realm, tuningShemaArray, TUNING);
