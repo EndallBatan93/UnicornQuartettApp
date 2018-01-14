@@ -67,6 +67,9 @@ public class DeckGalleryActivity extends AppCompatActivity {
     TextView profileName;
     RequestQueue requestQueue;
     RequestQueue.RequestFinishedListener shemaListener;
+    RequestQueue.RequestFinishedListener attributeListener;
+    int idInCardDTOList;
+    int endPositionInCardDTOList;
 
     @Override
     public void onResume() {
@@ -131,21 +134,95 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     private void downloadDeck(final Deck deck) {
         requestQueue = Volley.newRequestQueue(this);
+        getCardNames(deck.getId());
         shemaListener = new RequestQueue.RequestFinishedListener() {
             @Override
             public void onRequestFinished(Request request) {
                 getShemaForDeck(deck);
-                doSomethingOtherWithQueue();
+                getAttributes(deck);
             }
 
         };
-        getCardNames(deck.getId());
         requestQueue.addRequestFinishedListener(shemaListener);
+
     }
 
 
-    private void doSomethingOtherWithQueue() {
+    private void getAttributes(final Deck deck) {
         requestQueue.removeRequestFinishedListener(shemaListener);
+
+        attributeListener = new RequestQueue.RequestFinishedListener() {
+            @Override
+            public void onRequestFinished(Request request) {
+                if (idInCardDTOList != endPositionInCardDTOList){
+                    getAttributesForCard(deck);
+                } else {
+                    idInCardDTOList = -1;
+                    endPositionInCardDTOList = -2;
+                    doSomethingOther();
+                }
+            }
+        };
+        requestQueue.addRequestFinishedListener(attributeListener);
+    }
+
+    private void getAttributesForCard(Deck deck) {
+        final int deckID = deck.getId();
+        CardDTO cardDTO = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst().getListOfCardDTO().get(idInCardDTOList);
+        final int cardID = cardDTO.getId();
+        String url = "http://quartett.af-mba.dbis.info/decks/" + deckID + "/cards/" + cardID + "/attributes/";
+        final RealmList<Double> valueList = new RealmList<>();
+        JsonArrayRequest jsArrReqeust = new JsonArrayRequest
+
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        JSONArray returnedJson = response;
+                        for (int i = 0; i < returnedJson.length(); i++) {
+                            try {
+                                JSONObject o = returnedJson.getJSONObject(i);
+                                double value = o.getDouble("value");
+                                valueList.add(value);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } createValueListForCard(valueList, deckID);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        System.out.println("sth went wrong");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String credentials = "student:afmba";
+                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
+                headers.put("Content-Type", "application/json");
+                headers.put("Content-Type", "multipart/form/data");
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+
+        requestQueue.add(jsArrReqeust);
+
+
+    }
+
+    private void createValueListForCard(RealmList<Double> valueList, int deckID) {
+        CardDTO cardDTO = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst().getListOfCardDTO().get(idInCardDTOList);
+        realm.beginTransaction();
+        cardDTO.setValueList(valueList);
+        realm.commitTransaction();
+        idInCardDTOList += 1;
+    }
+
+    private void doSomethingOther() {
+        requestQueue.removeRequestFinishedListener(attributeListener);
     }
 
     private void getShemaForDeck(Deck deck) {
@@ -239,7 +316,8 @@ public class DeckGalleryActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-
+                        idInCardDTOList = 0;
+                        endPositionInCardDTOList = cardDTOList.size();
                         saveListOfCardDTO(deckID, cardDTOList);
                     }
                 }, new Response.ErrorListener() {

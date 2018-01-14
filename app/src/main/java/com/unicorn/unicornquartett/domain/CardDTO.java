@@ -1,15 +1,25 @@
 package com.unicorn.unicornquartett.domain;
 
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class CardDTO extends RealmObject {
     private int id;
     private String name;
     private int deckID;
+    private RealmList<Double> valueList;
 
     public CardDTO() {
 
+    }
+
+    public RealmList<Double> getValueList() {
+        return valueList;
+    }
+
+    public void setValueList(RealmList<Double> valueList) {
+        this.valueList = valueList;
     }
 
     public int getId() {
