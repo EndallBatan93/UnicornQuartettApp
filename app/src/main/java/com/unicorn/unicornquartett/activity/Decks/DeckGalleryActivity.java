@@ -31,7 +31,6 @@ import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.domain.CardDTO;
 import com.unicorn.unicornquartett.domain.CardDTOList;
 import com.unicorn.unicornquartett.domain.Deck;
-import com.unicorn.unicornquartett.domain.DeckDTO;
 import com.unicorn.unicornquartett.domain.Shema;
 import com.unicorn.unicornquartett.domain.ShemaList;
 import com.unicorn.unicornquartett.domain.User;
@@ -66,6 +65,8 @@ public class DeckGalleryActivity extends AppCompatActivity {
     ListView deckListView;
     final Realm realm = Realm.getDefaultInstance();
     TextView profileName;
+    RequestQueue requestQueue;
+    RequestQueue.RequestFinishedListener shemaListener;
 
     @Override
     public void onResume() {
@@ -128,16 +129,29 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     }
 
-    private void downloadDeck(Deck deck) {
-        final RequestQueue requestQueue = Volley.newRequestQueue(this);
-        getCardNames(deck.getId(), requestQueue);
-        getShemaForDeck(deck, requestQueue);
+    private void downloadDeck(final Deck deck) {
+        requestQueue = Volley.newRequestQueue(this);
+        shemaListener = new RequestQueue.RequestFinishedListener() {
+            @Override
+            public void onRequestFinished(Request request) {
+                getShemaForDeck(deck);
+                doSomethingOtherWithQueue();
+            }
+
+        };
+        getCardNames(deck.getId());
+        requestQueue.addRequestFinishedListener(shemaListener);
     }
 
-    private void getShemaForDeck(Deck deck, RequestQueue requestQueue) {
+
+    private void doSomethingOtherWithQueue() {
+        requestQueue.removeRequestFinishedListener(shemaListener);
+    }
+
+    private void getShemaForDeck(Deck deck) {
         final int deckId = deck.getId();
-        int firstCardID = realm.where(DeckDTO.class).equalTo("id", deckId).findFirst().getListOfCardsDTO().first().getId();
-        String url = "http://quartett.af-mba.dbis.info/decks/" + deckId + "/cards/" + firstCardID + "/attributes/";
+        int cardID = realm.where(CardDTOList.class).equalTo("deckID", deckId).findFirst().getListOfCardDTO().first().getId();
+        String url = "http://quartett.af-mba.dbis.info/decks/" + deckId + "/cards/" + cardID + "/attributes/";
         final RealmList<Shema> listOfShemas = new RealmList<>();
         JsonArrayRequest jsArrReqeust = new JsonArrayRequest
 
@@ -205,7 +219,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
     }
 
 
-    private void getCardNames(int id, RequestQueue requestQueue) {
+    private void getCardNames(int id) {
         String url = "http://quartett.af-mba.dbis.info/decks/" + id + "/cards/";
         final RealmList<CardDTO> cardDTOList = new RealmList<>();
         final int deckID = id;
