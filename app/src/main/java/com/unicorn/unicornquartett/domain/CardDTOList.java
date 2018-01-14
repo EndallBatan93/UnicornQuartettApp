@@ -11,8 +11,7 @@ public class CardDTOList extends RealmObject {
     private int deckID;
     private RealmList<CardDTO> listOfCardDTO;
 
-    public CardDTOList(RealmList<CardDTO> listOfCardDTO) {
-        this.listOfCardDTO = listOfCardDTO;
+    public CardDTOList() {
     }
 
     public RealmList<CardDTO> getListOfCardDTO() {

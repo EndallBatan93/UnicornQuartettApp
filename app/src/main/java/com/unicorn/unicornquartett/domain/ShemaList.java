@@ -11,9 +11,9 @@ public class ShemaList extends RealmObject {
     private int deckID;
     private RealmList<Shema> listOfShemas;
 
-    public ShemaList(RealmList<Shema> listOfShemas) {
-        this.listOfShemas = listOfShemas;
+    public ShemaList() {
     }
+
 
     public RealmList<Shema> getListOfShemas() {
         return listOfShemas;
