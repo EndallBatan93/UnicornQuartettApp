@@ -29,12 +29,16 @@ import com.google.gson.Gson;
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.domain.CardDTO;
+import com.unicorn.unicornquartett.domain.CardDTOList;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.DeckDTO;
+import com.unicorn.unicornquartett.domain.Shema;
+import com.unicorn.unicornquartett.domain.ShemaList;
 import com.unicorn.unicornquartett.domain.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -127,13 +131,84 @@ public class DeckGalleryActivity extends AppCompatActivity {
     private void downloadDeck(Deck deck) {
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
         getCardNames(deck.getId(), requestQueue);
+        getShemaForDeck(deck, requestQueue);
+    }
+
+    private void getShemaForDeck(Deck deck, RequestQueue requestQueue) {
+        final int deckId = deck.getId();
+        int firstCardID = realm.where(DeckDTO.class).equalTo("id", deckId).findFirst().getListOfCardsDTO().first().getId();
+        String url = "http://quartett.af-mba.dbis.info/decks/" + deckId + "/cards/" + firstCardID + "/attributes/";
+        final RealmList<Shema> listOfShemas = new RealmList<>();
+        JsonArrayRequest jsArrReqeust = new JsonArrayRequest
+
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        JSONArray returnedJson = response;
+                        for (int i = 0; i < returnedJson.length(); i++) {
+                            try {
+                                JSONObject o = returnedJson.getJSONObject(i);
+                                String name = o.getString("name");
+                                String unit = o.getString("unit");
+                                String what_wins = o.getString("what_wins");
+                                Boolean hW;
+                                if (what_wins.equals("higher_wins")){hW = true;} else { hW = false;}
+                                Shema shemaForCard = createShemaForCard(deckId, name, unit, hW);
+                                listOfShemas.add(shemaForCard);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        saveListOfShema(deckId, listOfShemas);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        System.out.println("sth went wrong");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String credentials = "student:afmba";
+                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
+                headers.put("Content-Type", "application/json");
+                headers.put("Content-Type", "multipart/form/data");
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+
+        requestQueue.add(jsArrReqeust);
+
+    }
+
+    private void saveListOfShema(int deckId, RealmList<Shema> listOfShemas) {
+        realm.beginTransaction();
+        ShemaList shemaList = realm.createObject(ShemaList.class);
+        shemaList.setDeckID(deckId);
+        shemaList.setListOfShemas(listOfShemas);
+        realm.commitTransaction();
+    }
+
+    private Shema createShemaForCard(int deckId, String name, String unit, Boolean hW) {
+        realm.beginTransaction();
+        Shema shema = realm.createObject(Shema.class);
+        shema.setHigherWins(hW);
+        shema.setProperty(name);
+        shema.setUnit(unit);
+        shema.setId(deckId);
+        realm.commitTransaction();
+        return shema;
     }
 
 
     private void getCardNames(int id, RequestQueue requestQueue) {
         String url = "http://quartett.af-mba.dbis.info/decks/" + id + "/cards/";
         final RealmList<CardDTO> cardDTOList = new RealmList<>();
-        final int dtoID = id;
+        final int deckID = id;
         JsonArrayRequest jsArrReqeust = new JsonArrayRequest
 
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -144,18 +219,14 @@ public class DeckGalleryActivity extends AppCompatActivity {
                             try {
                                 Gson gson = new Gson();
                                 CardDTO card = gson.fromJson(returnedJson.get(i).toString(), CardDTO.class);
-                                realm.beginTransaction();
-                                CardDTO realmCard = realm.createObject(CardDTO.class);
-                                realmCard.setId(card.getId());
-                                realmCard.setName(card.getName());
-                                realm.commitTransaction();
+                                CardDTO realmCard = createCardDTO(deckID, card);
                                 cardDTOList.add(realmCard);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
 
-                        saveCardDTO(dtoID, cardDTOList);
+                        saveListOfCardDTO(deckID, cardDTOList);
                     }
                 }, new Response.ErrorListener() {
 
@@ -180,10 +251,22 @@ public class DeckGalleryActivity extends AppCompatActivity {
         requestQueue.add(jsArrReqeust);
     }
 
-    private void saveCardDTO(int dtoID, RealmList<CardDTO> cardDTOList) {
+    @NonNull
+    private CardDTO createCardDTO(int deckID, CardDTO card) {
         realm.beginTransaction();
-        DeckDTO deckDTO = realm.where(DeckDTO.class).equalTo("id", dtoID).findFirst();
-        deckDTO.setListOfCardsDTO(cardDTOList);
+        CardDTO realmCard = realm.createObject(CardDTO.class);
+        realmCard.setDeckID(deckID);
+        realmCard.setId(card.getId());
+        realmCard.setName(card.getName());
+        realm.commitTransaction();
+        return realmCard;
+    }
+
+    private void saveListOfCardDTO(int deckDTOID, RealmList<CardDTO> listOfCardDTO) {
+        realm.beginTransaction();
+        CardDTOList cardDTOList = realm.createObject(CardDTOList.class);
+        cardDTOList.setDeckID(deckDTOID);
+        cardDTOList.setListOfCardDTO(listOfCardDTO);
         realm.commitTransaction();
     }
 

@@ -459,23 +459,23 @@ public class MenuActivity extends AppCompatActivity {
     private RealmList<GameResult> createTestData(User user) {
         RealmList<GameResult> results = new RealmList<>();
 //        GameResult object = realm.createObject(GameResult.class);
-//        object.setId(0);
+//        object.setDeckID(0);
 //        object.setWon(true);
 //
 //        GameResult object1 = realm.createObject(GameResult.class);
-//        object1.setId(1);
+//        object1.setDeckID(1);
 //        object1.setWon(true);
 //
 //        GameResult object2 = realm.createObject(GameResult.class);
-//        object2.setId(2);
+//        object2.setDeckID(2);
 //        object2.setWon(false);
 //
 //        GameResult object3 = realm.createObject(GameResult.class);
-//        object3.setId(3);
+//        object3.setDeckID(3);
 //        object3.setWon(false);
 //
 //        GameResult object4 = realm.createObject(GameResult.class);
-//        object4.setId(4);
+//        object4.setDeckID(4);
 //        object4.setWon(false);
 //
 //        results.add(object);

@@ -4,11 +4,20 @@ import io.realm.RealmObject;
 
 public class Shema extends RealmObject {
 
+    private int id;
     private String property;
     private String unit;
     private Boolean higherWins;
 
     public Shema (){}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getProperty() {
         return property;

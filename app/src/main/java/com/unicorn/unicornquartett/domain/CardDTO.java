@@ -6,6 +6,7 @@ import io.realm.RealmObject;
 public class CardDTO extends RealmObject {
     private int id;
     private String name;
+    private int deckID;
 
     public CardDTO() {
 
@@ -25,5 +26,13 @@ public class CardDTO extends RealmObject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getDeckID() {
+        return deckID;
+    }
+
+    public void setDeckID(int deckID) {
+        this.deckID = deckID;
     }
 }
