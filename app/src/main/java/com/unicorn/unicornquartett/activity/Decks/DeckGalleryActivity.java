@@ -1,10 +1,12 @@
 package com.unicorn.unicornquartett.activity.Decks;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -23,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -42,8 +45,10 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,9 +71,11 @@ public class DeckGalleryActivity extends AppCompatActivity {
     final Realm realm = Realm.getDefaultInstance();
     TextView profileName;
     RequestQueue requestQueue;
+    RequestQueue requestQueueImage;
     RequestQueue.RequestFinishedListener shemaListener;
     RequestQueue.RequestFinishedListener attributeListener;
-    RequestQueue.RequestFinishedListener iamgeListener;
+    RequestQueue.RequestFinishedListener imageListener;
+    RequestQueue.RequestFinishedListener imageFileListener;
     int idInCardDTOList;
     int endPositionInCardDTOList;
 
@@ -135,6 +142,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     private void downloadDeck(final Deck deck) {
         requestQueue = Volley.newRequestQueue(this);
+        requestQueueImage = Volley.newRequestQueue(this);
         getCardNames(deck.getId());
         shemaListener = new RequestQueue.RequestFinishedListener() {
             @Override
@@ -155,27 +163,28 @@ public class DeckGalleryActivity extends AppCompatActivity {
         attributeListener = new RequestQueue.RequestFinishedListener() {
             @Override
             public void onRequestFinished(Request request) {
-                if (idInCardDTOList != endPositionInCardDTOList){
+                if (idInCardDTOList != endPositionInCardDTOList) {
                     getAttributesForCard(deck);
                 } else {
                     idInCardDTOList = 0;
                     RealmList<CardDTO> listOfCard = realm.where(CardDTOList.class).equalTo("deckID", deck.getId()).findFirst().getListOfCardDTO();
                     endPositionInCardDTOList = listOfCard.size();
-                    loadImagesForCards();
+                    loadImagesForCards(deck);
                 }
             }
         };
         requestQueue.addRequestFinishedListener(attributeListener);
     }
 
-    private void loadImagesForCards() {
+    private void loadImagesForCards(final Deck deck) {
         requestQueue.removeRequestFinishedListener(attributeListener);
 
-        iamgeListener = new RequestQueue.RequestFinishedListener() {
+        imageListener = new RequestQueue.RequestFinishedListener() {
             @Override
             public void onRequestFinished(Request request) {
-                if (idInCardDTOList != endPositionInCardDTOList){
-                    //doImageLoadYouStück
+                int i = 5;
+                if (idInCardDTOList != endPositionInCardDTOList) {
+                    getCardImages(deck);
                 } else {
                     idInCardDTOList = -1;
                     endPositionInCardDTOList = -2;
@@ -183,11 +192,143 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 }
             }
         };
-        requestQueue.addRequestFinishedListener(iamgeListener);
+        requestQueue.addRequestFinishedListener(imageListener);
+        if (idInCardDTOList == 0) {
+            getCardImages(deck);
+        }
 
     }
 
-    private void doSomethingOther(){}
+    private void getCardImages(Deck deck) {
+        final int deckID = deck.getId();
+        final CardDTO cardDTO = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst().getListOfCardDTO().get(idInCardDTOList);
+        final int cardId = cardDTO.getId();
+        String url = "http://quartett.af-mba.dbis.info/decks/" + deckID + "/cards/" + cardId + "/images/";
+        final List<String> imageList = new ArrayList<>();
+        JsonArrayRequest jsArrReqeust = new JsonArrayRequest
+
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        JSONArray returnedJson = response;
+                        for (int i = 0; i < returnedJson.length(); i++) {
+                            try {
+                                JSONObject o = returnedJson.getJSONObject(i);
+                                String image = o.getString("image");
+                                imageList.add(image);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        saveImagesForCard(imageList, cardId, deckID);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        System.out.println("sth went wrong");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return DeckGalleryActivity.this.getHeaders();
+            }
+        };
+
+        requestQueue.add(jsArrReqeust);
+
+    }
+
+    private void saveImagesForCard(final List<String> imageList, final int cardId, final int deckID) {
+        imageFileListener = new RequestQueue.RequestFinishedListener() {
+            @Override
+            public void onRequestFinished(Request request) {
+                for (String image : imageList) {
+                    downloadFile(image, cardId, deckID);
+                }
+                idInCardDTOList += 1;
+            }
+        };
+        requestQueueImage.addRequestFinishedListener(imageFileListener);
+        if (idInCardDTOList == 0) {
+            for (String image : imageList) {
+                downloadFile(image, cardId, deckID);
+            }
+            idInCardDTOList += 1;
+        }
+    }
+
+    private void downloadFile(String imageUrl, final int cardId, final int deckID) {
+        ImageRequest imageRequest = new ImageRequest(
+                imageUrl, // Image URL
+                new Response.Listener<Bitmap>() { // Bitmap listener
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        Uri uri = saveImageToInternalStorage(response, cardId, deckID);
+                        realm.beginTransaction();
+                        CardDTO cardDTO = realm.where(CardDTOList.class).findFirst().getListOfCardDTO().get(idInCardDTOList);
+//                cardDTO.setImages(uri);
+                        realm.commitTransaction();
+                    }
+                },
+                0, // Image width
+                0, // Image height
+                ImageView.ScaleType.CENTER_CROP, // Image scale type
+                Bitmap.Config.RGB_565, //Image decode configuration
+                new Response.ErrorListener() { // Error listener
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Do something with error response
+                        error.printStackTrace();
+                    }
+                }
+        );
+        requestQueueImage.add(imageRequest);
+    }
+
+    private void doSomethingOther() {
+    }
+
+    protected Uri saveImageToInternalStorage(Bitmap bitmap, int cardId, int deckID) {
+        // Initialize ContextWrapper
+        ContextWrapper wrapper = new ContextWrapper(getApplicationContext());
+
+        // Initializing a new file
+        // The bellow line return a directory in internal storage
+        File file = wrapper.getDir("Images", MODE_PRIVATE);
+
+        // Create a file to save the image
+        file = new File(file, deckID + "-" + cardId + ".jpg");
+
+        try {
+            // Initialize a new OutputStream
+            OutputStream stream = null;
+
+            // If the output file exists, it can be replaced or appended to it
+            stream = new FileOutputStream(file);
+
+            // Compress the bitmap
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+            // Flushes the stream
+            stream.flush();
+
+            // Closes the stream
+            stream.close();
+
+        } catch (IOException e) // Catch the exception
+        {
+            e.printStackTrace();
+        }
+
+        // Parse the gallery image url to uri
+        Uri savedImageURI = Uri.parse(file.getAbsolutePath());
+
+        // Return the saved image Uri
+        requestQueueImage.removeRequestFinishedListener(imageFileListener);
+        return savedImageURI;
+    }
 
     private void getAttributesForCard(Deck deck) {
         final int deckID = deck.getId();
@@ -209,7 +350,8 @@ public class DeckGalleryActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        } createValueListForCard(valueList, deckID);
+                        }
+                        createValueListForCard(valueList, deckID);
                     }
                 }, new Response.ErrorListener() {
 
@@ -267,7 +409,11 @@ public class DeckGalleryActivity extends AppCompatActivity {
                                 String unit = o.getString("unit");
                                 String what_wins = o.getString("what_wins");
                                 Boolean hW;
-                                if (what_wins.equals("higher_wins")){hW = true;} else { hW = false;}
+                                if (what_wins.equals("higher_wins")) {
+                                    hW = true;
+                                } else {
+                                    hW = false;
+                                }
                                 Shema shemaForCard = createShemaForCard(deckId, name, unit, hW);
                                 listOfShemas.add(shemaForCard);
                             } catch (JSONException e) {

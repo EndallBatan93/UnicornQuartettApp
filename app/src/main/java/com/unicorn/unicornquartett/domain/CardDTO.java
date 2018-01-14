@@ -1,6 +1,8 @@
 package com.unicorn.unicornquartett.domain;
 
 
+import java.util.List;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
@@ -9,6 +11,7 @@ public class CardDTO extends RealmObject {
     private String name;
     private int deckID;
     private RealmList<Double> valueList;
+    private RealmList<String> images = new RealmList<>();
 
     public CardDTO() {
 
@@ -20,6 +23,14 @@ public class CardDTO extends RealmObject {
 
     public void setValueList(RealmList<Double> valueList) {
         this.valueList = valueList;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(RealmList<String> images) {
+        this.images = images;
     }
 
     public int getId() {
