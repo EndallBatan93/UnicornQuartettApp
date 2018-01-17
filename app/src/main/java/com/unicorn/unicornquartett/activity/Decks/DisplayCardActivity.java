@@ -35,7 +35,6 @@ public class DisplayCardActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("Resume");
     }
 
 

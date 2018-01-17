@@ -209,11 +209,10 @@ public class DeckGalleryActivity extends AppCompatActivity {
         final RealmList<CardImageList> listOfCardImagesLists = realm.where(DeckDTO.class).equalTo("id", deck.getId()).findFirst().getListOfCardImagesURLs();
         for (CardImageList cardImageList : listOfCardImagesLists) {
             RealmList<String> listOfImagesURLsForOneCard = cardImageList.getListOfImagesURLsForOneCard();
-//            for (String url : listOfImagesURLsForOneCard) {
-            String url = listOfImagesURLsForOneCard.first();
-            downloadFile(url, cardImageList.getCardID(), cardImageList.getDeckId());
-//            }
-//            idInCardDTOList++;
+            for (int nthImage = 0; nthImage< listOfImagesURLsForOneCard.size(); nthImage++) {
+                String url = listOfImagesURLsForOneCard.get(nthImage);
+                downloadFile(url, cardImageList.getCardID(), cardImageList.getDeckId(), nthImage);
+            }
         }
         buildDeckFromDTOs(deck);
     }
@@ -253,7 +252,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        System.out.println("sth went wrong");
                     }
                 }) {
             @Override
@@ -278,17 +276,16 @@ public class DeckGalleryActivity extends AppCompatActivity {
         idInCardDTOList++;
     }
 
-    private void downloadFile(String imageUrl, final int cardId, final int deckID) {
+    private void downloadFile(String imageUrl, final int cardId, final int deckID, final int nthImage) {
         ImageRequest imageRequest = new ImageRequest(
                 imageUrl, // Image URL
                 new Response.Listener<Bitmap>() { // Bitmap listener
                     @Override
                     public void onResponse(Bitmap response) {
-                        Uri uri = saveImageToInternalStorage(response, cardId, deckID);
-                        CardDTOList cardDTOList = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst();
-//                        System.out.println("DeckID: "+cardDTOList.getDeckID() + " Size " + cardDTOList.getListOfCardDTO().size()+ "idInCardDTOList" + idInCardDTOList);
-                        CardDTO cardDTO = cardDTOList.getListOfCardDTO().get(idInCardDTOList);
-                        idInCardDTOList++;
+                            Uri uri = saveImageToInternalStorage(response, cardId, deckID, nthImage);
+//                            CardDTOList cardDTOList = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst();
+//                            CardDTO cardDTO = cardDTOList.getListOfCardDTO().get(idInCardDTOList);
+
                     }
                 },
                 0, // Image width
@@ -306,31 +303,27 @@ public class DeckGalleryActivity extends AppCompatActivity {
         requestQueueImage.add(imageRequest);
     }
 
-    protected Uri saveImageToInternalStorage(Bitmap bitmap, int cardId, int deckID) {
-        // Initialize ContextWrapper
+    protected Uri saveImageToInternalStorage(Bitmap bitmap, int cardId, int deckID, int nthImage) {
+
         ContextWrapper wrapper = new ContextWrapper(getApplicationContext());
 
-        // Initializing a new file
-        // The bellow line return a directory in internal storage
         File file = wrapper.getDir("Images", MODE_PRIVATE);
-
-        // Create a file to save the image
-        file = new File(file, deckID + "-" + cardId + ".jpg");
+        if(nthImage == 0){
+            file = new File(file, deckID + "-" + cardId + ".jpg");
+            idInCardDTOList++;
+        } else {
+            file = new File(file, deckID + "-" + cardId + "-" +nthImage+ ".jpg");
+        }
 
         try {
-            // Initialize a new OutputStream
             OutputStream stream = null;
 
-            // If the output file exists, it can be replaced or appended to it
             stream = new FileOutputStream(file);
 
-            // Compress the bitmap
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
-            // Flushes the stream
             stream.flush();
 
-            // Closes the stream
             stream.close();
 
         } catch (IOException e) // Catch the exception
@@ -338,10 +331,8 @@ public class DeckGalleryActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Parse the gallery image url to uri
         Uri savedImageURI = Uri.parse(file.getAbsolutePath());
 
-        // Return the saved image Uri
         requestQueueImage.removeRequestFinishedListener(imageFileListener);
         return savedImageURI;
     }
@@ -432,7 +423,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        System.out.println("sth went wrong");
                     }
                 }) {
             @Override

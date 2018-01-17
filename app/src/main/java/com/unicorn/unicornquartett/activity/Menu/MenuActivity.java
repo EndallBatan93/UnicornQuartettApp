@@ -168,7 +168,6 @@ public class MenuActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        System.out.println("sth went wrong");
                     }
                 }){
             @Override
