@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -48,7 +48,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,6 +60,8 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
+import static com.unicorn.unicornquartett.Utility.Constants.IMAGE_PATH;
+import static com.unicorn.unicornquartett.Utility.Util.getCardImageFromStorage;
 import static com.unicorn.unicornquartett.Utility.Util.getHeadersForHTTP;
 import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 
@@ -76,7 +77,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
     RequestQueue.RequestFinishedListener attributeListener;
     RequestQueue.RequestFinishedListener imageListener;
     RequestQueue.RequestFinishedListener imageFileListener;
-    RequestQueue.RequestFinishedListener filesDownloadedListener;
     int idInCardDTOList;
     int endPositionInCardDTOList;
 
@@ -137,6 +137,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
     }
 
     private void downloadDeck(final Deck deck) {
+
         Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_LONG);
         progressToast.show();
         requestQueue = Volley.newRequestQueue(this);
@@ -156,6 +157,10 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     private void getAttributes(final Deck deck) {
         requestQueue.removeRequestFinishedListener(shemaListener);
+
+        idInCardDTOList = 0;
+        RealmList<CardDTO> listOfCard = realm.where(CardDTOList.class).equalTo("deckID", deck.getId()).findFirst().getListOfCardDTO();
+        endPositionInCardDTOList = listOfCard.size();
 
         attributeListener = new RequestQueue.RequestFinishedListener() {
             @Override
@@ -204,14 +209,16 @@ public class DeckGalleryActivity extends AppCompatActivity {
         final RealmList<CardImageList> listOfCardImagesLists = realm.where(DeckDTO.class).equalTo("id", deck.getId()).findFirst().getListOfCardImagesURLs();
         for (CardImageList cardImageList : listOfCardImagesLists) {
             RealmList<String> listOfImagesURLsForOneCard = cardImageList.getListOfImagesURLsForOneCard();
-            for (String url : listOfImagesURLsForOneCard) {
-                downloadFile(url, cardImageList.getCardID(), cardImageList.getDeckId());
-            }
+//            for (String url : listOfImagesURLsForOneCard) {
+            String url = listOfImagesURLsForOneCard.first();
+            downloadFile(url, cardImageList.getCardID(), cardImageList.getDeckId());
+//            }
+//            idInCardDTOList++;
         }
-        buildDeckFromDTOS(deck);
+        buildDeckFromDTOs(deck);
     }
 
-    private void buildDeckFromDTOS(Deck deck) {
+    private void buildDeckFromDTOs(Deck deck) {
         Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_SHORT);
         progressToast.show();
 
@@ -278,9 +285,9 @@ public class DeckGalleryActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Bitmap response) {
                         Uri uri = saveImageToInternalStorage(response, cardId, deckID);
-                        realm.beginTransaction();
-                        CardDTO cardDTO = realm.where(CardDTOList.class).findFirst().getListOfCardDTO().get(idInCardDTOList);
-                        realm.commitTransaction();
+                        CardDTOList cardDTOList = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst();
+//                        System.out.println("DeckID: "+cardDTOList.getDeckID() + " Size " + cardDTOList.getListOfCardDTO().size()+ "idInCardDTOList" + idInCardDTOList);
+                        CardDTO cardDTO = cardDTOList.getListOfCardDTO().get(idInCardDTOList);
                         idInCardDTOList++;
                     }
                 },
@@ -509,10 +516,10 @@ public class DeckGalleryActivity extends AppCompatActivity {
         return realmCard;
     }
 
-    private void saveListOfCardDTO(int deckDTOID, RealmList<CardDTO> listOfCardDTO) {
+    private void saveListOfCardDTO(int deckDTOId, RealmList<CardDTO> listOfCardDTO) {
         realm.beginTransaction();
         CardDTOList cardDTOList = realm.createObject(CardDTOList.class);
-        cardDTOList.setDeckID(deckDTOID);
+        cardDTOList.setDeckID(deckDTOId);
         cardDTOList.setListOfCardDTO(listOfCardDTO);
         realm.commitTransaction();
     }
@@ -526,19 +533,17 @@ public class DeckGalleryActivity extends AppCompatActivity {
             String deckName = deckNames.get(i);
             tmpTitleFromNameMap.put("title", deckName);
             if (!decks.get(i).getCards().isEmpty()) {
-                String imageIdentifier = decks.get(i).getCards().first().getImage().getImageIdentifiers().first();
-                String imagePath = deckName.toLowerCase() + "/" + imageIdentifier;
-                Drawable tempDrawable;
-                try {
-                    InputStream tempInputStream = getAssets().open(imagePath);
-                    tempDrawable = Drawable.createFromStream(tempInputStream, null);
-                    ListViewItem tmpListViewItem = new ListViewItem(tmpTitleFromNameMap, tempDrawable);
-                    listOfDeckItems.add(tmpListViewItem);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Deck deck = decks.get(i);
+                int deckID = deck.getId();
+                int cardID = deck.getCards().first().getId();
+                Bitmap cardImageFromStorage = getCardImageFromStorage(IMAGE_PATH, deckID, cardID);
+                ListViewItem tmpListViewItem = new ListViewItem(tmpTitleFromNameMap, cardImageFromStorage);
+                listOfDeckItems.add(tmpListViewItem);
+
             } else {
-                ListViewItem tmpListViewItem = new ListViewItem(tmpTitleFromNameMap, getDrawable(R.drawable.deckplatzhalter));
+                Bitmap standardPicture = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.deckplatzhalter);
+                ListViewItem tmpListViewItem = new ListViewItem(tmpTitleFromNameMap, standardPicture);
                 listOfDeckItems.add(tmpListViewItem);
             }
         }
@@ -567,11 +572,11 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     public class ListViewItem {
         HashMap<String, String> titleFromName;
-        Drawable drawableFromAsset;
+        Bitmap cardBitmap;
 
-        public ListViewItem(HashMap<String, String> titleFromName, Drawable drawableFromAsset) {
+        public ListViewItem(HashMap<String, String> titleFromName, Bitmap cardBitmap) {
             this.titleFromName = titleFromName;
-            this.drawableFromAsset = drawableFromAsset;
+            this.cardBitmap = cardBitmap;
         }
 
         public HashMap<String, String> getTitleFromName() {
@@ -582,12 +587,12 @@ public class DeckGalleryActivity extends AppCompatActivity {
             this.titleFromName = titleFromName;
         }
 
-        public Drawable getDrawableFromAsset() {
-            return drawableFromAsset;
+        public Bitmap getCardBitmap() {
+            return cardBitmap;
         }
 
-        public void setDrawableFromAsset(Drawable drawableFromAsset) {
-            this.drawableFromAsset = drawableFromAsset;
+        public void setCardBitmap(Bitmap cardBitmap) {
+            this.cardBitmap = cardBitmap;
         }
     }
 
@@ -608,7 +613,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
             String title1 = item.getTitleFromName().get("title");
             title.setText(title1);
-            image.setImageDrawable(item.getDrawableFromAsset());
+            image.setImageBitmap(item.getCardBitmap());
 
             return view;
         }
