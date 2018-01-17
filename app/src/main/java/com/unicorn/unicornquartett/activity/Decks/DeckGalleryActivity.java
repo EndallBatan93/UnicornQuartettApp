@@ -30,6 +30,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.Utility.DeckBuilder;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.domain.CardDTO;
 import com.unicorn.unicornquartett.domain.CardDTOList;
@@ -87,7 +88,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
         super.onResume();
         handleDeckGalleryInit();
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,20 +207,18 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 downloadFile(url, cardImageList.getCardID(), cardImageList.getDeckId());
             }
         }
-        doSthOther();
+        buildDeckFromDTOS(deck);
     }
 
-    private void doSthOther() {
+    private void buildDeckFromDTOS(Deck deck) {
         filesDownloadedListener = new RequestQueue.RequestFinishedListener() {
             @Override
             public void onRequestFinished(Request request) {
             }
         };
 
-        requestQueue.addRequestFinishedListener(filesDownloadedListener);
-        int i = 5;
+        new DeckBuilder(deck);
     }
-
 
     private void getCardImages(Deck deck) {
         final int deckID = deck.getId();

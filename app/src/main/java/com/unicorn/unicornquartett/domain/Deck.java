@@ -9,9 +9,9 @@ public class Deck extends RealmObject {
     private int id;
     private String name;
     private int numberOfCards;
-    private RealmList<Card> cards;
+    private RealmList<Card> cards = new RealmList<>();
+    private RealmList<Shema> shemaList;
     private Boolean isDownloaded = false;
-    private RealmList<Shema>shema;
 
     public Deck(int id, String name) {
         this.id = id;
@@ -20,6 +20,10 @@ public class Deck extends RealmObject {
 
     public Deck () {
 
+    }
+
+    public void addToCardList(Card card){
+        cards.add(card);
     }
 
     public int getId() {
@@ -62,12 +66,12 @@ public class Deck extends RealmObject {
         this.isDownloaded = isDownloaded;
     }
 
-    public RealmList<Shema> getShema() {
-        return shema;
+    public RealmList<Shema> getShemaList() {
+        return shemaList;
     }
 
-    public void setShema(RealmList<Shema> shema) {
-        this.shema = shema;
+    public void setShemaList(RealmList<Shema> shemaList) {
+        this.shemaList = shemaList;
     }
 }
 

@@ -250,7 +250,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     }
 
     private ArrayList<String> getShemaForCard(Deck deck, int i) {
-        RealmList<Shema> shemas = deck.getShema();
+        RealmList<Shema> shemas = deck.getShemaList();
         Shema shema = shemas.get(i);
         ArrayList<String> attributeDescriptionList = new ArrayList<>();
         attributeDescriptionList.add(shema.getProperty());

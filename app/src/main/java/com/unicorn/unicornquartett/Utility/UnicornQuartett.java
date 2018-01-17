@@ -82,7 +82,7 @@ public class UnicornQuartett extends Application {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            bikes.setShema(bikeShemas);
+            bikes.setShemaList(bikeShemas);
 
             RealmList<Card> bikeCards = getCards(realm, bikeListcards, bikeShemas);
             bikes.setCards(bikeCards);
@@ -101,7 +101,7 @@ public class UnicornQuartett extends Application {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            tuning.setShema(tuningShemas);
+            tuning.setShemaList(tuningShemas);
 
             RealmList<Card> tuningCards = getCards(realm, tuningListcards, tuningShemas);
             tuning.setCards(tuningCards);
@@ -224,7 +224,7 @@ public class UnicornQuartett extends Application {
     private RealmList<Double> calcAvgsForDeck(Deck deck) {
         RealmList<Double> avgListInDouble = new RealmList<>();
         Double tmpDouble = 0.0;
-        for (int i = 0; i < deck.getShema().size(); i++) {
+        for (int i = 0; i < deck.getShemaList().size(); i++) {
             for (int j = 0; j < deck.getCards().size(); j++) {
                 tmpDouble += Double.parseDouble(deck.getCards().get(j).getAttributes().get(i));
             }
@@ -238,8 +238,8 @@ public class UnicornQuartett extends Application {
 
     private RealmList<Boolean> createHigherWinsList(Deck deck) {
         RealmList<Boolean> higherWins = new RealmList<>();
-        for (int i = 0; i < deck.getShema().size(); i++) {
-            higherWins.add(deck.getShema().get(i).getHigherWins());
+        for (int i = 0; i < deck.getShemaList().size(); i++) {
+            higherWins.add(deck.getShemaList().get(i).getHigherWins());
         }
         return higherWins;
     }

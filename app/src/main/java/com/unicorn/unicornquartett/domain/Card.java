@@ -7,13 +7,36 @@ import io.realm.annotations.Index;
 public class Card extends RealmObject {
     @Index
     private int id;
+    private int deckID;
     private String name;
     private RealmList <String> attributes;
     private String description;
     private Image image;
+    private RealmList<String> listOfImagePaths = new RealmList<>();
 
     public Card ()  {
     }
+
+    public void addUrlToList(String url){
+        listOfImagePaths.add(url);
+    }
+
+    public RealmList<String> getListOfImagePaths() {
+        return listOfImagePaths;
+    }
+
+    public void setListOfImagePaths(RealmList<String> listOfImagePaths) {
+        this.listOfImagePaths = listOfImagePaths;
+    }
+
+    public int getDeckID() {
+        return deckID;
+    }
+
+    public void setDeckID(int deckID) {
+        this.deckID = deckID;
+    }
+
     public int getId() {
         return id;
     }
