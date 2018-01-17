@@ -78,7 +78,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
     RequestQueue.RequestFinishedListener attributeListener;
     RequestQueue.RequestFinishedListener imageListener;
     RequestQueue.RequestFinishedListener imageFileListener;
-    RealmList<CardImageList> listOfCardImagesURLs = new RealmList<>();
+    RequestQueue.RequestFinishedListener filesDownloadedListener;
     int idInCardDTOList;
     int endPositionInCardDTOList;
 
@@ -189,7 +189,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 } else {
                     idInCardDTOList = -1;
                     endPositionInCardDTOList = -2;
-                    doSmthOther();
+                    loadImagesFromURL(deck);
                 }
             }
         };
@@ -200,9 +200,32 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     }
 
-    private void doSmthOther() {
+    private void loadImagesFromURL(Deck deck) {
         requestQueue.removeRequestFinishedListener(imageListener);
+        idInCardDTOList = 0;
+        final RealmList<CardImageList> listOfCardImagesLists = realm.where(DeckDTO.class).equalTo("id", deck.getId()).findFirst().getListOfCardImagesURLs();
+        for (CardImageList cardImageList : listOfCardImagesLists) {
+            RealmList<String> listOfImagesURLsForOneCard = cardImageList.getListOfImagesURLsForOneCard();
+            for (String url : listOfImagesURLsForOneCard) {
+                downloadFile(url, cardImageList.getCardID(), cardImageList.getDeckId());
+            }
+        }
+        doSthOther();
     }
+
+    private void doSthOther() {
+        filesDownloadedListener = new RequestQueue.RequestFinishedListener() {
+            @Override
+            public void onRequestFinished(Request request) {
+                System.out.println("");
+//                idInCardDTOList = -1;
+            }
+        };
+
+        requestQueue.addRequestFinishedListener(filesDownloadedListener);
+        int i = 5;
+    }
+
 
     private void getCardImages(Deck deck) {
         final int deckID = deck.getId();
@@ -257,25 +280,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
         idInCardDTOList++;
     }
 
-//    private void saveImagesForCard(final List<String> imageList, final int cardId, final int deckID) {
-//        imageFileListener = new RequestQueue.RequestFinishedListener() {
-//            @Override
-//            public void onRequestFinished(Request request) {
-//                for (String image : imageList) {
-//                    downloadFile(image, cardId, deckID);
-//                }
-//                idInCardDTOList += 1;
-//            }
-//        };
-//        requestQueueImage.addRequestFinishedListener(imageFileListener);
-//        if (idInCardDTOList == 0) {
-//            for (String image : imageList) {
-//                downloadFile(image, cardId, deckID);
-//            }
-//            idInCardDTOList += 1;
-//        }
-//    }
-
     private void downloadFile(String imageUrl, final int cardId, final int deckID) {
         ImageRequest imageRequest = new ImageRequest(
                 imageUrl, // Image URL
@@ -287,6 +291,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                         CardDTO cardDTO = realm.where(CardDTOList.class).findFirst().getListOfCardDTO().get(idInCardDTOList);
 //                cardDTO.setImages(uri);
                         realm.commitTransaction();
+                        idInCardDTOList++;
                     }
                 },
                 0, // Image width
@@ -303,7 +308,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
         );
         requestQueueImage.add(imageRequest);
     }
-
 
 
     protected Uri saveImageToInternalStorage(Bitmap bitmap, int cardId, int deckID) {
