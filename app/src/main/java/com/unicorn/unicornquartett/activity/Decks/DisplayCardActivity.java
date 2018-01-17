@@ -25,7 +25,7 @@ import io.realm.RealmList;
 
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.IMAGE_PATH;
-import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
+import static com.unicorn.unicornquartett.Utility.Util.getCardImageFromStorage;
 
 public class DisplayCardActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
@@ -75,8 +75,7 @@ public class DisplayCardActivity extends AppCompatActivity {
     }
 
     public void setCardImage(Card card) {
-        String firstImageID = card.getListOfImagePaths().first();
-        Bitmap cardBitmap = getImageFromStorage(IMAGE_PATH, firstImageID);
+        Bitmap cardBitmap = getCardImageFromStorage(IMAGE_PATH, card.getDeckID(), card.getId());
         ImageView cardImage = findViewById(R.id.card);
         cardImage.setImageBitmap(cardBitmap);
 
