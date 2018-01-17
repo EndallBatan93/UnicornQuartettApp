@@ -10,10 +10,23 @@ import io.realm.RealmObject;
 public class DeckDTO extends RealmObject{
     private String name;
     private int id;
-    private RealmList<CardDTO> listOfCardsDTO;
+    private RealmList<CardDTO> listOfCardsDTO = new RealmList<>();
+    private RealmList<CardImageList> listOfCardImagesURLs = new RealmList<>();
 
     public DeckDTO() {
 
+    }
+
+    public void addCardImageList(CardImageList cardImageList) {
+        listOfCardImagesURLs.add(cardImageList);
+    }
+
+    public RealmList<CardImageList> getListOfCardImagesURLs() {
+        return listOfCardImagesURLs;
+    }
+
+    public void setListOfCardImagesURLs(RealmList<CardImageList> listOfCardImagesURLs) {
+        this.listOfCardImagesURLs = listOfCardImagesURLs;
     }
 
     public RealmList<CardDTO> getListOfCardsDTO() {
