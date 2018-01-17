@@ -85,23 +85,21 @@ public class DeckGalleryActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        RealmResults<User> allUsers = realm.where(User.class).findAll();
-        if (!allUsers.isEmpty()) {
-            User user = allUsers.first();
-            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
-            profileName.setText(user.getName());
-        }
+        handleDeckGalleryInit();
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    private void handleDeckGalleryInit() {
         setContentView(R.layout.activity_deck_gallery);
         Realm realm = Realm.getDefaultInstance();
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         final User user = allUsers.first();
-
 
         assert user != null;
         setTheme();
@@ -140,7 +138,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
         });
 
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
-
     }
 
     private void downloadDeck(final Deck deck) {
@@ -217,8 +214,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
         filesDownloadedListener = new RequestQueue.RequestFinishedListener() {
             @Override
             public void onRequestFinished(Request request) {
-                System.out.println("");
-//                idInCardDTOList = -1;
             }
         };
 
@@ -572,7 +567,12 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     private void setUserName(User user) {
         assert user != null;
-        profileName.setText(user.getName());
+        RealmResults<User> allUsers = realm.where(User.class).findAll();
+        if (!allUsers.isEmpty()) {
+            user = allUsers.first();
+            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+            profileName.setText(user.getName());
+        }
     }
 
     public void goToProfileActivity(View view) {
