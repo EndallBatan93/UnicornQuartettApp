@@ -54,7 +54,6 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
@@ -72,6 +71,7 @@ import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 import static com.unicorn.unicornquartett.Utility.Util.getThemeBasedMP;
 import static com.unicorn.unicornquartett.Utility.Util.setBackGroundConstant;
 import static com.unicorn.unicornquartett.Utility.Util.setSoundConstants;
+import static com.unicorn.unicornquartett.Utility.Util.verifyStoragePermissions;
 
 public class MenuActivity extends AppCompatActivity {
     private static final int REQUEST_FROM_GALLERY = 2;
@@ -225,6 +225,7 @@ public class MenuActivity extends AppCompatActivity {
 
     // give parameters absolutePath and imageIdentifier and on call set user.absolutePath and user.imageIdentifier
     private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
+        verifyStoragePermissions(MenuActivity.this);
         CircleImageView profileButton = findViewById(R.id.profileButton);
         profileButton.setImageBitmap(getImageFromStorage(absolutePath, imageIdentifier));
     }
@@ -404,14 +405,10 @@ public class MenuActivity extends AppCompatActivity {
     private void createUser(String username) {
         realm.beginTransaction();
         User user = realm.createObject(User.class);
-        RealmList<String> decks = new RealmList<>();
-        decks.add("Bikes");
-        decks.add("Tuning");
         user.setId(1);
         user.setName(username);
         user.setDifficulty("Fluffy");
         user.setFriends(null);
-        user.setDecks(decks);
         user.setRunningOffline(false);
         user.setRunningOnline(false);
         user.setImageIdentifier(user.getName() + user.getId() + ".jpg");

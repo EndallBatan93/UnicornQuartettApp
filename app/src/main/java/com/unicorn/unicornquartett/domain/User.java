@@ -12,7 +12,7 @@ public class User extends RealmObject {
     @Index
     private int id;
     private String name;
-    private RealmList<String> decks;
+    private RealmList<String> decks = new RealmList<>();
     private RealmList<GameResult> stats;
     private RealmList<User> friends;
     // Fluffy,moreFluffy,superFluffy
@@ -23,9 +23,13 @@ public class User extends RealmObject {
     private String imageIdentifier;
     private Date date;
     private String theme;
+
     public User() {
     }
 
+    public void addDeckName(String deckName){
+        decks.add(deckName);
+    }
 
     public String getTheme() {
         return theme;

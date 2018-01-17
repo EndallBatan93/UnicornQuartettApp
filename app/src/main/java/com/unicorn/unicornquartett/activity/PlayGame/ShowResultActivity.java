@@ -5,8 +5,8 @@ import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,17 +21,14 @@ import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static com.unicorn.unicornquartett.Utility.Constants.DRAW;
 import static com.unicorn.unicornquartett.Utility.Constants.EVEN_STACKS;
 import static com.unicorn.unicornquartett.Utility.Constants.GAME_CATEGORY;
 import static com.unicorn.unicornquartett.Utility.Constants.GAME_RUNNING;
+import static com.unicorn.unicornquartett.Utility.Constants.IMAGE_PATH;
 import static com.unicorn.unicornquartett.Utility.Constants.INSTANT_WIN;
 import static com.unicorn.unicornquartett.Utility.Constants.MULTIPLY;
 import static com.unicorn.unicornquartett.Utility.Constants.NONE;
@@ -47,6 +44,7 @@ import static com.unicorn.unicornquartett.Utility.Constants.UNICORN;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_GAME;
 import static com.unicorn.unicornquartett.Utility.Constants.USER;
 import static com.unicorn.unicornquartett.Utility.Constants.WINNER;
+import static com.unicorn.unicornquartett.Utility.Util.getCardImageFromStorage;
 
 public class ShowResultActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
@@ -57,6 +55,8 @@ public class ShowResultActivity extends AppCompatActivity {
     Intent finishIntent;
     String multiply;
     String instantWin;
+    TextView status;
+    TextView winnerLoser;
     User user;
     RealmResults<Game> gamesToDelete;
     Context context = this;
@@ -110,8 +110,8 @@ public class ShowResultActivity extends AppCompatActivity {
             TextView opponentProperty = findViewById(R.id.opponentProperty);
             TextView opponentValue = findViewById(R.id.opponentValueShow);
 
-            TextView winnerLoser = findViewById(R.id.winnerOrLoser);
-            TextView status = findViewById(R.id.status);
+            winnerLoser = findViewById(R.id.winnerOrLoser);
+            status = findViewById(R.id.status);
 
             TextView playerCardName = findViewById(R.id.playerCardName);
             TextView playerProperty = findViewById(R.id.playerProperty);
@@ -141,7 +141,7 @@ public class ShowResultActivity extends AppCompatActivity {
 
             //opponent
             Card firstOpponentCard = game.getOpponentCards().first();
-            setImage(firstOpponentCard, deck, opponentImageView);
+            setImage(firstOpponentCard, opponentImageView);
             opponentCardName.setText(game.getOpponentCards().first().getName());
             opponentProperty.setText(game.getShemas().get(0));
             Double opponentCardValue = Double.parseDouble(game.getValues().get(1));
@@ -152,7 +152,7 @@ public class ShowResultActivity extends AppCompatActivity {
 
             //user
             Card firstUserCard = game.getUsercards().first();
-            setImage(firstUserCard, deck, playerImageView);
+            setImage(firstUserCard, playerImageView);
             playerCardName.setText(game.getUsercards().first().getName());
             playerProperty.setText(game.getShemas().get(0));
             Double playerCardValue = Double.parseDouble(game.getValues().get(0));
@@ -161,26 +161,8 @@ public class ShowResultActivity extends AppCompatActivity {
             }
             playerValue.setText(playerCardValue.toString());
 
-            realm.beginTransaction();
             updateStacks(game.getLastWinner(), game);
-            realm.commitTransaction();
 
-            //resultView
-            switch (game.getLastWinner()) {
-                case PLAYER:
-                    winnerLoser.setText("WON");
-                    winnerLoser.setTextColor(Color.GREEN);
-                    break;
-                case OPPONENT:
-                    winnerLoser.setText("LOST");
-                    winnerLoser.setTextColor(Color.RED);
-                    break;
-                default:
-                    winnerLoser.setText("DRAWN");
-                    winnerLoser.setTextColor(Color.BLUE);
-                    break;
-            }
-            status.setText(game.getUsercards().size() + ":" + game.getOpponentCards().size());
         }
     }
 
@@ -189,19 +171,13 @@ public class ShowResultActivity extends AppCompatActivity {
         //TODO Spielstand speichern
     }
 
-    public void setImage(Card card, Deck deck, ImageView view) {
-        RealmList<String> imageIdentifiers = card.getImage().getImageIdentifiers();
-        String identifier = imageIdentifiers.first();
-        try {
-            InputStream open = getAssets().open(deck.getName().toLowerCase() + "/" + identifier);
-            Drawable fromStream = Drawable.createFromStream(open, null);
-            view.setImageDrawable(fromStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setImage(Card card, ImageView cardView) {
+        Bitmap cardBitmap = getCardImageFromStorage(IMAGE_PATH, card.getDeckID(), card.getId());
+        cardView.setImageBitmap(cardBitmap);
     }
 
     private void updateStacks(String winner, Game game) {
+        realm.beginTransaction();
         Card firstPlayerCard = game.getUsercards().first();
         Card firstOpponentCard = game.getOpponentCards().first();
         if (winner.equals(PLAYER)) {
@@ -236,10 +212,29 @@ public class ShowResultActivity extends AppCompatActivity {
             game.getUsercards().remove(firstPlayerCard);
             game.getOpponentCards().remove(firstOpponentCard);
         }
+
+        //resultView
+        switch (game.getLastWinner()) {
+            case PLAYER:
+                winnerLoser.setText("WON");
+                winnerLoser.setTextColor(Color.GREEN);
+                break;
+            case OPPONENT:
+                winnerLoser.setText("LOST");
+                winnerLoser.setTextColor(Color.RED);
+                break;
+            default:
+                winnerLoser.setText("DRAWN");
+                winnerLoser.setTextColor(Color.BLUE);
+                break;
+        }
+        status.setText(game.getUsercards().size() + ":" + game.getOpponentCards().size());
+
         checkIfGameIsOver(game);
     }
 
     private void checkIfGameIsOver(Game game) {
+        realm.commitTransaction();
         if (game.getOpponentCards().isEmpty()) {
             createUserWonGame(user);
         } else if (game.getUsercards().isEmpty()) {

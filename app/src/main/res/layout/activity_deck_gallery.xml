@@ -37,28 +37,17 @@
         app:layout_constraintHorizontal_bias="0.115"
         app:layout_constraintStart_toEndOf="@+id/profileButton" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="101dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/colorAccent"
-        android:text="@string/DeckGallery"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ListView
         android:id="@+id/decksListView"
-        android:layout_width="366dp"
-        android:layout_height="331dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/profileButton"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toTopOf="@id/profileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.341" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

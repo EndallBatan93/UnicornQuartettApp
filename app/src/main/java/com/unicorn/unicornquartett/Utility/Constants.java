@@ -62,5 +62,7 @@ public final class Constants {
     public static final String MULTIPLY = "multiply" ;
     public static final String INSTANT_WIN = "win";
 
+    // IMAGES
+    public static final String IMAGE_PATH = "/data/user/0/com.unicorn.unicornquartett/app_Images/";
 
 }

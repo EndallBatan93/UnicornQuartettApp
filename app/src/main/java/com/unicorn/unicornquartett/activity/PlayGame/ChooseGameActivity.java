@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.activity.Menu.MenuActivity;
@@ -138,32 +139,37 @@ public class ChooseGameActivity extends AppCompatActivity {
         public DeckChooser(final String mode) {
             final User user = realm.where(User.class).findFirst();
             final RealmList<String> decks = user.getDecks();
-            final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activityContext);
-            alertDialog.setTitle("Choose your Deck")
-                    .setSingleChoiceItems(decks.toArray(new String[decks.size()]), -1, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            selectedDeck = decks.get(i);
+            if (decks.isEmpty()) {
+                Toast noDecksToast = Toast.makeText(activityContext,"No decks found. Please download one.", Toast.LENGTH_LONG);
+                noDecksToast.show();
+            } else {
+                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activityContext);
+                alertDialog.setTitle("Choose your Deck")
+                        .setSingleChoiceItems(decks.toArray(new String[decks.size()]), -1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                selectedDeck = decks.get(i);
+                            }
+                        });
+                alertDialog.setPositiveButton("Play", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (mode.equals("playUnicorn")) {
+                            startGameActivity(UNICORN);
+                        } else {
+                            startGameActivity(STANDARD);
                         }
-                    });
-            alertDialog.setPositiveButton("Play", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (mode.equals("playUnicorn")) {
-                        startGameActivity(UNICORN);
-                    } else {
-                        startGameActivity(STANDARD);
                     }
-                }
-            });
+                });
 
-            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                }
-            });
-            alertDialog.create();
-            alertDialog.show();
+                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                alertDialog.create();
+                alertDialog.show();
+            }
         }
     }
 

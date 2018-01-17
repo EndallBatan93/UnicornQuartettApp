@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -67,6 +68,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     ListView deckListView;
     final Realm realm = Realm.getDefaultInstance();
+    final Context context = this;
     TextView profileName;
     RequestQueue requestQueue;
     RequestQueue requestQueueImage;
@@ -135,6 +137,8 @@ public class DeckGalleryActivity extends AppCompatActivity {
     }
 
     private void downloadDeck(final Deck deck) {
+        Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_LONG);
+        progressToast.show();
         requestQueue = Volley.newRequestQueue(this);
         requestQueueImage = Volley.newRequestQueue(this);
         getCardNames(deck.getId());
@@ -171,7 +175,8 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     private void loadImagesForCards(final Deck deck) {
         requestQueue.removeRequestFinishedListener(attributeListener);
-
+        Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_SHORT);
+        progressToast.show();
         imageListener = new RequestQueue.RequestFinishedListener() {
             @Override
             public void onRequestFinished(Request request) {
@@ -193,6 +198,8 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     private void loadImagesFromURL(Deck deck) {
         requestQueue.removeRequestFinishedListener(imageListener);
+        Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_SHORT);
+        progressToast.show();
         idInCardDTOList = 0;
         final RealmList<CardImageList> listOfCardImagesLists = realm.where(DeckDTO.class).equalTo("id", deck.getId()).findFirst().getListOfCardImagesURLs();
         for (CardImageList cardImageList : listOfCardImagesLists) {
@@ -205,13 +212,10 @@ public class DeckGalleryActivity extends AppCompatActivity {
     }
 
     private void buildDeckFromDTOS(Deck deck) {
-        filesDownloadedListener = new RequestQueue.RequestFinishedListener() {
-            @Override
-            public void onRequestFinished(Request request) {
-            }
-        };
+        Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_SHORT);
+        progressToast.show();
 
-        new DeckBuilder(deck);
+        new DeckBuilder(context, deck);
     }
 
     private void getCardImages(Deck deck) {

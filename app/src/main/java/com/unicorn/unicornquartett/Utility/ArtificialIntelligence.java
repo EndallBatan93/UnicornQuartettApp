@@ -27,7 +27,7 @@ public class ArtificialIntelligence {
 
     public ArtificialIntelligence(Deck deck, String difficulty) {
         this.difficulty = difficulty;
-        this.avg = realm.where(Avg.class).equalTo("name", deck.getName()).findFirst();
+        this.avg = realm.where(Avg.class).equalTo("deckID", deck.getId()).findFirst();
         this.attributesValues = avg.getAvgDoubles();
         this.higherWins = avg.getHigherWins();
     }

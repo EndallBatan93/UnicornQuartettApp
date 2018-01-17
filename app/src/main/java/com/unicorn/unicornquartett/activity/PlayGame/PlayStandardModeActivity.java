@@ -3,8 +3,8 @@ package com.unicorn.unicornquartett.activity.PlayGame;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,8 +22,6 @@ import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.Shema;
 import com.unicorn.unicornquartett.domain.User;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,6 +35,7 @@ import static com.unicorn.unicornquartett.Utility.Constants.DRAW;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.GAME_CATEGORY;
 import static com.unicorn.unicornquartett.Utility.Constants.GAME_RUNNING;
+import static com.unicorn.unicornquartett.Utility.Constants.IMAGE_PATH;
 import static com.unicorn.unicornquartett.Utility.Constants.OPPONENT;
 import static com.unicorn.unicornquartett.Utility.Constants.OPPONENTTURN;
 import static com.unicorn.unicornquartett.Utility.Constants.PLAYER;
@@ -46,6 +45,7 @@ import static com.unicorn.unicornquartett.Utility.Constants.SELECTED_DECK;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_GAME;
 import static com.unicorn.unicornquartett.Utility.Constants.USER;
+import static com.unicorn.unicornquartett.Utility.Util.getCardImageFromStorage;
 
 public class PlayStandardModeActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
@@ -56,19 +56,22 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     private Context c = this;
     private TextView status;
     private TextView turn;
+    private ImageView cardImage;
     private Game game;
-    Boolean isChoosen = false;
-    RealmList<String> attributes;
-    ArtificialIntelligence currentAI;
-    String difficulty;
-    User user;
-    Deck deck;
-    String runningGame;
+    private Boolean isChoosen = false;
+    private RealmList<String> attributes;
+    private ArtificialIntelligence currentAI;
+    private String difficulty;
+    private User user;
+    private Deck deck;
+    private String runningGame;
 
     @Override
     protected void onResume() {
         super.onResume();
         setContentView(R.layout.activity_play_game_view);
+        status = findViewById(R.id.status);
+        turn = findViewById(R.id.turn);
         Game standardGame = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
         if (standardGame != null) {
             handleResume();
@@ -79,8 +82,6 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     }
 
     private void handleResume() {
-        status = findViewById(R.id.status);
-        turn = findViewById(R.id.turn);
 
         game = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
         user = game.getUsers().first();
@@ -192,7 +193,7 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), listOfDeckAttributes, R.layout.listview_text_x4, buildDescriptors, buildLocation);
         final ListView lw = findViewById(R.id.playCardView);
         lw.setAdapter(simpleAdapter);
-        setImage(card, deck);
+        setImage(card);
 
         final Button chooseValue = findViewById(R.id.chooseValueButton);
         chooseValue.setBackgroundColor(Color.GRAY);
@@ -259,18 +260,10 @@ public class PlayStandardModeActivity extends AppCompatActivity {
         return attributeDescriptionList;
     }
 
-    private void setImage(Card card, Deck deck) {
-        RealmList<String> imageIdentifiers = card.getImage().getImageIdentifiers();
-        String identifier = imageIdentifiers.first();
-        try {
-            String deckName = deck.getName().toLowerCase();
-            InputStream open = getAssets().open(deckName + "/" + identifier);
-            Drawable fromStream = Drawable.createFromStream(open, null);
-            ImageView view = findViewById(R.id.cardImage);
-            view.setImageDrawable(fromStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void setImage(Card card) {
+        cardImage = findViewById(R.id.cardImage);
+        Bitmap cardBitmap = getCardImageFromStorage(IMAGE_PATH, card.getDeckID(), card.getId());
+        cardImage.setImageBitmap(cardBitmap);
     }
 
     private Game compareValues(String value, int position, Deck deck) {

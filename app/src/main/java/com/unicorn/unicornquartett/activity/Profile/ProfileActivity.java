@@ -54,6 +54,7 @@ import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 import static com.unicorn.unicornquartett.Utility.Util.getThemeBasedMP;
 import static com.unicorn.unicornquartett.Utility.Util.setBackGroundConstant;
 import static com.unicorn.unicornquartett.Utility.Util.setSoundConstants;
+import static com.unicorn.unicornquartett.Utility.Util.verifyStoragePermissions;
 
 public class ProfileActivity extends AppCompatActivity {
     final Realm realm = Realm.getDefaultInstance();
@@ -271,6 +272,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
+        verifyStoragePermissions(ProfileActivity.this);
         CircleImageView profileButton = findViewById(R.id.profileButton);
         profileButton.setImageBitmap(getImageFromStorage(absolutePath, imageIdentifier));
     }

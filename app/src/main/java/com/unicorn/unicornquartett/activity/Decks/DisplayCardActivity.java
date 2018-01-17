@@ -1,7 +1,7 @@
 package com.unicorn.unicornquartett.activity.Decks;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,8 +16,6 @@ import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.Shema;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,11 +24,13 @@ import io.realm.Realm;
 import io.realm.RealmList;
 
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.IMAGE_PATH;
+import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 
 public class DisplayCardActivity extends AppCompatActivity {
     Realm realm = Realm.getDefaultInstance();
     TextView cardName;
-    private  int currentCardIndex = 0;
+    private int currentCardIndex = 0;
 
     @Override
     public void onResume() {
@@ -45,20 +45,20 @@ public class DisplayCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_card);
         final Deck deck = getDeck();
         Card first = deck.getCards().first();
-        setAttributes(deck,first);
+        setAttributes(deck, first);
     }
 
 
     public Card getCurrentCard(Boolean left, RealmList<Card> cards) {
-        if(left) {
-            if(this.currentCardIndex == 0) {
-                this.currentCardIndex = cards.size()-1;
+        if (left) {
+            if (this.currentCardIndex == 0) {
+                this.currentCardIndex = cards.size() - 1;
             } else {
                 this.currentCardIndex -= 1;
             }
 
-            }else { //right
-            if(this.currentCardIndex == cards.size()-1) {
+        } else { //right
+            if (this.currentCardIndex == cards.size() - 1) {
                 this.currentCardIndex = 0;
             } else {
                 this.currentCardIndex += 1;
@@ -74,17 +74,12 @@ public class DisplayCardActivity extends AppCompatActivity {
 
     }
 
-    public void setImage(Card card, Deck deck) {
-        RealmList<String> imageIdentifiers = card.getImage().getImageIdentifiers();
-        String identifier = imageIdentifiers.first();
-        try {
-            InputStream open = getAssets().open(deck.getName().toLowerCase() + "/" + identifier);
-            Drawable fromStream = Drawable.createFromStream(open, null);
-            ImageView view = findViewById(R.id.card);
-            view.setImageDrawable(fromStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setCardImage(Card card) {
+        String firstImageID = card.getListOfImagePaths().first();
+        Bitmap cardBitmap = getImageFromStorage(IMAGE_PATH, firstImageID);
+        ImageView cardImage = findViewById(R.id.card);
+        cardImage.setImageBitmap(cardBitmap);
+
     }
 
     public void setAttributes(final Deck deck, Card card) {
@@ -97,7 +92,7 @@ public class DisplayCardActivity extends AppCompatActivity {
         ArrayList<Map<String, String>> listOfDeckAttributes = new ArrayList<>();
         for (int i = 0; i < card.getAttributes().size(); i++) {
             HashMap<String, String> tmpHashmap = new HashMap<>();
-            tmpHashmap.put("value", card.getAttributes().get(i)+"  ");
+            tmpHashmap.put("value", card.getAttributes().get(i) + "  ");
             ArrayList<String> shemaForCard = getShemaForCard(deck, i);
             tmpHashmap.put("desc", shemaForCard.get(0));
             tmpHashmap.put("unit", shemaForCard.get(1));
@@ -109,7 +104,7 @@ public class DisplayCardActivity extends AppCompatActivity {
         ListView lw = findViewById(R.id.attributes);
         lw.setAdapter(simpleAdapter);
         cardName.setText(card.getName());
-        setImage(card,deck);
+        setCardImage(card);
 
         //
 //        final MediaPlayer mp = MediaPlayer.create(this, R.raw.lasershot);
@@ -131,7 +126,7 @@ public class DisplayCardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Fun_SOUND.start();
-                setAttributes(deck,getCurrentCard(true,cards));
+                setAttributes(deck, getCurrentCard(true, cards));
 //                mp.start();
             }
         });
@@ -140,7 +135,7 @@ public class DisplayCardActivity extends AppCompatActivity {
     public ArrayList<String> getShemaForCard(Deck deck, int i) {
         RealmList<Shema> shemas = deck.getShemaList();
         Shema shema = shemas.get(i);
-        ArrayList<String> attributeDescriptionList= new ArrayList<>();
+        ArrayList<String> attributeDescriptionList = new ArrayList<>();
         attributeDescriptionList.add(shema.getProperty());
         attributeDescriptionList.add(shema.getUnit());
         attributeDescriptionList.add(shema.getHigherWins().toString());

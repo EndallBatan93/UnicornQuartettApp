@@ -194,6 +194,12 @@ public class Util {
         return resized;
     }
 
+    public static Bitmap getCardImageFromStorage(String absolutePath, int deckID, int cardID){
+        File file = new File(absolutePath+deckID+"-"+cardID+".jpg");
+        Bitmap cardImage = BitmapFactory.decodeFile(file.getAbsolutePath());
+        return cardImage;
+    }
+
     public static Bitmap getImageFromStorage(String absolutePath, String imageIdentifier){
         Bitmap bitmap;
         try {
