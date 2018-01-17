@@ -283,8 +283,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Bitmap response) {
                             Uri uri = saveImageToInternalStorage(response, cardId, deckID, nthImage);
-//                            CardDTOList cardDTOList = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst();
-//                            CardDTO cardDTO = cardDTOList.getListOfCardDTO().get(idInCardDTOList);
 
                     }
                 },
