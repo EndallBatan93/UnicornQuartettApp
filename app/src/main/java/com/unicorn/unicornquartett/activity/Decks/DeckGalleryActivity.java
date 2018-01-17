@@ -125,7 +125,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 if (decks.get(position).getCards().isEmpty()) {
                     downloadDeck(decks.get(position));
                 } else {
-
                     Deck deckIdentity = decks.get(position);
                     goToDisplayCardActivity(view, deckIdentity.getName());
                 }
@@ -277,7 +276,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
                         Uri uri = saveImageToInternalStorage(response, cardId, deckID);
                         realm.beginTransaction();
                         CardDTO cardDTO = realm.where(CardDTOList.class).findFirst().getListOfCardDTO().get(idInCardDTOList);
-//                cardDTO.setImagesForDecks(uri);
                         realm.commitTransaction();
                         idInCardDTOList++;
                     }
@@ -378,8 +376,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
 
     }
-
-
 
     private void createValueListForCard(RealmList<Double> valueList, int deckID) {
         CardDTO cardDTO = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst().getListOfCardDTO().get(idInCardDTOList);
@@ -526,8 +522,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
             String deckName = deckNames.get(i);
             tmpTitleFromNameMap.put("title", deckName);
             if (!decks.get(i).getCards().isEmpty()) {
-
-
                 String imageIdentifier = decks.get(i).getCards().first().getImage().getImageIdentifiers().first();
                 String imagePath = deckName.toLowerCase() + "/" + imageIdentifier;
                 Drawable tempDrawable;

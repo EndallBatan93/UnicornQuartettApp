@@ -39,7 +39,6 @@ import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.domain.Deck;
 import com.unicorn.unicornquartett.domain.DeckDTO;
 import com.unicorn.unicornquartett.domain.Game;
-import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
 
 import org.json.JSONArray;
@@ -68,6 +67,7 @@ import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
+import static com.unicorn.unicornquartett.Utility.Util.getHeadersForHTTP;
 import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 import static com.unicorn.unicornquartett.Utility.Util.getThemeBasedMP;
 import static com.unicorn.unicornquartett.Utility.Util.setBackGroundConstant;
@@ -198,13 +198,7 @@ public class MenuActivity extends AppCompatActivity {
                 }, 0, 0, null, null){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String credentials = "student:afmba";
-                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
-                headers.put("Content-Type", "application/json");
-                headers.put("Content-Type", "multipart/form/data");
-                headers.put("Authorization", auth);
-                return headers;
+                return getHeadersForHTTP();
             }
         };
 
@@ -422,40 +416,9 @@ public class MenuActivity extends AppCompatActivity {
         user.setRunningOnline(false);
         user.setImageIdentifier(user.getName() + user.getId() + ".jpg");
         user.setDate(new Date());
-        user.setStats(createTestData(user));
         profileName.setText(username);
     }
 
-    private RealmList<GameResult> createTestData(User user) {
-        RealmList<GameResult> results = new RealmList<>();
-//        GameResult object = realm.createObject(GameResult.class);
-//        object.setDeckID(0);
-//        object.setWon(true);
-//
-//        GameResult object1 = realm.createObject(GameResult.class);
-//        object1.setDeckID(1);
-//        object1.setWon(true);
-//
-//        GameResult object2 = realm.createObject(GameResult.class);
-//        object2.setDeckID(2);
-//        object2.setWon(false);
-//
-//        GameResult object3 = realm.createObject(GameResult.class);
-//        object3.setDeckID(3);
-//        object3.setWon(false);
-//
-//        GameResult object4 = realm.createObject(GameResult.class);
-//        object4.setDeckID(4);
-//        object4.setWon(false);
-//
-//        results.add(object);
-//        results.add(object1);
-//        results.add(object2);
-//        results.add(object3);
-//        results.add(object4);
-
-        return results;
-    }
 
     @SuppressLint("ValidFragment")
     private class ThemeChooser extends DialogFragment {
