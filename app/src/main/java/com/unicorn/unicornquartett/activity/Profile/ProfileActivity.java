@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,13 +23,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.Utility.Util;
 import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,16 +44,13 @@ import static com.unicorn.unicornquartett.Utility.Constants.DIFFICULTY_1;
 import static com.unicorn.unicornquartett.Utility.Constants.DIFFICULTY_2;
 import static com.unicorn.unicornquartett.Utility.Constants.DIFFICULTY_3;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
-import static com.unicorn.unicornquartett.Utility.Constants.HIGH_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.INTRO_SOUND;
-import static com.unicorn.unicornquartett.Utility.Constants.LOW_FACTOR;
-import static com.unicorn.unicornquartett.Utility.Constants.MEDIUM_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
-import static com.unicorn.unicornquartett.Utility.Constants.ULTRA_HIGH_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
+import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 import static com.unicorn.unicornquartett.Utility.Util.getThemeBasedMP;
 import static com.unicorn.unicornquartett.Utility.Util.setBackGroundConstant;
 import static com.unicorn.unicornquartett.Utility.Util.setSoundConstants;
@@ -279,31 +271,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
-        Util.verifyStoragePermissions(ProfileActivity.this);
-        try {
-            File f = new File(absolutePath, imageIdentifier);
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            int height = b.getHeight();
-            int width = b.getWidth();
-            if (height > 4000 || width > 4000) {
-                height = height / ULTRA_HIGH_FACTOR;
-                width = width / ULTRA_HIGH_FACTOR;
-            } else if (height > 2000 || width > 2000) {
-                height = height / HIGH_FACTOR;
-                width = width / HIGH_FACTOR;
-            } else if (height > 1000 || width > 1000) {
-                height = height / MEDIUM_FACTOR;
-                width = width / MEDIUM_FACTOR;
-            } else if (height > 700 || width > 700) {
-                height = height / LOW_FACTOR;
-                width = width / LOW_FACTOR;
-            }
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, width, height, true);
-            CircleImageView profileButton = findViewById(R.id.profileButton);
-            profileButton.setImageBitmap(scaledBitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        CircleImageView profileButton = findViewById(R.id.profileButton);
+        profileButton.setImageBitmap(getImageFromStorage(absolutePath, imageIdentifier));
     }
 
 

@@ -2,39 +2,37 @@ package com.unicorn.unicornquartett.Utility;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.constraint.ConstraintLayout;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
-import android.view.LayoutInflater;
-import android.view.View;
 
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.activity.Menu.MenuActivity;
-import com.unicorn.unicornquartett.activity.PlayGame.ChooseGameActivity;
-import com.unicorn.unicornquartett.domain.User;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Array;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import io.realm.Realm;
-
-import static com.unicorn.unicornquartett.Utility.Constants.*;
+import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.HIGH_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.INTRO_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.LOW_FACTOR;
+import static com.unicorn.unicornquartett.Utility.Constants.MEDIUM_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
+import static com.unicorn.unicornquartett.Utility.Constants.ULTRA_HIGH_FACTOR;
+import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
 
 public class Util {
 
@@ -50,6 +48,8 @@ public class Util {
         this.context = context;
     }
 
+    // 1. PERMISSIONS
+
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -63,6 +63,9 @@ public class Util {
             );
         }
     }
+
+    // 2. AUDIO
+
     public static ArrayList<MediaPlayer> getThemeBasedMP(Context context, String theme) {
         ArrayList<MediaPlayer> unicornMPs = new ArrayList<>();
         ArrayList<MediaPlayer> mBayMPs = new ArrayList<>();
@@ -144,6 +147,8 @@ public class Util {
         INTRO_SOUND = mediaPlayers.get(2);
     }
 
+    //3. BACKGROUND
+
     public static void setBackGroundConstant(String mode) {
         switch (mode) {
             case STANDARD_THEME:
@@ -166,4 +171,62 @@ public class Util {
                 break;
         }
     }
+
+    //4. IMAGES
+
+    public static int getResizeFactor(int size){
+        int resizeFactor = 1;
+        if (size > 4000){
+            resizeFactor = ULTRA_HIGH_FACTOR;
+        } else if (size > 2000) {
+            resizeFactor = HIGH_FACTOR;
+        } else if (size > 1000) {
+            resizeFactor = MEDIUM_FACTOR;
+        } else if (size > 500) {
+            resizeFactor = LOW_FACTOR;
+        }
+
+        return resizeFactor;
+    }
+
+    public static int getResizedDim(int size, int factor){
+        int resized = size / factor;
+        return resized;
+    }
+
+    public static Bitmap getImageFromStorage(String absolutePath, String imageIdentifier){
+        Bitmap bitmap;
+        try {
+            File f = new File(absolutePath, imageIdentifier);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            int factor = 1;
+            if (b.getHeight() > b.getWidth()) {
+                factor = getResizeFactor(b.getHeight());
+            } else {
+                factor = getResizeFactor(b.getWidth());
+            }
+            int width = getResizedDim(b.getWidth(), factor);
+            int height = getResizedDim(b.getHeight(), factor);
+
+            bitmap = Bitmap.createScaledBitmap(b, width, height, true);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            bitmap = null;
+        }
+        return bitmap;
+    }
+
+    //5. HTTP
+
+    @NonNull
+    public static Map<String, String> getHeadersForHTTP() {
+        Map<String, String> headers = new HashMap<>();
+        String credentials = "student:afmba";
+        String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
+        headers.put("Content-Type", "application/json");
+        headers.put("Content-Type", "multipart/form/data");
+        headers.put("Authorization", auth);
+        return headers;
+    }
+
 }

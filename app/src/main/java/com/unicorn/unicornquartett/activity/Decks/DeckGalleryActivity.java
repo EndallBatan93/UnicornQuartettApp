@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,8 +45,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,10 +60,8 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
-import static com.unicorn.unicornquartett.Utility.Constants.HIGH_FACTOR;
-import static com.unicorn.unicornquartett.Utility.Constants.LOW_FACTOR;
-import static com.unicorn.unicornquartett.Utility.Constants.MEDIUM_FACTOR;
-import static com.unicorn.unicornquartett.Utility.Constants.ULTRA_HIGH_FACTOR;
+import static com.unicorn.unicornquartett.Utility.Util.getHeadersForHTTP;
+import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 
 public class DeckGalleryActivity extends AppCompatActivity {
 
@@ -120,7 +115,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
             }
         }
 
-        List<ListViewItem> listOfDeckItems = setImages(decks, deckNames);
+        List<ListViewItem> listOfDeckItems = setImagesForDecks(decks, deckNames);
 
         CustomAdapter customAdapter = new CustomAdapter(getBaseContext(), listOfDeckItems);
         deckListView.setAdapter(customAdapter);
@@ -253,7 +248,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return DeckGalleryActivity.this.getHeaders();
+                return getHeadersForHTTP();
             }
         };
 
@@ -282,7 +277,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                         Uri uri = saveImageToInternalStorage(response, cardId, deckID);
                         realm.beginTransaction();
                         CardDTO cardDTO = realm.where(CardDTOList.class).findFirst().getListOfCardDTO().get(idInCardDTOList);
-//                cardDTO.setImages(uri);
+//                cardDTO.setImagesForDecks(uri);
                         realm.commitTransaction();
                         idInCardDTOList++;
                     }
@@ -301,7 +296,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
         );
         requestQueueImage.add(imageRequest);
     }
-
 
     protected Uri saveImageToInternalStorage(Bitmap bitmap, int cardId, int deckID) {
         // Initialize ContextWrapper
@@ -376,7 +370,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return DeckGalleryActivity.this.getHeaders();
+                return getHeadersForHTTP();
             }
         };
 
@@ -385,16 +379,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     }
 
-    @NonNull
-    private Map<String, String> getHeaders() {
-        Map<String, String> headers = new HashMap<>();
-        String credentials = "student:afmba";
-        String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
-        headers.put("Content-Type", "application/json");
-        headers.put("Content-Type", "multipart/form/data");
-        headers.put("Authorization", auth);
-        return headers;
-    }
+
 
     private void createValueListForCard(RealmList<Double> valueList, int deckID) {
         CardDTO cardDTO = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst().getListOfCardDTO().get(idInCardDTOList);
@@ -445,7 +430,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return DeckGalleryActivity.this.getHeaders();
+                return getHeadersForHTTP();
             }
         };
 
@@ -471,7 +456,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
         realm.commitTransaction();
         return shema;
     }
-
 
     private void getCardNames(int id) {
         String url = "http://quartett.af-mba.dbis.info/decks/" + id + "/cards/";
@@ -507,7 +491,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return DeckGalleryActivity.this.getHeaders();
+                return getHeadersForHTTP();
             }
         };
 
@@ -534,7 +518,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private List<ListViewItem> setImages(RealmResults<Deck> decks, List<String> deckNames) {
+    private List<ListViewItem> setImagesForDecks(RealmResults<Deck> decks, List<String> deckNames) {
         List<ListViewItem> listOfDeckItems = new ArrayList<>();
         for (int i = 0; i < decks.size(); i++) {
 
@@ -579,31 +563,8 @@ public class DeckGalleryActivity extends AppCompatActivity {
     }
 
     private void loadImageFromStorage(String absolutePath, String imageIdentifier) {
-        try {
-            File f = new File(absolutePath, imageIdentifier);
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            int height = b.getHeight();
-            int width = b.getWidth();
-            if (height > 4000 || width > 4000) {
-                height = height / ULTRA_HIGH_FACTOR;
-                width = width / ULTRA_HIGH_FACTOR;
-            } else if (height > 2000 || width > 2000) {
-                height = height / HIGH_FACTOR;
-                width = width / HIGH_FACTOR;
-            } else if (height > 1000 || width > 1000) {
-                height = height / MEDIUM_FACTOR;
-                width = width / MEDIUM_FACTOR;
-            } else if (height > 700 || width > 700) {
-                height = height / LOW_FACTOR;
-                width = width / LOW_FACTOR;
-            }
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, width, height, true);
-            CircleImageView profileButton = findViewById(R.id.profileButton);
-            profileButton.setImageBitmap(scaledBitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+        CircleImageView profileButton = findViewById(R.id.profileButton);
+        profileButton.setImageBitmap(getImageFromStorage(absolutePath, imageIdentifier));
     }
 
     public class ListViewItem {

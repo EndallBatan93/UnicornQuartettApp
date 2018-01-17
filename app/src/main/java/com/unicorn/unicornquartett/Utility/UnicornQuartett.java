@@ -36,7 +36,6 @@ public class UnicornQuartett extends Application {
     public void onCreate() {
         super.onCreate();
 
-
         Realm.init(getApplicationContext());
         RealmConfiguration config = new RealmConfiguration
                 .Builder()
@@ -49,6 +48,13 @@ public class UnicornQuartett extends Application {
 
         // IMPORTANT For database testing purposes only
         clearDatabaseRealm(realm);
+
+//        initDecksFromAssets(realm);
+
+    }
+
+    private void initDecksFromAssets(Realm realm) {
+        realm.beginTransaction();
 
         String tuningsJSON = this.loadJSONFromAsset("tuning/tuning.json");
         String bikesJSON = this.loadJSONFromAsset("bikes/bikes.json");
@@ -68,7 +74,6 @@ public class UnicornQuartett extends Application {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        realm.beginTransaction();
 
         Deck bikeExists = realm.where(Deck.class).equalTo("name", REALM_BIKE_NAME).findFirst();
         if (bikeExists == null) {
