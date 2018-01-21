@@ -5,6 +5,8 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -125,7 +127,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 if (decks.get(position).getCards().isEmpty()) {
-                    downloadDeck(decks.get(position));
+                    checkIfWiFiIsOn(decks, position);
                 } else {
                     Deck deckIdentity = decks.get(position);
                     goToDisplayCardActivity(view, deckIdentity.getName());
@@ -134,6 +136,24 @@ public class DeckGalleryActivity extends AppCompatActivity {
         });
 
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+    }
+
+    private void checkIfWiFiIsOn(RealmResults<Deck> decks, int position) {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        boolean isConnectedWithWIFI = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting() &&
+                activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+
+        if (isConnectedWithWIFI){
+            downloadDeck(decks.get(position));
+        } else {
+            Toast wifiToast = Toast.makeText(context, "Please enable your WIFI. \nDownloading with mobile data is not supported.", Toast.LENGTH_LONG);
+            wifiToast.show();
+        }
     }
 
     private void downloadDeck(final Deck deck) {
