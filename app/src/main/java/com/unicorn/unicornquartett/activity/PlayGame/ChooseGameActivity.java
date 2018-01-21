@@ -165,7 +165,7 @@ public class ChooseGameActivity extends AppCompatActivity {
                     }
                 });
 
-                alertDialog.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                alertDialog.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         RealmResults<Game> unicornGames;
@@ -178,6 +178,12 @@ public class ChooseGameActivity extends AppCompatActivity {
                         unicornGames.deleteAllFromRealm();
                         realm.commitTransaction();
                         handleInitialization();
+                    }
+                });
+
+                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 });
                 alertDialog.create();
