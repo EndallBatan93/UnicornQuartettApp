@@ -23,6 +23,7 @@ import com.unicorn.unicornquartett.domain.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
@@ -30,7 +31,9 @@ import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.REALM_ID;
 import static com.unicorn.unicornquartett.Utility.Constants.SELECTED_DECK;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD;
+import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_GAME;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN;
+import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_GAME;
 import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 
 public class ChooseGameActivity extends AppCompatActivity {
@@ -162,9 +165,19 @@ public class ChooseGameActivity extends AppCompatActivity {
                     }
                 });
 
-                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                alertDialog.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        RealmResults<Game> unicornGames;
+                        realm.beginTransaction();
+                        if (mode.equals("playUnicorn")) {
+                            unicornGames = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findAll();
+                        } else {
+                            unicornGames = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findAll();
+
+                        }
+                        unicornGames.deleteAllFromRealm();
+                        realm.commitTransaction();
                     }
                 });
                 alertDialog.create();
