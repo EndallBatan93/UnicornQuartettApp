@@ -75,7 +75,6 @@ public class ShowResultActivity extends AppCompatActivity {
         instantWin = getIntent().getStringExtra(INSTANT_WIN);
         category = getIntent().getStringExtra(GAME_CATEGORY);
         String randomEvent = getIntent().getStringExtra(RANDOM_EVENT_TRIGGERED);
-//        new RandomEventTriggeredDialog("rest");
 
         if (category != null && category.equals(STANDARD)) {
             game = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
@@ -168,7 +167,8 @@ public class ShowResultActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //TODO Spielstand speichern
+        Intent intent = new Intent(context, ChooseGameActivity.class);
+        startActivity(intent);
     }
 
     public void setImage(Card card, ImageView cardView) {
