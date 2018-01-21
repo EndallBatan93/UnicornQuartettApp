@@ -7,11 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.FileProvider;
@@ -22,13 +22,13 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -66,7 +66,6 @@ import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
-import static com.unicorn.unicornquartett.Utility.Util.getHeadersForHTTP;
 import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 import static com.unicorn.unicornquartett.Utility.Util.getThemeBasedMP;
 import static com.unicorn.unicornquartett.Utility.Util.setBackGroundConstant;
@@ -76,7 +75,7 @@ import static com.unicorn.unicornquartett.Utility.Util.verifyStoragePermissions;
 public class MenuActivity extends AppCompatActivity {
     private static final int REQUEST_FROM_GALLERY = 2;
     static final int REQUEST_TAKE_PHOTO = 1;
-
+    private boolean doubleBackToExitPressedOnce = false;
 
     String mCurrentPhotoPath;
     final Context c = this;
@@ -92,6 +91,21 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
 
     }
 
@@ -152,7 +166,7 @@ public class MenuActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         JSONArray returnedJson = response;
-                        for (int i = 0; i < returnedJson.length(); i++){
+                        for (int i = 0; i < returnedJson.length(); i++) {
                             Gson gson = new Gson();
                             try {
                                 DeckDTO deckDTO = gson.fromJson(returnedJson.get(i).toString(), DeckDTO.class);
@@ -160,7 +174,8 @@ public class MenuActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        } createNewDecksIfAvailable(downloadableDecks);
+                        }
+                        createNewDecksIfAvailable(downloadableDecks);
 
                     }
                 }, new Response.ErrorListener() {
@@ -169,12 +184,12 @@ public class MenuActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
                     }
-                }){
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 String credentials = "student:afmba";
-                String auth = "Basic "+ "c3R1ZGVudDphZm1iYQ==";
+                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
                 headers.put("Content-Type", "application/json");
                 headers.put("Content-Type", "multipart/form/data");
                 headers.put("Authorization", auth);
@@ -183,25 +198,6 @@ public class MenuActivity extends AppCompatActivity {
         };
 
         requestQueue.add(jsArrReqeust);
-    }
-
-    private void imageRequestToRestFullWebService() {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "http://quartett.af-mba.dbis.info/decks/125/cards/370/images";
-        ImageRequest imageRequest = new ImageRequest(url,
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap response) {
-                        Bitmap bitmap = response;
-                    }
-                }, 0, 0, null, null){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return getHeadersForHTTP();
-            }
-        };
-
-        requestQueue.add(imageRequest);
     }
 
     private void createNewDecksIfAvailable(List<DeckDTO> downloadableDecks) {
@@ -472,9 +468,6 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    public interface VolleyCallback{
-        void onSuccess(List<DeckDTO> result);
-    }
 }
 
 
