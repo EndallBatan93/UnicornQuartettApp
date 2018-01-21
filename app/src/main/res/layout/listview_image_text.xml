@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/vwiatImage"
         android:layout_height="match_parent"
-        android:layout_width="200dp"
+        android:layout_width="175dp"
         android:scaleType="fitXY"
         android:contentDescription="@string/app_name"
         android:padding="2dp"
@@ -24,7 +24,7 @@
         android:text=''
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:textSize="30sp"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
 </LinearLayout>
