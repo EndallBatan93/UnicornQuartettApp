@@ -174,10 +174,10 @@ public class ChooseGameActivity extends AppCompatActivity {
                             unicornGames = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findAll();
                         } else {
                             unicornGames = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findAll();
-
                         }
                         unicornGames.deleteAllFromRealm();
                         realm.commitTransaction();
+                        handleInitialization();
                     }
                 });
                 alertDialog.create();
