@@ -117,12 +117,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         statistics.setText("won: "+won +" || lost: " +lost);
         if(won > lost) {
-            dissView.setText("Such Wow. Get youself an icecream. Just jizzed in my pants.");
+            dissView.setText(R.string.good);
         } else if(won == lost) {
-            dissView.setText("Seriously. Much too learn you have dimwit.");
-
+            dissView.setText(R.string.medium);
         } else {
-            dissView.setText("You should just throw your phone away and cry.");
+            dissView.setText(R.string.bad);
         }
 
 
@@ -216,6 +215,8 @@ public class ProfileActivity extends AppCompatActivity {
         View createPhotoDialogView = layoutInflater.inflate(R.layout.dialog_create_photo, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setView(createPhotoDialogView);
+
+        verifyStoragePermissions(this);
 
         builder.setPositiveButton("Take picture", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

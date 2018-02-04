@@ -11,7 +11,7 @@
         android:id="@+id/createUserTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose a username:"
+        android:text="Choose your fantastic username:"
         android:textAppearance="?android:attr/textAppearanceLarge"
         tools:text="@string/createTitle" />
 
@@ -19,6 +19,6 @@
         android:id="@+id/createUserInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Something"
+        android:hint="Enter something ..."
         android:inputType="text" />
 </LinearLayout>

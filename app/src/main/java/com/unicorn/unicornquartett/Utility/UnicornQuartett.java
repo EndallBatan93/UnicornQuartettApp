@@ -24,7 +24,6 @@ public class UnicornQuartett extends Application {
         // IMPORTANT For database testing purposes only
         clearDatabaseRealm(realm);
 
-
     }
 
     private void clearDatabaseRealm(Realm realm) {

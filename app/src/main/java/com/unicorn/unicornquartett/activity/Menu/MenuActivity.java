@@ -361,8 +361,7 @@ public class MenuActivity extends AppCompatActivity {
             final EditText userInputDialogText = (EditText) createUserDialogView.findViewById(R.id.createUserInput);
 
             builder.setCancelable(false)
-                    .setMessage("Ich bin so süss ich könnte Zucker pupsen")
-                    .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Create User", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             String username = String.valueOf(userInputDialogText.getText());
                             createUser(username);
@@ -379,6 +378,8 @@ public class MenuActivity extends AppCompatActivity {
             View createPhotoDialogView = layoutInflater.inflate(R.layout.dialog_create_photo, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(c);
             builder.setView(createPhotoDialogView);
+
+            verifyStoragePermissions(MenuActivity.this);
 
             builder.setCancelable(false)
                     .setPositiveButton("Take picture", new DialogInterface.OnClickListener() {

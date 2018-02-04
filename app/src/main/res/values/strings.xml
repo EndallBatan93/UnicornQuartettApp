@@ -15,7 +15,7 @@
     <string name="OfflineMode">OfflineMode</string>
     <string name="createTitle">Enter username:</string>
     <string name="createTitleInput">UnicornHunter69</string>
-    <string name="createPhoto">Take or choose a photo</string>
+    <string name="createPhoto">Choose or take a profile picture.</string>
     <string name="UnicornMode">UnicornMode</string>
     <string name="StandardMode">StandardMode</string>
     <string name="Load">Loading content</string>
@@ -23,4 +23,7 @@
     <string name="supriseButton">Suprise</string>
     <string name="resumeUnicorn">Resume Unicorn</string>
     <string name="resumeStandard">Resume Standard</string>
+    <string name="good">Such wow. Much skills. Get youself an icecream.</string>
+    <string name="medium">Seriously. Much too learn you have Kevin.</string>
+    <string name="bad">You should just throw your phone away and cry.</string>
 </resources>
