@@ -165,8 +165,9 @@ public class PlayStandardModeActivity extends AppCompatActivity {
 
         for (int i = 0; i < indices.size(); i += 2) {
             opponentCards.add(deck.getCards().get(indices.get(i)));
-            userCards.add(deck.getCards().get(indices.get(i + 1)));
-
+            if (i+1 < indices.size()) {
+                userCards.add(deck.getCards().get(indices.get(i + 1)));
+            }
         }
         setStatus();
     }

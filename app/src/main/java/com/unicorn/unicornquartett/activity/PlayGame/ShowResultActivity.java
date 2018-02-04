@@ -235,10 +235,12 @@ public class ShowResultActivity extends AppCompatActivity {
 
     private void checkIfGameIsOver(Game game) {
         realm.commitTransaction();
-        if (game.getOpponentCards().isEmpty()) {
-            createUserWonGame(user);
-        } else if (game.getUsercards().isEmpty()) {
-            createOpponentWonGame(user);
+        if (game.getDrawnCards().isEmpty()) {
+            if (game.getOpponentCards().isEmpty()) {
+                createUserWonGame(user);
+            } else if (game.getUsercards().isEmpty()) {
+                createOpponentWonGame(user);
+            }
         }
     }
 
