@@ -33,6 +33,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.Utility.DeckBuilder;
+import com.unicorn.unicornquartett.activity.Menu.MenuActivity;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
 import com.unicorn.unicornquartett.domain.CardDTO;
 import com.unicorn.unicornquartett.domain.CardDTOList;
@@ -92,6 +93,12 @@ public class DeckGalleryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
     }
 
     private void handleDeckGalleryInit() {

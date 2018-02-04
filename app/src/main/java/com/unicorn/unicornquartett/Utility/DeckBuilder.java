@@ -1,8 +1,10 @@
 package com.unicorn.unicornquartett.Utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
+import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.domain.Avg;
 import com.unicorn.unicornquartett.domain.Card;
 import com.unicorn.unicornquartett.domain.CardDTO;
@@ -58,6 +60,8 @@ public class DeckBuilder {
         calcAvgValues();
         Toast finishedDownload = Toast.makeText(context, "Download finished.", Toast.LENGTH_LONG);
         finishedDownload.show();
+        Intent intent = new Intent(context, DeckGalleryActivity.class);
+        context.startActivity(intent);
     }
 
     private void calcAvgValues() {
