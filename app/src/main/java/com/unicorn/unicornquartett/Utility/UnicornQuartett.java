@@ -22,7 +22,7 @@ public class UnicornQuartett extends Application {
         Realm realm = Realm.getDefaultInstance();
 
         // IMPORTANT For database testing purposes only
-//        clearDatabaseRealm(realm);
+        clearDatabaseRealm(realm);
 
 
     }
