@@ -82,7 +82,6 @@ public class PlayStandardModeActivity extends AppCompatActivity {
     }
 
     private void handleResume() {
-
         game = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
         user = game.getUsers().first();
         difficulty = user.getDifficulty();
@@ -185,7 +184,13 @@ public class PlayStandardModeActivity extends AppCompatActivity {
             ArrayList<String> shemaForCard = getShemaForCard(deck, i);
             tmpHashmap.put("desc", shemaForCard.get(0));
             tmpHashmap.put("unit", shemaForCard.get(1));
-            tmpHashmap.put("higherWins", shemaForCard.get(2));
+            String hw="";
+            if(shemaForCard.get(2).equals("true")){
+                hw = "Higher Value";
+            } else {
+                hw = "Lower Value";
+            }
+            tmpHashmap.put("higherWins", hw);
             listOfDeckAttributes.add(tmpHashmap);
         }
 
