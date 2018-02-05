@@ -10,14 +10,30 @@ import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.unicorn.unicornquartett.R;
+import com.unicorn.unicornquartett.domain.Deck;
+import com.unicorn.unicornquartett.domain.DeckDTO;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import io.realm.Realm;
 
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
@@ -35,7 +51,6 @@ import static com.unicorn.unicornquartett.Utility.Constants.ULTRA_HIGH_FACTOR;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
 
 public class Util {
-
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -228,6 +243,68 @@ public class Util {
         headers.put("Content-Type", "multipart/form/data");
         headers.put("Authorization", auth);
         return headers;
+    }
+
+    public static void getDownloadableDecks(Context context) {
+        final List<DeckDTO> downloadableDecks = new ArrayList<>();
+        final RequestQueue requestQueue = Volley.newRequestQueue(context);
+        String url = "http://quartett.af-mba.dbis.info/decks/";
+        JsonArrayRequest jsArrReqeust = new JsonArrayRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++) {
+                            Gson gson = new Gson();
+                            try {
+                                DeckDTO deckDTO = gson.fromJson(response.get(i).toString(), DeckDTO.class);
+                                downloadableDecks.add(deckDTO);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        createNewDecksIfAvailable(downloadableDecks);
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String credentials = "student:afmba";
+                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
+                headers.put("Content-Type", "application/json");
+                headers.put("Content-Type", "multipart/form/data");
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+
+        requestQueue.add(jsArrReqeust);
+
+    }
+
+    private static void createNewDecksIfAvailable(List<DeckDTO> downloadableDecks) {
+        final Realm realm = Realm.getDefaultInstance();
+        for (DeckDTO downloadableDeck : downloadableDecks) {
+            Deck tmpDeck = realm.where(Deck.class).equalTo("id", downloadableDeck.getId()).findFirst();
+            realm.beginTransaction();
+            DeckDTO deckDTO = realm.createObject(DeckDTO.class);
+            deckDTO.setId(downloadableDeck.getId());
+            deckDTO.setName(downloadableDeck.getName());
+            if (tmpDeck != null) {
+                //TODO checkIfDeckIsUpToDate()
+            } else {
+                Deck emptyDeck = realm.createObject(Deck.class);
+                emptyDeck.setId(downloadableDeck.getId());
+                emptyDeck.setName(downloadableDeck.getName());
+            }
+            realm.commitTransaction();
+        }
     }
 
 }

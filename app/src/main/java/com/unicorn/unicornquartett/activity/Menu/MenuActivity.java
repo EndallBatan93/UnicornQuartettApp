@@ -24,32 +24,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.activity.Decks.DeckGalleryActivity;
 import com.unicorn.unicornquartett.activity.PlayGame.ChooseGameActivity;
 import com.unicorn.unicornquartett.activity.Profile.ProfileActivity;
-import com.unicorn.unicornquartett.domain.Deck;
-import com.unicorn.unicornquartett.domain.DeckDTO;
 import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.User;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -66,6 +50,7 @@ import static com.unicorn.unicornquartett.Utility.Constants.RAPTOR_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.STARWARS_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
+import static com.unicorn.unicornquartett.Utility.Util.getDownloadableDecks;
 import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 import static com.unicorn.unicornquartett.Utility.Util.getThemeBasedMP;
 import static com.unicorn.unicornquartett.Utility.Util.setBackGroundConstant;
@@ -81,7 +66,6 @@ public class MenuActivity extends AppCompatActivity {
     private final Context c = this;
     private final Realm realm = Realm.getDefaultInstance();
     private TextView profileName;
-    private final List<DeckDTO> downloadableDecks = new ArrayList<>();
 
     @Override
     public void onResume() {
@@ -124,8 +108,6 @@ public class MenuActivity extends AppCompatActivity {
         Game standard = realm.where(Game.class).equalTo("id", 1).findFirst();
         RealmResults<User> allUsers = realm.where(User.class).findAll();
 
-        getDownloadableDecks();
-
         checkForRunningGames(playButton, unicorn, standard);
 
         checkForOrLoadUser(allUsers);
@@ -154,66 +136,6 @@ public class MenuActivity extends AppCompatActivity {
         } else if (standard != null) {
             playButton.setText(R.string.PlayGame1);
 
-        }
-    }
-
-    private void getDownloadableDecks() {
-        final RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "http://quartett.af-mba.dbis.info/decks/";
-        JsonArrayRequest jsArrReqeust = new JsonArrayRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        for (int i = 0; i < response.length(); i++) {
-                            Gson gson = new Gson();
-                            try {
-                                DeckDTO deckDTO = gson.fromJson(response.get(i).toString(), DeckDTO.class);
-                                downloadableDecks.add(deckDTO);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        createNewDecksIfAvailable(downloadableDecks);
-
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String credentials = "student:afmba";
-                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
-                headers.put("Content-Type", "application/json");
-                headers.put("Content-Type", "multipart/form/data");
-                headers.put("Authorization", auth);
-                return headers;
-            }
-        };
-
-        requestQueue.add(jsArrReqeust);
-    }
-
-    private void createNewDecksIfAvailable(List<DeckDTO> downloadableDecks) {
-        for (DeckDTO downloadableDeck : downloadableDecks) {
-            Deck tmpDeck = realm.where(Deck.class).equalTo("id", downloadableDeck.getId()).findFirst();
-            if (tmpDeck != null) {
-                //TODO
-                //checkIfDeckIsUpToDate()
-            } else {
-                realm.beginTransaction();
-                DeckDTO deckDTO = realm.createObject(DeckDTO.class);
-                deckDTO.setId(downloadableDeck.getId());
-                deckDTO.setName(downloadableDeck.getName());
-                Deck emptyDeck = realm.createObject(Deck.class);
-                emptyDeck.setId(downloadableDeck.getId());
-                emptyDeck.setName(downloadableDeck.getName());
-                realm.commitTransaction();
-            }
         }
     }
 
@@ -450,6 +372,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void resumeLogicMenu() {
+        getDownloadableDecks(this);
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         if (!allUsers.isEmpty()) {
             User user = allUsers.first();
