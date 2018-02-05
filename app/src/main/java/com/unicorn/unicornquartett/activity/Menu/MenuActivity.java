@@ -359,7 +359,7 @@ public class MenuActivity extends AppCompatActivity {
             View createUserDialogView = layoutInflater.inflate(R.layout.dialog_create_user, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(c);
             builder.setView(createUserDialogView);
-            final EditText userInputDialogText = (EditText) createUserDialogView.findViewById(R.id.createUserInput);
+            final EditText userInputDialogText = createUserDialogView.findViewById(R.id.createUserInput);
 
             builder.setCancelable(false)
                     .setPositiveButton("Create User", new DialogInterface.OnClickListener() {

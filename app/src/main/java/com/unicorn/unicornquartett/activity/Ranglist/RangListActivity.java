@@ -42,7 +42,7 @@ public class RangListActivity extends AppCompatActivity {
         assert user != null;
         setTheme();
         loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
-        ListView rangList = (ListView) findViewById(R.id.ranglistView);
+        ListView rangList = findViewById(R.id.ranglistView);
         profileName = findViewById(R.id.userName);
 
         assert user != null;

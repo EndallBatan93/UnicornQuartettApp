@@ -430,11 +430,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                                 String unit = o.getString("unit");
                                 String what_wins = o.getString("what_wins");
                                 Boolean hW;
-                                if (what_wins.equals("higher_wins")) {
-                                    hW = true;
-                                } else {
-                                    hW = false;
-                                }
+                                hW = what_wins.equals("higher_wins");
                                 Shema shemaForCard = createShemaForCard(deckId, name, unit, hW);
                                 listOfShemas.add(shemaForCard);
                             } catch (JSONException e) {

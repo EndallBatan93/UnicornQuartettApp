@@ -4,19 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.unicorn.unicornquartett.R;
-import com.unicorn.unicornquartett.Utility.Constants;
 import com.unicorn.unicornquartett.activity.Menu.MenuActivity;
 
 import io.realm.Realm;
 
-import static com.unicorn.unicornquartett.Utility.Constants.*;
+import static com.unicorn.unicornquartett.Utility.Constants.WINNER;
 
 public class EndGameActivity extends AppCompatActivity {
 

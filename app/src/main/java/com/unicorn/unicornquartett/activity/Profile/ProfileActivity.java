@@ -304,8 +304,7 @@ public class ProfileActivity extends AppCompatActivity {
             createUserDialog.show();
         }
     }
-
-
+    
     @SuppressLint("ValidFragment")
     private class ThemeChooser extends DialogFragment {
         public ThemeChooser() {
