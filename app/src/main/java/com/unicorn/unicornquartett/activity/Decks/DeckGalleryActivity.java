@@ -165,7 +165,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     private void downloadDeck(final Deck deck) {
 
-        Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_LONG);
+        Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_SHORT);
         progressToast.show();
         requestQueue = Volley.newRequestQueue(this);
         requestQueueImage = Volley.newRequestQueue(this);

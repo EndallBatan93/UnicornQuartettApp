@@ -97,8 +97,7 @@ public class ChooseGameActivity extends AppCompatActivity {
                 if (standardGame == null) {
                     new DeckChooser("playStandard");
                 } else {
-                    Intent intent = new Intent(activityContext, PlayStandardModeActivity.class);
-                    activityContext.startActivity(intent);
+                    new GameResumer("playStandard");
                 }
             }
         });
@@ -138,57 +137,99 @@ public class ChooseGameActivity extends AppCompatActivity {
     }
 
     @SuppressLint("ValidFragment")
+    private class GameResumer extends DialogFragment {
+        public GameResumer(final String mode) {
+            final AlertDialog.Builder gameResumerDialog = new AlertDialog.Builder(activityContext);
+            gameResumerDialog.setTitle("Resume game");
+            gameResumerDialog.setNeutralButton("Delete & New", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    RealmResults<Game> unicornGames;
+                    realm.beginTransaction();
+                    if (mode.equals("playUnicorn")) {
+                        unicornGames = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findAll();
+                        Game game = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findFirst();
+                        if(game != null){
+                            selectedDeck = game.getDeck();
+                        }
+                    } else {
+                        unicornGames = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findAll();
+                        Game game = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findFirst();
+                        if(game != null){
+                            selectedDeck = game.getDeck();
+                        }
+                    }
+                    unicornGames.deleteAllFromRealm();
+                    realm.commitTransaction();
+                    startGame(mode);
+                }
+            });
+            gameResumerDialog.setPositiveButton("Resume", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    resumeGame(mode);
+                }
+            });
+            gameResumerDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            gameResumerDialog.create();
+            gameResumerDialog.show();
+        }
+
+        private void resumeGame(String mode) {
+            if (mode.equals("playUnicorn")) {
+                Intent unicornIntent = new Intent(activityContext, PlayStandardModeActivity.class);
+                activityContext.startActivity(unicornIntent);
+            } else {
+                Intent standardIntent = new Intent(activityContext, PlayStandardModeActivity.class);
+                activityContext.startActivity(standardIntent);
+            }
+        }
+    }
+
+    @SuppressLint("ValidFragment")
     private class DeckChooser extends DialogFragment {
         public DeckChooser(final String mode) {
             final User user = realm.where(User.class).findFirst();
             final RealmList<String> decks = user.getDecks();
             if (decks.isEmpty()) {
-                Toast noDecksToast = Toast.makeText(activityContext,"No decks found. Please download one.", Toast.LENGTH_LONG);
+                Toast noDecksToast = Toast.makeText(activityContext, "No decks found. Please download one.", Toast.LENGTH_LONG);
                 noDecksToast.show();
             } else {
-                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activityContext);
-                alertDialog.setTitle("Choose your Deck")
+                final AlertDialog.Builder deckChooserDialog = new AlertDialog.Builder(activityContext);
+                deckChooserDialog.setTitle("Choose your Deck")
                         .setSingleChoiceItems(decks.toArray(new String[decks.size()]), -1, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 selectedDeck = decks.get(i);
                             }
                         });
-                alertDialog.setPositiveButton("Play", new DialogInterface.OnClickListener() {
+                deckChooserDialog.setPositiveButton("Play", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (mode.equals("playUnicorn")) {
-                            startGameActivity(UNICORN);
-                        } else {
-                            startGameActivity(STANDARD);
-                        }
+                        startGame(mode);
                     }
                 });
 
-                alertDialog.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        RealmResults<Game> unicornGames;
-                        realm.beginTransaction();
-                        if (mode.equals("playUnicorn")) {
-                            unicornGames = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findAll();
-                        } else {
-                            unicornGames = realm.where(Game.class).equalTo(REALM_ID, STANDARD_GAME).findAll();
-                        }
-                        unicornGames.deleteAllFromRealm();
-                        realm.commitTransaction();
-                        handleInitialization();
-                    }
-                });
-
-                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                deckChooserDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 });
-                alertDialog.create();
-                alertDialog.show();
+                deckChooserDialog.create();
+                deckChooserDialog.show();
             }
+        }
+    }
+
+    private void startGame(String mode) {
+        if (mode.equals("playUnicorn")) {
+            startGameActivity(UNICORN);
+        } else {
+            startGameActivity(STANDARD);
         }
     }
 
@@ -198,7 +239,6 @@ public class ChooseGameActivity extends AppCompatActivity {
             intent = new Intent(activityContext, PlayUnicornModeActivity.class);
         } else {
             intent = new Intent(activityContext, PlayStandardModeActivity.class);
-
         }
         intent.putExtra(SELECTED_DECK, selectedDeck);
         activityContext.startActivity(intent);
