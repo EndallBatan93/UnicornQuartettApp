@@ -27,9 +27,9 @@
         android:id="@+id/deckbutton"
         style="@style/Friends"
         android:layout_width="156dp"
-        android:layout_height="40dp"
+        android:layout_height="42dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="332dp"
+        android:layout_marginTop="14dp"
         android:background="@color/colorPrimaryDark"
         android:onClick="goToDeckGalleryActivity"
         android:text="@string/DeckGallery"
@@ -37,40 +37,41 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/playbutton" />
 
     <Button
         android:id="@+id/ranglisbutton"
         android:layout_width="156dp"
         android:layout_height="39dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="232dp"
+        android:layout_marginTop="14dp"
         android:background="@color/colorPrimaryDark"
         android:onClick="goToRangListActivity"
         android:text="@string/RangList"
-        android:textColor="@android:color/background_light"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/friendButton" />
 
     <Button
         android:id="@+id/friendButton"
         android:layout_width="156dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="41dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="280dp"
+        android:layout_marginTop="14dp"
         android:background="@color/colorPrimaryDark"
         android:onClick="goToFriendActivity"
         android:text="@string/Friend"
-        android:textColor="@android:color/background_light"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/deckbutton" />
 
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"

@@ -326,7 +326,7 @@ public class MenuActivity extends AppCompatActivity {
     public void goToRangListActivity(View view) {
         Button_SOUND.start();
         final AlertDialog.Builder rangListDialog = new AlertDialog.Builder(this);
-        rangListDialog.setTitle("Rang List\n");
+        rangListDialog.setTitle("Highscore\n");
         rangListDialog.setMessage("This content will be available for only 29.99$ soon.\n");
         rangListDialog.create();
         rangListDialog.show();
