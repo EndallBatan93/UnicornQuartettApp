@@ -8,10 +8,10 @@ import io.realm.RealmObject;
  */
 
 public class Avg extends RealmObject {
-    int deckID;
-    String name;
-    RealmList<Double> avgDoubles;
-    RealmList<Boolean> higherWins;
+    private int deckID;
+    private String name;
+    private RealmList<Double> avgDoubles;
+    private RealmList<Boolean> higherWins;
 
     public int getDeckID() {
         return deckID;

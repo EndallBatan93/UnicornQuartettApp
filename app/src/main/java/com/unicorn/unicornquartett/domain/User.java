@@ -67,8 +67,8 @@ public class User extends RealmObject {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId() {
+        this.id = 1;
     }
 
     public String getName() {
@@ -99,8 +99,8 @@ public class User extends RealmObject {
         return friends;
     }
 
-    public void setFriends(RealmList<User> friends) {
-        this.friends = friends;
+    public void setFriends() {
+        this.friends = null;
     }
 
     public String getDifficulty() {
@@ -115,15 +115,15 @@ public class User extends RealmObject {
         return runningOffline;
     }
 
-    public void setRunningOffline(Boolean runningOffline) {
-        this.runningOffline = runningOffline;
+    public void setRunningOffline() {
+        this.runningOffline = false;
     }
 
     public Boolean getRunningOnline() {
         return runningOnline;
     }
 
-    public void setRunningOnline(Boolean runningOnline) {
-        this.runningOnline = runningOnline;
+    public void setRunningOnline() {
+        this.runningOnline = false;
     }
 }

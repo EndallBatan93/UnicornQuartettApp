@@ -24,12 +24,10 @@ import io.realm.Realm;
 import io.realm.RealmList;
 
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
-import static com.unicorn.unicornquartett.Utility.Constants.IMAGE_PATH;
 import static com.unicorn.unicornquartett.Utility.Util.getCardImageFromStorage;
 
 public class DisplayCardActivity extends AppCompatActivity {
-    Realm realm = Realm.getDefaultInstance();
-    TextView cardName;
+    private final Realm realm = Realm.getDefaultInstance();
     private int currentCardIndex = 0;
 
     @Override
@@ -48,7 +46,7 @@ public class DisplayCardActivity extends AppCompatActivity {
     }
 
 
-    public Card getCurrentCard(Boolean left, RealmList<Card> cards) {
+    private Card getCurrentCard(Boolean left, RealmList<Card> cards) {
         if (left) {
             if (this.currentCardIndex == 0) {
                 this.currentCardIndex = cards.size() - 1;
@@ -66,23 +64,23 @@ public class DisplayCardActivity extends AppCompatActivity {
         return cards.get(this.currentCardIndex);
     }
 
-    public Deck getDeck() {
+    private Deck getDeck() {
         Intent intent = getIntent();
         String deckName = intent.getStringExtra("DeckName");
         return realm.where(Deck.class).equalTo("name", deckName).findFirst();
 
     }
 
-    public void setCardImage(Card card) {
-        Bitmap cardBitmap = getCardImageFromStorage(IMAGE_PATH, card.getDeckID(), card.getId());
+    private void setCardImage(Card card) {
+        Bitmap cardBitmap = getCardImageFromStorage(card.getDeckID(), card.getId());
         ImageView cardImage = findViewById(R.id.card);
         cardImage.setImageBitmap(cardBitmap);
 
     }
 
-    public void setAttributes(final Deck deck, Card card) {
+    private void setAttributes(final Deck deck, Card card) {
         setContentView(R.layout.activity_display_card);
-        cardName = findViewById(R.id.cardName);
+        TextView cardName = findViewById(R.id.cardName);
 
         String[] buildDescriptors = {"desc", "value", "unit", "higherWins"};
         int[] buildLocation = {R.id.cardAttributeTitle, R.id.cardAttributeValue, R.id.cardAttributeUnit, R.id.cardAttributeHW};
@@ -130,13 +128,13 @@ public class DisplayCardActivity extends AppCompatActivity {
         });
     }
 
-    public ArrayList<String> getShemaForCard(Deck deck, int i) {
+    private ArrayList<String> getShemaForCard(Deck deck, int i) {
         RealmList<Shema> shemas = deck.getShemaList();
         Shema shema = shemas.get(i);
         ArrayList<String> attributeDescriptionList = new ArrayList<>();
-        attributeDescriptionList.add(shema.getProperty());
-        attributeDescriptionList.add(shema.getUnit());
-        attributeDescriptionList.add(shema.getHigherWins().toString());
+        attributeDescriptionList.add(shema != null ? shema.getProperty() : null);
+        attributeDescriptionList.add(shema != null ? shema.getUnit() : null);
+        attributeDescriptionList.add(shema != null ? shema.getHigherWins().toString() : null);
         return attributeDescriptionList;
     }
 }

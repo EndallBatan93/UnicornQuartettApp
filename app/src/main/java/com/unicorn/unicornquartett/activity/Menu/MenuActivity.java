@@ -45,7 +45,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -73,17 +72,16 @@ import static com.unicorn.unicornquartett.Utility.Util.setBackGroundConstant;
 import static com.unicorn.unicornquartett.Utility.Util.setSoundConstants;
 import static com.unicorn.unicornquartett.Utility.Util.verifyStoragePermissions;
 
+@SuppressWarnings("ConstantConditions")
 public class MenuActivity extends AppCompatActivity {
     private static final int REQUEST_FROM_GALLERY = 2;
-    static final int REQUEST_TAKE_PHOTO = 1;
+    private static final int REQUEST_TAKE_PHOTO = 1;
     private boolean doubleBackToExitPressedOnce = false;
 
-    String mCurrentPhotoPath;
-    final Context c = this;
-    Realm realm = Realm.getDefaultInstance();
-    TextView profileName;
-    String theme;
-    List<DeckDTO> downloadableDecks = new ArrayList<>();
+    private final Context c = this;
+    private final Realm realm = Realm.getDefaultInstance();
+    private TextView profileName;
+    private final List<DeckDTO> downloadableDecks = new ArrayList<>();
 
     @Override
     public void onResume() {
@@ -139,7 +137,7 @@ public class MenuActivity extends AppCompatActivity {
 
         } else {
             User user = allUsers.first();
-            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+            loadImageFromStorage(user != null ? user.getImageAbsolutePath() : null, user != null ? user.getImageIdentifier() : null);
             profileName.setText(user.getName());
             if (user.getTheme() != null) {
                 initializeTheme(user.getTheme());
@@ -166,11 +164,10 @@ public class MenuActivity extends AppCompatActivity {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        JSONArray returnedJson = response;
-                        for (int i = 0; i < returnedJson.length(); i++) {
+                        for (int i = 0; i < response.length(); i++) {
                             Gson gson = new Gson();
                             try {
-                                DeckDTO deckDTO = gson.fromJson(returnedJson.get(i).toString(), DeckDTO.class);
+                                DeckDTO deckDTO = gson.fromJson(response.get(i).toString(), DeckDTO.class);
                                 downloadableDecks.add(deckDTO);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -205,6 +202,7 @@ public class MenuActivity extends AppCompatActivity {
         for (DeckDTO downloadableDeck : downloadableDecks) {
             Deck tmpDeck = realm.where(Deck.class).equalTo("id", downloadableDeck.getId()).findFirst();
             if (tmpDeck != null) {
+                //TODO
                 //checkIfDeckIsUpToDate()
             } else {
                 realm.beginTransaction();
@@ -227,16 +225,16 @@ public class MenuActivity extends AppCompatActivity {
     }
 
 
-    private File createImageFile() throws IOException {
+    private File createImageFile() {
         User user = realm.where(User.class).findFirst();
-        String imageFileName = user.getImageIdentifier();
+        String imageFileName = user != null ? user.getImageIdentifier() : null;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        user.setImageAbsolutePath(storageDir.getAbsolutePath());
+        user.setImageAbsolutePath(storageDir != null ? storageDir.getAbsolutePath() : null);
         File image = new File(storageDir, imageFileName);
 
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
+        String mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
 
@@ -245,13 +243,9 @@ public class MenuActivity extends AppCompatActivity {
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
+            File photoFile;
+            photoFile = createImageFile();
 
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
@@ -275,7 +269,7 @@ public class MenuActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO) {
             if (resultCode == RESULT_OK) {
                 User user = realm.where(User.class).findFirst();
-                loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+                loadImageFromStorage(user != null ? user.getImageAbsolutePath() : null, user != null ? user.getImageIdentifier() : null);
             }
         } else if (requestCode == REQUEST_FROM_GALLERY) {
             if (resultCode != RESULT_CANCELED) {
@@ -356,7 +350,7 @@ public class MenuActivity extends AppCompatActivity {
 
         public CreateUserDialogFragment() {
             LayoutInflater layoutInflater = LayoutInflater.from(c);
-            View createUserDialogView = layoutInflater.inflate(R.layout.dialog_create_user, null);
+            @SuppressLint("InflateParams") View createUserDialogView = layoutInflater.inflate(R.layout.dialog_create_user, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(c);
             builder.setView(createUserDialogView);
             final EditText userInputDialogText = createUserDialogView.findViewById(R.id.createUserInput);
@@ -376,7 +370,7 @@ public class MenuActivity extends AppCompatActivity {
         private void takePictureDialog() {
 
             LayoutInflater layoutInflater = LayoutInflater.from(c);
-            View createPhotoDialogView = layoutInflater.inflate(R.layout.dialog_create_photo, null);
+            @SuppressLint("InflateParams") View createPhotoDialogView = layoutInflater.inflate(R.layout.dialog_create_photo, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(c);
             builder.setView(createPhotoDialogView);
 
@@ -402,12 +396,12 @@ public class MenuActivity extends AppCompatActivity {
     private void createUser(String username) {
         realm.beginTransaction();
         User user = realm.createObject(User.class);
-        user.setId(1);
+        user.setId();
         user.setName(username);
         user.setDifficulty(DIFFICULTY_1);
-        user.setFriends(null);
-        user.setRunningOffline(false);
-        user.setRunningOnline(false);
+        user.setFriends();
+        user.setRunningOffline();
+        user.setRunningOnline();
         user.setImageIdentifier(user.getName() + user.getId() + ".jpg");
         user.setDate(new Date());
         profileName.setText(username);
@@ -445,7 +439,6 @@ public class MenuActivity extends AppCompatActivity {
         setSoundConstants(themeBasedMP);
         setBackGroundConstant(mode);
         setTheme();
-        assert user != null;
         realm.beginTransaction();
         user.setTheme(mode);
         realm.commitTransaction();
@@ -460,8 +453,7 @@ public class MenuActivity extends AppCompatActivity {
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         if (!allUsers.isEmpty()) {
             User user = allUsers.first();
-            assert user != null;
-            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+            loadImageFromStorage(user != null ? user.getImageAbsolutePath() : null, user.getImageIdentifier());
             profileName.setText(user.getName());
             if (user.getTheme() != null) {
                 setTheme();

@@ -36,16 +36,13 @@ import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_THEME;
 
 public class Util {
 
-    private Context context;
-
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
+    private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
     public Util(Context context) {
-        this.context = context;
     }
 
     // 1. PERMISSIONS
@@ -174,7 +171,7 @@ public class Util {
 
     //4. IMAGES
 
-    public static int getResizeFactor(int size){
+    private static int getResizeFactor(int size){
         int resizeFactor = 1;
         if (size > 4000){
             resizeFactor = ULTRA_HIGH_FACTOR;
@@ -189,15 +186,13 @@ public class Util {
         return resizeFactor;
     }
 
-    public static int getResizedDim(int size, int factor){
-        int resized = size / factor;
-        return resized;
+    private static int getResizedDim(int size, int factor){
+        return size / factor;
     }
 
-    public static Bitmap getCardImageFromStorage(String absolutePath, int deckID, int cardID){
-        File file = new File(absolutePath+deckID+"-"+cardID+".jpg");
-        Bitmap cardImage = BitmapFactory.decodeFile(file.getAbsolutePath());
-        return cardImage;
+    public static Bitmap getCardImageFromStorage(int deckID, int cardID){
+        File file = new File(Constants.IMAGE_PATH +deckID+"-"+cardID+".jpg");
+        return BitmapFactory.decodeFile(file.getAbsolutePath());
     }
 
     public static Bitmap getImageFromStorage(String absolutePath, String imageIdentifier){
@@ -205,7 +200,7 @@ public class Util {
         try {
             File f = new File(absolutePath, imageIdentifier);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            int factor = 1;
+            int factor;
             if (b.getHeight() > b.getWidth()) {
                 factor = getResizeFactor(b.getHeight());
             } else {

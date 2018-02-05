@@ -62,8 +62,8 @@ public class Deck extends RealmObject {
         return isDownloaded;
     }
 
-    public void setIsDownloaded(Boolean isDownloaded) {
-        this.isDownloaded = isDownloaded;
+    public void setIsDownloaded() {
+        this.isDownloaded = true;
     }
 
     public RealmList<Shema> getShemaList() {

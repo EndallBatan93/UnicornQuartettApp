@@ -16,44 +16,45 @@ import static com.unicorn.unicornquartett.Utility.Constants.DIFFICULTY_2;
  * Created by max on 28.12.17.
  */
 
+@SuppressWarnings("ConstantConditions")
 public class ArtificialIntelligence {
 
-    Realm realm = Realm.getDefaultInstance();
-    String difficulty;
-    Avg avg;
-    RealmList<Double> attributesValues;
-    RealmList<Boolean> higherWins;
-    RealmList<Double> relativeValues = new RealmList<>();
+    private final String difficulty;
+    private final RealmList<Double> attributesValues;
+    private final RealmList<Boolean> higherWins;
+    private final RealmList<Double> relativeValues = new RealmList<>();
 
     public ArtificialIntelligence(Deck deck, String difficulty) {
         this.difficulty = difficulty;
-        this.avg = realm.where(Avg.class).equalTo("deckID", deck.getId()).findFirst();
-        this.attributesValues = avg.getAvgDoubles();
+        Realm realm = Realm.getDefaultInstance();
+        Avg avg = realm.where(Avg.class).equalTo("deckID", deck.getId()).findFirst();
+        this.attributesValues = avg != null ? avg.getAvgDoubles() : null;
         this.higherWins = avg.getHigherWins();
     }
 
     public int playCard (Card card){
-        int attributePosition = 0;
+        int attributePosition;
         calcRelativeValues(card);
-        if (difficulty.equals(DIFFICULTY_1)) {
-            attributePosition = chooseEasy();
-        }
-        else if (difficulty.equals(DIFFICULTY_2)) {
-            attributePosition = chooseMedium();
-        }
-        else {
-            attributePosition = chooseHard();
+        switch (difficulty) {
+            case DIFFICULTY_1:
+                attributePosition = chooseEasy();
+                break;
+            case DIFFICULTY_2:
+                attributePosition = chooseMedium();
+                break;
+            default:
+                attributePosition = chooseHard();
+                break;
         }
         return attributePosition;
     }
 
     private int chooseEasy() {
-        int easyPosition = ThreadLocalRandom.current().nextInt(0, relativeValues.size());
-        return easyPosition;
+        return ThreadLocalRandom.current().nextInt(0, relativeValues.size());
     }
 
     private int chooseMedium() {
-        int mediumPosition = 0;
+        int mediumPosition;
         double firstHighestValue = Double.MIN_VALUE, secondHighestValue = Double.MIN_VALUE;
         int firstPosition = 0, secondPosition = 0;
 
@@ -94,7 +95,7 @@ public class ArtificialIntelligence {
     private void calcRelativeValues(Card card) {
         for(int i=0; i< card.getAttributes().size(); i++){
             Double tmpCardValue = Double.parseDouble(card.getAttributes().get(i));
-            if (higherWins.get(i) == true) {
+            if (higherWins.get(i)) {
                 Double tmpRelativeValue = tmpCardValue / attributesValues.get(i);
                 relativeValues.add(tmpRelativeValue);
             } else {

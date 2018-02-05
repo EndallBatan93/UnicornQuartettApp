@@ -10,7 +10,7 @@ import io.realm.RealmObject;
 public class CardImageList extends RealmObject {
     private int deckId;
     private int cardID;
-    RealmList<String> listOfImagesURLsForOneCard;
+    private RealmList<String> listOfImagesURLsForOneCard;
 
     public CardImageList() {
     }

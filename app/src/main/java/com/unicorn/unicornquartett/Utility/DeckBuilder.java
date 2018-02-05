@@ -22,33 +22,31 @@ import io.realm.RealmList;
  * Created by max on 17.01.18.
  */
 
+@SuppressWarnings("ConstantConditions")
 public class DeckBuilder {
-    private Realm realm;
-    private Deck deckToFill;
-    private ShemaList shemaList;
-    private CardDTOList cardDTOList;
-    private RealmList<Card> cardList;
-    private DeckDTO deckDTO;
-    private User user;
-    RealmList<CardDTO> listOfCardDTO = new RealmList<>();
-    RealmList<CardImageList> listOfCardImagesURLs = new RealmList<>();
+    private final Realm realm;
+    private final Deck deckToFill;
+    private final DeckDTO deckDTO;
+    private final User user;
+    private RealmList<CardDTO> listOfCardDTO = new RealmList<>();
+    private RealmList<CardImageList> listOfCardImagesURLs = new RealmList<>();
 
     public DeckBuilder(Context context, Deck emptyDeck) {
         realm = Realm.getDefaultInstance();
 
         int deckID = emptyDeck.getId();
         deckToFill = realm.where(Deck.class).equalTo("id", deckID).findFirst();
-        shemaList = realm.where(ShemaList.class).equalTo("deckID", deckID).findFirst();
-        cardDTOList = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst();
+        ShemaList shemaList = realm.where(ShemaList.class).equalTo("deckID", deckID).findFirst();
+        CardDTOList cardDTOList = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst();
         deckDTO = realm.where(DeckDTO.class).equalTo("id", deckID).findFirst();
         user = realm.where(User.class).findFirst();
 
-        listOfCardDTO = cardDTOList.getListOfCardDTO();
-        listOfCardImagesURLs = deckDTO.getListOfCardImagesURLs();
+        listOfCardDTO = cardDTOList != null ? cardDTOList.getListOfCardDTO() : null;
+        listOfCardImagesURLs = deckDTO != null ? deckDTO.getListOfCardImagesURLs() : null;
 
         //List Of Shemas
         realm.beginTransaction();
-        deckToFill.setShemaList(shemaList.getListOfShemas());
+        deckToFill.setShemaList(shemaList != null ? shemaList.getListOfShemas() : null);
         //Number Of Cards
         deckToFill.setNumberOfCards(cardDTOList.getListOfCardDTO().size());
         realm.commitTransaction();
@@ -70,7 +68,7 @@ public class DeckBuilder {
         Avg deckAvg = realm.createObject(Avg.class);
         deckAvg.setAvgDoubles(calcAvgsForDeck(deck));
         deckAvg.setHigherWins(createHigherWinsList(deck));
-        deckAvg.setName(deck.getName());
+        deckAvg.setName(deck != null ? deck.getName() : null);
         deckAvg.setDeckID(deck.getId());
         realm.commitTransaction();
     }
@@ -106,7 +104,7 @@ public class DeckBuilder {
         RealmList<Card> cardListToAdd = new RealmList<>();
         for (int i = 0; i < deckToFill.getNumberOfCards(); i++) {
             CardDTO cardDTO = listOfCardDTO.get(i);
-            RealmList<Double> valueListDouble = cardDTO.getValueList();
+            RealmList<Double> valueListDouble = cardDTO != null ? cardDTO.getValueList() : null;
             RealmList<String> cardValues = new RealmList<>();
             for (Double aDouble : valueListDouble) {
                 cardValues.add(aDouble.toString());
@@ -134,7 +132,7 @@ public class DeckBuilder {
         realm.beginTransaction();
         deckToFill.setCards(cardListToAdd);
         //Is downloaded = true
-        deckToFill.setIsDownloaded(true);
+        deckToFill.setIsDownloaded();
         realm.commitTransaction();
     }
 

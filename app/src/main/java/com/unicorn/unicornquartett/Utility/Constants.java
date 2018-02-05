@@ -1,6 +1,7 @@
 package com.unicorn.unicornquartett.Utility;
 
 
+import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 
 import com.unicorn.unicornquartett.R;
@@ -69,6 +70,7 @@ public final class Constants {
     public static final String INSTANT_WIN = "win";
 
     // IMAGES
+    @SuppressLint("SdCardPath")
     public static final String IMAGE_PATH = "/data/user/0/com.unicorn.unicornquartett/app_Images/";
 
 }

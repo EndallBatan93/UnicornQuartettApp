@@ -20,16 +20,16 @@ import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 
 public class RangListActivity extends AppCompatActivity {
-    Realm realm = Realm.getDefaultInstance();
-    TextView profileName;
+    private final Realm realm = Realm.getDefaultInstance();
+    private TextView profileName;
     @Override
     public void onResume() {
         super.onResume();
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         if (!allUsers.isEmpty()) {
             User user = allUsers.first();
-            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
-            profileName.setText(user.getName());
+            loadImageFromStorage(user != null ? user.getImageAbsolutePath() : null, user != null ? user.getImageIdentifier() : null);
+            profileName.setText(user != null ? user.getName() : null);
         }
     }
     @Override
@@ -39,14 +39,12 @@ public class RangListActivity extends AppCompatActivity {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<User> all = realm.where(User.class).findAll();
         User user = all.first();
-        assert user != null;
         setTheme();
-        loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+        loadImageFromStorage(user != null ? user.getImageAbsolutePath() : null, user != null ? user.getImageIdentifier() : null);
         ListView rangList = findViewById(R.id.ranglistView);
         profileName = findViewById(R.id.userName);
 
-        assert user != null;
-        profileName.setText(user.getName());
+        profileName.setText(user != null ? user.getName() : null);
 
 
     }

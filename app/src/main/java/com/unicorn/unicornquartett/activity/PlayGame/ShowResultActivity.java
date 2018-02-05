@@ -21,6 +21,8 @@ import com.unicorn.unicornquartett.domain.Game;
 import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
 
+import java.util.Objects;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -28,7 +30,6 @@ import static com.unicorn.unicornquartett.Utility.Constants.DRAW;
 import static com.unicorn.unicornquartett.Utility.Constants.EVEN_STACKS;
 import static com.unicorn.unicornquartett.Utility.Constants.GAME_CATEGORY;
 import static com.unicorn.unicornquartett.Utility.Constants.GAME_RUNNING;
-import static com.unicorn.unicornquartett.Utility.Constants.IMAGE_PATH;
 import static com.unicorn.unicornquartett.Utility.Constants.INSTANT_WIN;
 import static com.unicorn.unicornquartett.Utility.Constants.MULTIPLY;
 import static com.unicorn.unicornquartett.Utility.Constants.NONE;
@@ -46,21 +47,19 @@ import static com.unicorn.unicornquartett.Utility.Constants.USER;
 import static com.unicorn.unicornquartett.Utility.Constants.WINNER;
 import static com.unicorn.unicornquartett.Utility.Util.getCardImageFromStorage;
 
+@SuppressWarnings("ConstantConditions")
 public class ShowResultActivity extends AppCompatActivity {
-    Realm realm = Realm.getDefaultInstance();
-    String category;
-    Game game;
-    Deck deck;
-    Intent playIntent;
-    Intent finishIntent;
-    String multiply;
-    String instantWin;
-    TextView status;
-    TextView winnerLoser;
-    User user;
-    RealmResults<Game> gamesToDelete;
-    Context context = this;
+    private final Realm realm = Realm.getDefaultInstance();
+    private Game game;
+    private Intent playIntent;
+    private Intent finishIntent;
+    private TextView status;
+    private TextView winnerLoser;
+    private User user;
+    private RealmResults<Game> gamesToDelete;
+    private final Context context = this;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,9 +70,9 @@ public class ShowResultActivity extends AppCompatActivity {
         user = realm.where(User.class).findFirst();
 
         //some unicorn stuff
-        multiply = getIntent().getStringExtra(MULTIPLY);
-        instantWin = getIntent().getStringExtra(INSTANT_WIN);
-        category = getIntent().getStringExtra(GAME_CATEGORY);
+        String multiply = getIntent().getStringExtra(MULTIPLY);
+        String instantWin = getIntent().getStringExtra(INSTANT_WIN);
+        String category = getIntent().getStringExtra(GAME_CATEGORY);
         String randomEvent = getIntent().getStringExtra(RANDOM_EVENT_TRIGGERED);
 
         if (category != null && category.equals(STANDARD)) {
@@ -119,7 +118,7 @@ public class ShowResultActivity extends AppCompatActivity {
 
             LinearLayout mainResultLayout = findViewById(R.id.resultMainLayout);
 
-            if (category.equals(STANDARD)) {
+            if (Objects.equals(category, STANDARD)) {
                 game = realm.where(Game.class).equalTo("id", STANDARD_GAME).findFirst();
                 playIntent = new Intent(context, PlayStandardModeActivity.class);
                 playIntent.putExtra(GAME_RUNNING, "true");
@@ -128,7 +127,7 @@ public class ShowResultActivity extends AppCompatActivity {
                 playIntent = new Intent(context, PlayUnicornModeActivity.class);
                 playIntent.putExtra(GAME_RUNNING, "true");
             }
-            deck = realm.where(Deck.class).equalTo("name", game.getDeck()).findFirst();
+            Deck deck = realm.where(Deck.class).equalTo("name", game.getDeck()).findFirst();
 
             mainResultLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -171,46 +170,51 @@ public class ShowResultActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void setImage(Card card, ImageView cardView) {
-        Bitmap cardBitmap = getCardImageFromStorage(IMAGE_PATH, card.getDeckID(), card.getId());
+    private void setImage(Card card, ImageView cardView) {
+        Bitmap cardBitmap = getCardImageFromStorage(card.getDeckID(), card.getId());
         cardView.setImageBitmap(cardBitmap);
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateStacks(String winner, Game game) {
         realm.beginTransaction();
         Card firstPlayerCard = game.getUsercards().first();
         Card firstOpponentCard = game.getOpponentCards().first();
-        if (winner.equals(PLAYER)) {
-            game.getUsercards().add(firstOpponentCard);
-            game.getOpponentCards().remove(firstOpponentCard);
-            game.getUsercards().move(0, game.getUsercards().size() - 1);
-            if (game.getDrawnCards() != null && !game.getDrawnCards().isEmpty()) {
-                for (Card card : game.getDrawnCards()) {
-                    game.getUsercards().add(card);
+        switch (winner) {
+            case PLAYER:
+                game.getUsercards().add(firstOpponentCard);
+                game.getOpponentCards().remove(firstOpponentCard);
+                game.getUsercards().move(0, game.getUsercards().size() - 1);
+                if (game.getDrawnCards() != null && !game.getDrawnCards().isEmpty()) {
+                    for (Card card : game.getDrawnCards()) {
+                        game.getUsercards().add(card);
+                    }
+                    game.getDrawnCards().clear();
+                    game.setDrawnInRow(0);
                 }
-                game.getDrawnCards().clear();
-                game.setDrawnInRow(0);
-            }
 
-        } else if (winner.equals(OPPONENT)) {
-            game.getOpponentCards().add(firstPlayerCard);
-            game.getUsercards().remove(firstPlayerCard);
-            game.getOpponentCards().move(0, game.getOpponentCards().size() - 1);
-            if (game.getDrawnCards() != null && !game.getDrawnCards().isEmpty()) {
-                for (Card card : game.getDrawnCards()) {
-                    game.getOpponentCards().add(card);
+                break;
+            case OPPONENT:
+                game.getOpponentCards().add(firstPlayerCard);
+                game.getUsercards().remove(firstPlayerCard);
+                game.getOpponentCards().move(0, game.getOpponentCards().size() - 1);
+                if (game.getDrawnCards() != null && !game.getDrawnCards().isEmpty()) {
+                    for (Card card : game.getDrawnCards()) {
+                        game.getOpponentCards().add(card);
+                    }
+                    game.getDrawnCards().clear();
+                    game.setDrawnInRow(0);
                 }
-                game.getDrawnCards().clear();
-                game.setDrawnInRow(0);
-            }
 
-        } else if (winner.equals(DRAW)) {
-            int increasedDrawn = game.getDrawnInRow() + 1;
-            game.setDrawnInRow(increasedDrawn);
-            game.getDrawnCards().add(firstPlayerCard);
-            game.getDrawnCards().add(firstOpponentCard);
-            game.getUsercards().remove(firstPlayerCard);
-            game.getOpponentCards().remove(firstOpponentCard);
+                break;
+            case DRAW:
+                int increasedDrawn = game.getDrawnInRow() + 1;
+                game.setDrawnInRow(increasedDrawn);
+                game.getDrawnCards().add(firstPlayerCard);
+                game.getDrawnCards().add(firstOpponentCard);
+                game.getUsercards().remove(firstPlayerCard);
+                game.getOpponentCards().remove(firstOpponentCard);
+                break;
         }
 
         //resultView

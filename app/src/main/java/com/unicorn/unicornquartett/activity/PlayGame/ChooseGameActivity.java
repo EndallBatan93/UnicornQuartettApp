@@ -39,15 +39,11 @@ import static com.unicorn.unicornquartett.Utility.Constants.UNICORN_GAME;
 import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 
 public class ChooseGameActivity extends AppCompatActivity {
-    Realm realm = Realm.getDefaultInstance();
-    TextView profileName;
-    final Context activityContext = this;
-    String selectedDeck;
-    User user;
-    Game unicornGame;
-    Game standardGame;
-    Button playStandard;
-    Button playUnicorn;
+    private final Realm realm = Realm.getDefaultInstance();
+    private final Context activityContext = this;
+    private String selectedDeck;
+    private Game unicornGame;
+    private Game standardGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,16 +70,16 @@ public class ChooseGameActivity extends AppCompatActivity {
     }
 
     private void handleInitialization() {
-        user = realm.where(User.class).findFirst();
+        User user = realm.where(User.class).findFirst();
         if (user != null) {
-            setTheme(user.getTheme());
+            setTheme();
             loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
             setUserName(user);
         }
         unicornGame = realm.where(Game.class).equalTo(REALM_ID, 2).findFirst();
         standardGame = realm.where(Game.class).equalTo(REALM_ID, 1).findFirst();
-        playStandard = findViewById(R.id.playStandard);
-        playUnicorn = findViewById(R.id.playUnicorn);
+        Button playStandard = findViewById(R.id.playStandard);
+        Button playUnicorn = findViewById(R.id.playUnicorn);
 
         if (unicornGame != null) {
             playUnicorn.setText(R.string.resumeUnicorn);
@@ -118,10 +114,9 @@ public class ChooseGameActivity extends AppCompatActivity {
         });
     }
 
-    public void setUserName(User user) {
-        profileName = findViewById(R.id.userName);
+    private void setUserName(User user) {
+        TextView profileName = findViewById(R.id.userName);
 
-        assert user != null;
         profileName.setText(user.getName());
     }
 
@@ -191,18 +186,19 @@ public class ChooseGameActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @SuppressLint("ValidFragment")
     private class DeckChooser extends DialogFragment {
         public DeckChooser(final String mode) {
             final User user = realm.where(User.class).findFirst();
-            final RealmList<String> decks = user.getDecks();
-            if (decks.isEmpty()) {
+            final RealmList<String> decks = user != null ? user.getDecks() : null;
+            if (decks != null && decks.isEmpty()) {
                 Toast noDecksToast = Toast.makeText(activityContext, "No decks found. Please download one.", Toast.LENGTH_LONG);
                 noDecksToast.show();
             } else {
                 final AlertDialog.Builder deckChooserDialog = new AlertDialog.Builder(activityContext);
                 deckChooserDialog.setTitle("Choose your Deck")
-                        .setSingleChoiceItems(decks.toArray(new String[decks.size()]), -1, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(decks != null ? decks.toArray(new String[decks != null ? decks.size() : 0]) : new String[0], -1, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 selectedDeck = decks.get(i);
@@ -245,7 +241,7 @@ public class ChooseGameActivity extends AppCompatActivity {
         activityContext.startActivity(intent);
     }
 
-    private void setTheme(String mode) {
+    private void setTheme() {
         ConstraintLayout layout = findViewById(R.id.playGameLayout);
         layout.setBackground(getDrawable(BACKGROUND));
     }

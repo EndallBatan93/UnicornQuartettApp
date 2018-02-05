@@ -9,13 +9,13 @@ import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.activity.Menu.MenuActivity;
 
 public class Splash extends Activity {
-    private final int SPLASH_DISPLAY_LENGTH = 1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
 
+        int SPLASH_DISPLAY_LENGTH = 1000;
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {

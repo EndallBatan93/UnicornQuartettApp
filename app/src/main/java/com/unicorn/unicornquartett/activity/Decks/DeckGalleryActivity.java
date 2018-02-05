@@ -1,5 +1,6 @@
 package com.unicorn.unicornquartett.activity.Decks;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -8,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -63,36 +63,29 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
-import static com.unicorn.unicornquartett.Utility.Constants.IMAGE_PATH;
 import static com.unicorn.unicornquartett.Utility.Util.getCardImageFromStorage;
 import static com.unicorn.unicornquartett.Utility.Util.getHeadersForHTTP;
 import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 
+@SuppressWarnings("ConstantConditions")
 public class DeckGalleryActivity extends AppCompatActivity {
 
-    ListView deckListView;
-    final Realm realm = Realm.getDefaultInstance();
-    final Context context = this;
-    TextView profileName;
-    RequestQueue requestQueue;
-    RequestQueue requestQueueImage;
-    RequestQueue.RequestFinishedListener shemaListener;
-    RequestQueue.RequestFinishedListener attributeListener;
-    RequestQueue.RequestFinishedListener imageListener;
-    RequestQueue.RequestFinishedListener imageFileListener;
-    int idInCardDTOList;
-    int endPositionInCardDTOList;
+    private final Realm realm = Realm.getDefaultInstance();
+    private final Context context = this;
+    private TextView profileName;
+    private RequestQueue requestQueue;
+    private RequestQueue requestQueueImage;
+    private RequestQueue.RequestFinishedListener shemaListener;
+    private RequestQueue.RequestFinishedListener attributeListener;
+    private RequestQueue.RequestFinishedListener imageListener;
+    private RequestQueue.RequestFinishedListener imageFileListener;
+    private int idInCardDTOList;
+    private int endPositionInCardDTOList;
 
     @Override
     public void onResume() {
         super.onResume();
         handleDeckGalleryInit();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -107,17 +100,16 @@ public class DeckGalleryActivity extends AppCompatActivity {
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         final User user = allUsers.first();
 
-        assert user != null;
         setTheme();
 
         profileName = findViewById(R.id.userName);
         ListView deckListView = findViewById(R.id.decksListView);
 
-        setUserName(user);
+        setUserName();
         final RealmResults<Deck> decks = realm.where(Deck.class).findAll();
 
-        List<String> deckNames = new ArrayList<String>();
-        List<Integer> imageList = new ArrayList<>();
+        List<String> deckNames = new ArrayList<>();
+        @SuppressWarnings("MismatchedQueryAndUpdateOfCollection") List<Integer> imageList = new ArrayList<>();
         if (decks.size() != 0) {
             for (Deck deck : decks) {
                 String deckName = deck.getName();
@@ -137,19 +129,19 @@ public class DeckGalleryActivity extends AppCompatActivity {
                     checkIfWiFiIsOn(decks, position);
                 } else {
                     Deck deckIdentity = decks.get(position);
-                    goToDisplayCardActivity(view, deckIdentity.getName());
+                    goToDisplayCardActivity(deckIdentity != null ? deckIdentity.getName() : null);
                 }
             }
         });
 
-        loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+        loadImageFromStorage(user != null ? user.getImageAbsolutePath() : null, user.getImageIdentifier());
     }
 
     private void checkIfWiFiIsOn(RealmResults<Deck> decks, int position) {
         ConnectivityManager cm =
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        NetworkInfo activeNetwork = cm != null ? cm.getActiveNetworkInfo() : null;
 
         boolean isConnectedWithWIFI = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting() &&
@@ -254,7 +246,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
     private void getCardImages(Deck deck) {
         final int deckID = deck.getId();
         final CardDTO cardDTO = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst().getListOfCardDTO().get(idInCardDTOList);
-        final int cardId = cardDTO.getId();
+        final int cardId = cardDTO != null ? cardDTO.getId() : 0;
         String url = "http://quartett.af-mba.dbis.info/decks/" + deckID + "/cards/" + cardId + "/images/";
         final RealmList<String> imageListForOneCard = new RealmList<>();
         JsonArrayRequest jsArrReqeust = new JsonArrayRequest
@@ -262,10 +254,9 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        JSONArray returnedJson = response;
-                        for (int i = 0; i < returnedJson.length(); i++) {
+                        for (int i = 0; i < response.length(); i++) {
                             try {
-                                JSONObject o = returnedJson.getJSONObject(i);
+                                JSONObject o = response.getJSONObject(i);
                                 String image = o.getString("image");
                                 imageListForOneCard.add(image);
                             } catch (JSONException e) {
@@ -328,7 +319,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
         requestQueueImage.add(imageRequest);
     }
 
-    protected Uri saveImageToInternalStorage(Bitmap bitmap, int cardId, int deckID, int nthImage) {
+    private Uri saveImageToInternalStorage(Bitmap bitmap, int cardId, int deckID, int nthImage) {
 
         ContextWrapper wrapper = new ContextWrapper(getApplicationContext());
 
@@ -341,7 +332,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
         }
 
         try {
-            OutputStream stream = null;
+            OutputStream stream;
 
             stream = new FileOutputStream(file);
 
@@ -365,7 +356,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
     private void getAttributesForCard(Deck deck) {
         final int deckID = deck.getId();
         CardDTO cardDTO = realm.where(CardDTOList.class).equalTo("deckID", deckID).findFirst().getListOfCardDTO().get(idInCardDTOList);
-        final int cardID = cardDTO.getId();
+        final int cardID = cardDTO != null ? cardDTO.getId() : 0;
         String url = "http://quartett.af-mba.dbis.info/decks/" + deckID + "/cards/" + cardID + "/attributes/";
         final RealmList<Double> valueList = new RealmList<>();
         JsonArrayRequest jsArrReqeust = new JsonArrayRequest
@@ -373,10 +364,9 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        JSONArray returnedJson = response;
-                        for (int i = 0; i < returnedJson.length(); i++) {
+                        for (int i = 0; i < response.length(); i++) {
                             try {
-                                JSONObject o = returnedJson.getJSONObject(i);
+                                JSONObject o = response.getJSONObject(i);
                                 double value = o.getDouble("value");
                                 valueList.add(value);
                             } catch (JSONException e) {
@@ -422,10 +412,9 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        JSONArray returnedJson = response;
-                        for (int i = 0; i < returnedJson.length(); i++) {
+                        for (int i = 0; i < response.length(); i++) {
                             try {
-                                JSONObject o = returnedJson.getJSONObject(i);
+                                JSONObject o = response.getJSONObject(i);
                                 String name = o.getString("name");
                                 String unit = o.getString("unit");
                                 String what_wins = o.getString("what_wins");
@@ -484,11 +473,10 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        JSONArray returnedJson = response;
-                        for (int i = 0; i < returnedJson.length(); i++) {
+                        for (int i = 0; i < response.length(); i++) {
                             try {
                                 Gson gson = new Gson();
-                                CardDTO card = gson.fromJson(returnedJson.get(i).toString(), CardDTO.class);
+                                CardDTO card = gson.fromJson(response.get(i).toString(), CardDTO.class);
                                 CardDTO realmCard = createCardDTO(deckID, card);
                                 cardDTOList.add(realmCard);
                             } catch (JSONException e) {
@@ -545,9 +533,9 @@ public class DeckGalleryActivity extends AppCompatActivity {
             tmpTitleFromNameMap.put("title", deckName);
             if (!decks.get(i).getCards().isEmpty()) {
                 Deck deck = decks.get(i);
-                int deckID = deck.getId();
+                int deckID = deck != null ? deck.getId() : 0;
                 int cardID = deck.getCards().first().getId();
-                Bitmap cardImageFromStorage = getCardImageFromStorage(IMAGE_PATH, deckID, cardID);
+                Bitmap cardImageFromStorage = getCardImageFromStorage(deckID, cardID);
                 ListViewItem tmpListViewItem = new ListViewItem(tmpTitleFromNameMap, cardImageFromStorage);
                 listOfDeckItems.add(tmpListViewItem);
 
@@ -561,12 +549,11 @@ public class DeckGalleryActivity extends AppCompatActivity {
         return listOfDeckItems;
     }
 
-    private void setUserName(User user) {
-        assert user != null;
+    private void setUserName() {
         RealmResults<User> allUsers = realm.where(User.class).findAll();
         if (!allUsers.isEmpty()) {
-            user = allUsers.first();
-            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+            User user = allUsers.first();
+            loadImageFromStorage(user != null ? user.getImageAbsolutePath() : null, user.getImageIdentifier());
             profileName.setText(user.getName());
         }
     }
@@ -612,9 +599,10 @@ public class DeckGalleryActivity extends AppCompatActivity {
             super(context, 0, listViewItemList);
         }
 
+        @SuppressLint("InflateParams")
         @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View view = convertView;
             if (view == null)
                 view = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.listview_image_text, null);
@@ -622,7 +610,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
             TextView title = view.findViewById(R.id.vwiatImageTitle);
             ImageView image = view.findViewById(R.id.vwiatImage);
 
-            String title1 = item.getTitleFromName().get("title");
+            String title1 = item != null ? item.getTitleFromName().get("title") : null;
             title.setText(title1);
             image.setImageBitmap(item.getCardBitmap());
 
@@ -630,7 +618,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
         }
     }
 
-    public void goToDisplayCardActivity(View view, String deckName) {
+    private void goToDisplayCardActivity(String deckName) {
         Intent intent = new Intent(this, DisplayCardActivity.class);
         intent.putExtra("DeckName", deckName);
         startActivity(intent);

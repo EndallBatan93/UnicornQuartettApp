@@ -1,5 +1,6 @@
 package com.unicorn.unicornquartett.activity.PlayGame;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,13 +14,11 @@ import android.widget.TextView;
 import com.unicorn.unicornquartett.R;
 import com.unicorn.unicornquartett.activity.Menu.MenuActivity;
 
-import io.realm.Realm;
-
 import static com.unicorn.unicornquartett.Utility.Constants.WINNER;
 
 public class EndGameActivity extends AppCompatActivity {
 
-    Realm realm = Realm.getDefaultInstance();
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

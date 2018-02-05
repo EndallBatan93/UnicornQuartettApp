@@ -27,7 +27,6 @@ import com.unicorn.unicornquartett.domain.GameResult;
 import com.unicorn.unicornquartett.domain.User;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,16 +55,15 @@ import static com.unicorn.unicornquartett.Utility.Util.setBackGroundConstant;
 import static com.unicorn.unicornquartett.Utility.Util.setSoundConstants;
 import static com.unicorn.unicornquartett.Utility.Util.verifyStoragePermissions;
 
+@SuppressWarnings("ConstantConditions")
 public class ProfileActivity extends AppCompatActivity {
-    final Realm realm = Realm.getDefaultInstance();
-    String mCurrentPhotoPath;
+    private final Realm realm = Realm.getDefaultInstance();
     private static final int REQUEST_FROM_GALLERY = 2;
-    static final int REQUEST_TAKE_PHOTO = 1;
-    Button googlePlayButton;
+    private static final int REQUEST_TAKE_PHOTO = 1;
 
-    String[] diffArray = new String[]{DIFFICULTY_1, DIFFICULTY_2, DIFFICULTY_3};
+    private final String[] diffArray = new String[]{DIFFICULTY_1, DIFFICULTY_2, DIFFICULTY_3};
 
-    final Context c = this;
+    private final Context c = this;
 
     @Override
     public void onResume() {
@@ -74,8 +72,8 @@ public class ProfileActivity extends AppCompatActivity {
         final EditText usernameTextView = findViewById(R.id.username);
         if (!allUsers.isEmpty()) {
             User user = allUsers.first();
-            loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
-            usernameTextView.setText(user.getName());
+            loadImageFromStorage(user != null ? user.getImageAbsolutePath() : null, user != null ? user.getImageIdentifier() : null);
+            usernameTextView.setText(user != null ? user.getName() : null);
         }
     }
 
@@ -87,9 +85,8 @@ public class ProfileActivity extends AppCompatActivity {
         RealmResults<User> all = realm.where(User.class).findAll();
         final User user = all.first();
 
-        assert user != null;
         setTheme();
-        loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+        loadImageFromStorage(user != null ? user.getImageAbsolutePath() : null, user.getImageIdentifier());
         final EditText usernameTextView = findViewById(R.id.username);
         TextView registeredTextView = findViewById(R.id.registered);
         TextView dissView = findViewById(R.id.dissView);
@@ -98,7 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
         TextView statistics = findViewById(R.id.stats);
         Button theme = findViewById(R.id.themeChooser);
         Date date = user.getDate();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd:MM:yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd:MM:yyyy");
         String dateString = dateFormat.format(date);
 
         registeredTextView.setText("Registered since: " + dateString);
@@ -108,22 +105,21 @@ public class ProfileActivity extends AppCompatActivity {
         int won = 0;
         int lost = 0;
         for (GameResult stat : stats) {
-            if(stat.getWon()) {
-                won = won+1;
+            if (stat.getWon()) {
+                won = won + 1;
             } else {
-                lost = lost+1;
+                lost = lost + 1;
             }
         }
 
-        statistics.setText("won: "+won +" || lost: " +lost);
-        if(won > lost) {
+        statistics.setText("won: " + won + " || lost: " + lost);
+        if (won > lost) {
             dissView.setText(R.string.good);
-        } else if(won == lost) {
+        } else if (won == lost) {
             dissView.setText(R.string.medium);
         } else {
             dissView.setText(R.string.bad);
         }
-
 
 
         circleImageView.setOnClickListener(new View.OnClickListener() {
@@ -162,20 +158,16 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    public void connectToGooglePlay(View view) {
-        //tbd
-    }
 
-
-    private File createImageFile() throws IOException {
+    private File createImageFile() {
         User user = realm.where(User.class).findFirst();
-        String imageFileName = user.getImageIdentifier();
+        String imageFileName = user != null ? user.getImageIdentifier() : null;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        user.setImageAbsolutePath(storageDir.getAbsolutePath());
+        user.setImageAbsolutePath(storageDir != null ? storageDir.getAbsolutePath() : null);
         File image = new File(storageDir, imageFileName);
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
+        String mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
 
@@ -184,13 +176,9 @@ public class ProfileActivity extends AppCompatActivity {
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
+            File photoFile;
+            photoFile = createImageFile();
 
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
@@ -212,18 +200,18 @@ public class ProfileActivity extends AppCompatActivity {
     private void takePictureDialog() {
 
         LayoutInflater layoutInflater = LayoutInflater.from(c);
-        View createPhotoDialogView = layoutInflater.inflate(R.layout.dialog_create_photo, null);
+        @SuppressLint("InflateParams") View createPhotoDialogView = layoutInflater.inflate(R.layout.dialog_create_photo, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setView(createPhotoDialogView);
 
         verifyStoragePermissions(this);
 
         builder.setPositiveButton("Take picture", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        realm.beginTransaction();
-                        dispatchTakePictureIntent();
-                    }
-                })
+            public void onClick(DialogInterface dialog, int id) {
+                realm.beginTransaction();
+                dispatchTakePictureIntent();
+            }
+        })
                 .setNeutralButton("Choose picture", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         realm.beginTransaction();
@@ -239,7 +227,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO) {
             if (resultCode == RESULT_OK) {
                 User user = realm.where(User.class).findFirst();
-                loadImageFromStorage(user.getImageAbsolutePath(), user.getImageIdentifier());
+                loadImageFromStorage(user != null ? user.getImageAbsolutePath() : null, user != null ? user.getImageIdentifier() : null);
             }
         } else if (requestCode == REQUEST_FROM_GALLERY) {
             if (resultCode != RESULT_CANCELED) {
@@ -284,12 +272,12 @@ public class ProfileActivity extends AppCompatActivity {
         public DifficultyChooser() {
             realm.beginTransaction();
             final User user = realm.where(User.class).findFirst();
-            final String diff = user.getDifficulty();
+            final String diff = user != null ? user.getDifficulty() : null;
             LayoutInflater layoutInflater = LayoutInflater.from(c);
-            View createUserDialogView = layoutInflater.inflate(R.layout.dialog_difficulty, null);
+            @SuppressLint("InflateParams") View createUserDialogView = layoutInflater.inflate(R.layout.dialog_difficulty, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(c);
             builder.setView(createUserDialogView);
-            builder.setTitle("Choose difficulty | Current: "+diff);
+            builder.setTitle("Choose difficulty | Current: " + diff);
             builder.setCancelable(false)
                     .setSingleChoiceItems(diffArray, -1, new DialogInterface
                             .OnClickListener() {
@@ -304,12 +292,12 @@ public class ProfileActivity extends AppCompatActivity {
             createUserDialog.show();
         }
     }
-    
+
     @SuppressLint("ValidFragment")
     private class ThemeChooser extends DialogFragment {
         public ThemeChooser() {
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
-            final String[] themes = new String[]{STANDARD_THEME, UNICORN_THEME, STARWARS_THEME, RAPTOR_THEME, HOB_THEME, BAY_THEME, };
+            final String[] themes = new String[]{STANDARD_THEME, UNICORN_THEME, STARWARS_THEME, RAPTOR_THEME, HOB_THEME, BAY_THEME,};
             alertDialog.setTitle("Choose a theme")
                     .setSingleChoiceItems(themes, -1, new DialogInterface.OnClickListener() {
 
@@ -336,7 +324,6 @@ public class ProfileActivity extends AppCompatActivity {
         setSoundConstants(themeBasedMP);
         setBackGroundConstant(mode);
         setTheme();
-        assert user != null;
         realm.beginTransaction();
         user.setTheme(mode);
         realm.commitTransaction();
