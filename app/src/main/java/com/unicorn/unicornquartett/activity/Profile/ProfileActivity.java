@@ -284,11 +284,12 @@ public class ProfileActivity extends AppCompatActivity {
         public DifficultyChooser() {
             realm.beginTransaction();
             final User user = realm.where(User.class).findFirst();
+            final String diff = user.getDifficulty();
             LayoutInflater layoutInflater = LayoutInflater.from(c);
             View createUserDialogView = layoutInflater.inflate(R.layout.dialog_difficulty, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(c);
             builder.setView(createUserDialogView);
-
+            builder.setTitle("Choose difficulty | Current: "+diff);
             builder.setCancelable(false)
                     .setSingleChoiceItems(diffArray, -1, new DialogInterface
                             .OnClickListener() {

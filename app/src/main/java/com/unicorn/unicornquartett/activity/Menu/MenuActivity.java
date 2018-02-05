@@ -59,6 +59,7 @@ import io.realm.RealmResults;
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.BAY_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.DIFFICULTY_1;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.HOB_THEME;
 import static com.unicorn.unicornquartett.Utility.Constants.INTRO_SOUND;
@@ -403,7 +404,7 @@ public class MenuActivity extends AppCompatActivity {
         User user = realm.createObject(User.class);
         user.setId(1);
         user.setName(username);
-        user.setDifficulty("Fluffy");
+        user.setDifficulty(DIFFICULTY_1);
         user.setFriends(null);
         user.setRunningOffline(false);
         user.setRunningOnline(false);
