@@ -28,6 +28,8 @@ import io.realm.RealmResults;
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Constants.Button_SOUND;
 import static com.unicorn.unicornquartett.Utility.Constants.Fun_SOUND;
+import static com.unicorn.unicornquartett.Utility.Constants.PLAY_STANDARD;
+import static com.unicorn.unicornquartett.Utility.Constants.PLAY_UNICORN;
 import static com.unicorn.unicornquartett.Utility.Constants.REALM_ID;
 import static com.unicorn.unicornquartett.Utility.Constants.SELECTED_DECK;
 import static com.unicorn.unicornquartett.Utility.Constants.STANDARD;
@@ -95,9 +97,9 @@ public class ChooseGameActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Button_SOUND.start();
                 if (standardGame == null) {
-                    new DeckChooser("playStandard");
+                    new DeckChooser(PLAY_STANDARD);
                 } else {
-                    new GameResumer("playStandard");
+                    new GameResumer(PLAY_STANDARD);
                 }
             }
         });
@@ -108,10 +110,9 @@ public class ChooseGameActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Button_SOUND.start();
                 if (unicornGame == null) {
-                    new DeckChooser("playUnicorn");
+                    new DeckChooser(PLAY_UNICORN);
                 } else {
-                    Intent intent = new Intent(activityContext, PlayUnicornModeActivity.class);
-                    activityContext.startActivity(intent);
+                    new GameResumer(PLAY_UNICORN);
                 }
             }
         });
@@ -146,7 +147,7 @@ public class ChooseGameActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     RealmResults<Game> unicornGames;
                     realm.beginTransaction();
-                    if (mode.equals("playUnicorn")) {
+                    if (mode.equals(PLAY_UNICORN)) {
                         unicornGames = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findAll();
                         Game game = realm.where(Game.class).equalTo(REALM_ID, UNICORN_GAME).findFirst();
                         if(game != null){
@@ -180,7 +181,7 @@ public class ChooseGameActivity extends AppCompatActivity {
         }
 
         private void resumeGame(String mode) {
-            if (mode.equals("playUnicorn")) {
+            if (mode.equals(PLAY_UNICORN)) {
                 Intent unicornIntent = new Intent(activityContext, PlayStandardModeActivity.class);
                 activityContext.startActivity(unicornIntent);
             } else {
@@ -226,16 +227,16 @@ public class ChooseGameActivity extends AppCompatActivity {
     }
 
     private void startGame(String mode) {
-        if (mode.equals("playUnicorn")) {
+        if (mode.equals(PLAY_UNICORN)) {
             startGameActivity(UNICORN);
         } else {
             startGameActivity(STANDARD);
         }
     }
 
-    private void startGameActivity(String game) {
+    private void startGameActivity(String mode) {
         Intent intent;
-        if (game.equals(UNICORN)) {
+        if (mode.equals(UNICORN)) {
             intent = new Intent(activityContext, PlayUnicornModeActivity.class);
         } else {
             intent = new Intent(activityContext, PlayStandardModeActivity.class);

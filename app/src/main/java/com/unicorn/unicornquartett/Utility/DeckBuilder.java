@@ -58,7 +58,7 @@ public class DeckBuilder {
         addDecksToUser();
         //Calc avg values for Deck
         calcAvgValues();
-        Toast finishedDownload = Toast.makeText(context, "Download finished.", Toast.LENGTH_LONG);
+        Toast finishedDownload = Toast.makeText(context, "Download finished.", Toast.LENGTH_SHORT);
         finishedDownload.show();
         Intent intent = new Intent(context, DeckGalleryActivity.class);
         context.startActivity(intent);
