@@ -155,7 +155,9 @@ public class MenuActivity extends AppCompatActivity {
         User user = realm.where(User.class).findFirst();
         String imageFileName = user != null ? user.getImageIdentifier() : null;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        realm.beginTransaction();
         user.setImageAbsolutePath(storageDir != null ? storageDir.getAbsolutePath() : null);
+        realm.commitTransaction();
         File image = new File(storageDir, imageFileName);
 
 

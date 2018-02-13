@@ -102,6 +102,9 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
         setTheme();
 
+        //Cleanup
+        cleanup();
+
         profileName = findViewById(R.id.userName);
         ListView deckListView = findViewById(R.id.decksListView);
 
@@ -674,6 +677,52 @@ public class DeckGalleryActivity extends AppCompatActivity {
     private void setTheme() {
         ConstraintLayout layout = findViewById(R.id.deckGalleryLayout);
         layout.setBackground(getDrawable(BACKGROUND));
+    }
+
+    // CLEANUP
+
+    private void cleanup() {
+        removeOldDTOs();
+        if (requestQueue != null) {
+            requestQueue.stop();
+            requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+                @Override
+                public boolean apply(Request<?> request) {
+                    return true;
+                }
+            });
+        }
+        if (requestQueueImage != null) {
+            requestQueueImage.stop();
+            requestQueueImage.cancelAll(new RequestQueue.RequestFilter() {
+                @Override
+                public boolean apply(Request<?> request) {
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void removeOldDTOs() {
+        realm.beginTransaction();
+        RealmResults<CardDTO> allCardDTOs = realm.where(CardDTO.class).findAll();
+        RealmResults<CardDTOList> allCardDTOLists = realm.where(CardDTOList.class).findAll();
+        RealmResults<DeckDTO> allDeckDTOs = realm.where(DeckDTO.class).findAll();
+        RealmResults<CardImageList> allCardImageLists = realm.where(CardImageList.class).findAll();
+        if (allDeckDTOs != null) {
+            allDeckDTOs.deleteAllFromRealm();
+        }
+        if (allCardDTOs != null) {
+            allCardDTOs.deleteAllFromRealm();
+        }
+        if (allCardDTOLists != null) {
+            allCardDTOLists.deleteAllFromRealm();
+        }
+        if (allCardImageLists != null) {
+            allCardImageLists.deleteAllFromRealm();
+        }
+        realm.commitTransaction();
+
     }
 
 }
