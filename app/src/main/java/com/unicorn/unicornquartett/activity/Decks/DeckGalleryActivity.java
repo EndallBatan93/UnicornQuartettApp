@@ -526,6 +526,8 @@ public class DeckGalleryActivity extends AppCompatActivity {
     @NonNull
     private List<ListViewItem> setImagesForDecks(RealmResults<Deck> decks, List<String> deckNames) {
         List<ListViewItem> listOfDeckItems = new ArrayList<>();
+        Bitmap standardPicture = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.deckplatzhalter);
         for (int i = 0; i < decks.size(); i++) {
 
             HashMap<String, String> tmpTitleFromNameMap = new HashMap<>();
@@ -540,8 +542,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 listOfDeckItems.add(tmpListViewItem);
 
             } else {
-                Bitmap standardPicture = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.deckplatzhalter);
                 ListViewItem tmpListViewItem = new ListViewItem(tmpTitleFromNameMap, standardPicture);
                 listOfDeckItems.add(tmpListViewItem);
             }
