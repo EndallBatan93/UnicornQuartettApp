@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -64,6 +65,7 @@ import io.realm.RealmResults;
 
 import static com.unicorn.unicornquartett.Utility.Constants.BACKGROUND;
 import static com.unicorn.unicornquartett.Utility.Util.getCardImageFromStorage;
+import static com.unicorn.unicornquartett.Utility.Util.getDownloadableDecks;
 import static com.unicorn.unicornquartett.Utility.Util.getHeadersForHTTP;
 import static com.unicorn.unicornquartett.Utility.Util.getImageFromStorage;
 
@@ -151,7 +153,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
 
         if (isConnectedWithWIFI){
-            downloadDeck(decks.get(position));
+            updateDeckDTOs(decks.get(position));
         } else {
             Toast wifiToast = Toast.makeText(context, "Please enable your WIFI. \nDownloading with mobile data is not supported.", Toast.LENGTH_LONG);
             wifiToast.show();
@@ -160,7 +162,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     private void downloadDeck(final Deck deck) {
 
-        Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_SHORT);
+        Toast progressToast = Toast.makeText(context, "Downloading. Please wait ...", Toast.LENGTH_SHORT);
         progressToast.show();
         requestQueue = Volley.newRequestQueue(this);
         requestQueueImage = Volley.newRequestQueue(this);
@@ -202,7 +204,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     private void loadImagesForCards(final Deck deck) {
         requestQueue.removeRequestFinishedListener(attributeListener);
-        Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_SHORT);
+        Toast progressToast = Toast.makeText(context, "Downloading. Please wait ...", Toast.LENGTH_SHORT);
         progressToast.show();
         imageListener = new RequestQueue.RequestFinishedListener() {
             @Override
@@ -225,7 +227,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     private void loadImagesFromURL(Deck deck) {
         requestQueue.removeRequestFinishedListener(imageListener);
-        Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_SHORT);
+        Toast progressToast = Toast.makeText(context, "Downloading. Please wait ...", Toast.LENGTH_SHORT);
         progressToast.show();
         idInCardDTOList = 0;
         final RealmList<CardImageList> listOfCardImagesLists = realm.where(DeckDTO.class).equalTo("id", deck.getId()).findFirst().getListOfCardImagesURLs();
@@ -723,6 +725,18 @@ public class DeckGalleryActivity extends AppCompatActivity {
         }
         realm.commitTransaction();
 
+    }
+
+    private void updateDeckDTOs(final Deck deckToDownload) {
+        Toast updateDeckDTO = Toast.makeText(context, "Checking deck ...", Toast.LENGTH_SHORT);
+        updateDeckDTO.show();
+        getDownloadableDecks(this);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                downloadDeck(deckToDownload);
+            }
+        }, 1200);
     }
 
 }
