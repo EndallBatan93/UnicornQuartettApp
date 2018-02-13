@@ -276,7 +276,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                         requestQueue.removeRequestFinishedListener(imageListener);
                         String err = error.toString();
                         error.printStackTrace();
-                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        Toast errorToast = Toast.makeText(context, "Not correct bullshit deck.", Toast.LENGTH_LONG);
                         errorToast.show();
                     }
                 }) {
@@ -328,7 +328,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                         requestQueue.removeRequestFinishedListener(imageListener);
                         String err = error.toString();
                         error.printStackTrace();
-                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        Toast errorToast = Toast.makeText(context, "Not correct bullshit deck.", Toast.LENGTH_LONG);
                         errorToast.show();
                     }
                 }
@@ -405,7 +405,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                         requestQueue.removeRequestFinishedListener(attributeListener);
                         String err = error.toString();
                         error.printStackTrace();
-                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        Toast errorToast = Toast.makeText(context, "Not correct bullshit deck.", Toast.LENGTH_LONG);
                         errorToast.show();
                     }
                 }) {
@@ -469,7 +469,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                         requestQueue.removeRequestFinishedListener(shemaListener);
                         String err = error.toString();
                         error.printStackTrace();
-                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        Toast errorToast = Toast.makeText(context, "Not correct bullshit deck.", Toast.LENGTH_LONG);
                         errorToast.show();
                     }
                 }) {
@@ -538,7 +538,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                         requestQueue.removeRequestFinishedListener(shemaListener);
                         String err = error.toString();
                         error.printStackTrace();
-                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        Toast errorToast = Toast.makeText(context, "Not correct bullshit deck.", Toast.LENGTH_LONG);
                         errorToast.show();
                     }
                 }) {

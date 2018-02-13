@@ -271,7 +271,7 @@ public class Util {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         String err = error.toString();
-                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        Toast errorToast = Toast.makeText(context, "Something went wrong on the server.", Toast.LENGTH_SHORT);
                         errorToast.show();
                     }
                 }) {
