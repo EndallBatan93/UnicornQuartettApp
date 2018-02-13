@@ -273,13 +273,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
-                            @Override
-                            public boolean apply(Request<?> request) {
-                                return true;
-                            }
-                        });
-                        requestQueue.removeRequestFinishedListener(imageListener);
+                        cancelVolley(requestQueue, imageListener);
                         String err = error.toString();
                         error.printStackTrace();
                         Toast errorToast = Toast.makeText(context, "Not correct bullshit deck.", Toast.LENGTH_LONG);
@@ -294,6 +288,20 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
         requestQueue.add(jsArrReqeust);
 
+    }
+
+    private static void cancelVolley(RequestQueue requestQueue, RequestQueue.RequestFinishedListener imageListener) {
+        cancelQueue(requestQueue);
+        requestQueue.removeRequestFinishedListener(imageListener);
+    }
+
+    private static void cancelQueue(RequestQueue requestQueue) {
+        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+            @Override
+            public boolean apply(Request<?> request) {
+                return true;
+            }
+        });
     }
 
     private void addCardImageList(RealmList<String> imageListForOneCard, int deckID, int cardId) {
@@ -325,13 +333,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 new Response.ErrorListener() { // Error listener
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
-                            @Override
-                            public boolean apply(Request<?> request) {
-                                return true;
-                            }
-                        });
-                        requestQueue.removeRequestFinishedListener(imageListener);
+                        cancelVolley(requestQueue, imageListener);
                         String err = error.toString();
                         error.printStackTrace();
                         Toast errorToast = Toast.makeText(context, "Not correct bullshit deck.", Toast.LENGTH_LONG);
@@ -402,13 +404,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
-                            @Override
-                            public boolean apply(Request<?> request) {
-                                return true;
-                            }
-                        });
-                        requestQueue.removeRequestFinishedListener(attributeListener);
+                        cancelVolley(requestQueue, attributeListener);
                         String err = error.toString();
                         error.printStackTrace();
                         Toast errorToast = Toast.makeText(context, "Not correct bullshit deck.", Toast.LENGTH_LONG);
@@ -466,13 +462,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
-                            @Override
-                            public boolean apply(Request<?> request) {
-                                return true;
-                            }
-                        });
-                        requestQueue.removeRequestFinishedListener(shemaListener);
+                        cancelVolley(requestQueue, shemaListener);
                         String err = error.toString();
                         error.printStackTrace();
                         Toast errorToast = Toast.makeText(context, "Not correct bullshit deck.", Toast.LENGTH_LONG);
@@ -535,13 +525,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
-                            @Override
-                            public boolean apply(Request<?> request) {
-                                return true;
-                            }
-                        });
-                        requestQueue.removeRequestFinishedListener(shemaListener);
+                        cancelVolley(requestQueue, shemaListener);
                         String err = error.toString();
                         error.printStackTrace();
                         Toast errorToast = Toast.makeText(context, "Not correct bullshit deck.", Toast.LENGTH_LONG);
@@ -688,21 +672,11 @@ public class DeckGalleryActivity extends AppCompatActivity {
         removeOldDTOs();
         if (requestQueue != null) {
             requestQueue.stop();
-            requestQueue.cancelAll(new RequestQueue.RequestFilter() {
-                @Override
-                public boolean apply(Request<?> request) {
-                    return true;
-                }
-            });
+            cancelQueue(requestQueue);
         }
         if (requestQueueImage != null) {
             requestQueueImage.stop();
-            requestQueueImage.cancelAll(new RequestQueue.RequestFilter() {
-                @Override
-                public boolean apply(Request<?> request) {
-                    return true;
-                }
-            });
+            cancelQueue(requestQueueImage);
         }
     }
 
