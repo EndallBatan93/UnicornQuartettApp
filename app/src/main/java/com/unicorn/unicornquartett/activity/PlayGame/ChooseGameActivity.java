@@ -137,7 +137,7 @@ public class ChooseGameActivity extends AppCompatActivity {
         public GameResumer(final String mode) {
             final AlertDialog.Builder gameResumerDialog = new AlertDialog.Builder(activityContext);
             gameResumerDialog.setTitle("Resume game");
-            gameResumerDialog.setNeutralButton("Delete & New", new DialogInterface.OnClickListener() {
+            gameResumerDialog.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     RealmResults<Game> unicornGames;
@@ -157,7 +157,8 @@ public class ChooseGameActivity extends AppCompatActivity {
                     }
                     unicornGames.deleteAllFromRealm();
                     realm.commitTransaction();
-                    startGame(mode);
+                    Intent intent = new Intent(activityContext, ChooseGameActivity.class);
+                    activityContext.startActivity(intent);
                 }
             });
             gameResumerDialog.setPositiveButton("Resume", new DialogInterface.OnClickListener() {
@@ -245,5 +246,7 @@ public class ChooseGameActivity extends AppCompatActivity {
         ConstraintLayout layout = findViewById(R.id.playGameLayout);
         layout.setBackground(getDrawable(BACKGROUND));
     }
+
+
 
 }
