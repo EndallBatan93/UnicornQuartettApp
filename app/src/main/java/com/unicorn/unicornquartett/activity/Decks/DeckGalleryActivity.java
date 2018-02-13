@@ -669,7 +669,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
     // CLEANUP
 
     private void cleanup() {
-        removeOldDTOs();
         if (requestQueue != null) {
             requestQueue.stop();
             cancelQueue(requestQueue);
@@ -678,6 +677,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
             requestQueueImage.stop();
             cancelQueue(requestQueueImage);
         }
+        removeOldDTOs();
     }
 
     private void removeOldDTOs() {
