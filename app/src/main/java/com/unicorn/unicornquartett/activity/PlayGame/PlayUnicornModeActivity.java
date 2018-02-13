@@ -177,8 +177,9 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
 
         for (int i = 0; i < indices.size(); i += 2) {
             opponentCards.add(deck.getCards().get(indices.get(i)));
-            userCards.add(deck.getCards().get(indices.get(i + 1)));
-
+            if (i+1 < indices.size()) {
+                userCards.add(deck.getCards().get(indices.get(i + 1)));
+            }
         }
         setStatus();
     }
@@ -277,7 +278,7 @@ public class PlayUnicornModeActivity extends AppCompatActivity {
 
                     intent.putExtra(GAME_CATEGORY, UNICORN);
 
-                    int chanceToRandomStuff = ThreadLocalRandom.current().nextInt(0, 9);
+                    int chanceToRandomStuff = ThreadLocalRandom.current().nextInt(0, 12);
                     if(chanceToRandomStuff < 3) {
                         int randomEventIndex = ThreadLocalRandom.current().nextInt(0, 2);
                         randomRandomlyTriggeredUnicornEvent(randomEventIndex, round);
