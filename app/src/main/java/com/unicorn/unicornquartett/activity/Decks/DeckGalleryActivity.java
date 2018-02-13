@@ -237,8 +237,6 @@ public class DeckGalleryActivity extends AppCompatActivity {
     }
 
     private void buildDeckFromDTOs(Deck deck) {
-        Toast progressToast = Toast.makeText(context, "Downloading. Please wait", Toast.LENGTH_SHORT);
-        progressToast.show();
 
         new DeckBuilder(context, deck);
     }
