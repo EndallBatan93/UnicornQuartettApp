@@ -275,13 +275,7 @@ public class Util {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String credentials = "student:afmba";
-                String auth = "Basic " + "c3R1ZGVudDphZm1iYQ==";
-                headers.put("Content-Type", "application/json");
-                headers.put("Content-Type", "multipart/form/data");
-                headers.put("Authorization", auth);
-                return headers;
+                return Util.getHeadersForHTTP();
             }
         };
 
