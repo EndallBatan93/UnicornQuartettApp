@@ -267,7 +267,17 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
+                        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+                            @Override
+                            public boolean apply(Request<?> request) {
+                                return true;
+                            }
+                        });
+                        requestQueue.removeRequestFinishedListener(imageListener);
+                        String err = error.toString();
+                        error.printStackTrace();
+                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        errorToast.show();
                     }
                 }) {
             @Override
@@ -309,8 +319,17 @@ public class DeckGalleryActivity extends AppCompatActivity {
                 new Response.ErrorListener() { // Error listener
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // Do something with error response
+                        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+                            @Override
+                            public boolean apply(Request<?> request) {
+                                return true;
+                            }
+                        });
+                        requestQueue.removeRequestFinishedListener(imageListener);
+                        String err = error.toString();
                         error.printStackTrace();
+                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        errorToast.show();
                     }
                 }
         );
@@ -377,8 +396,17 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-                        System.out.println("sth went wrong");
+                        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+                            @Override
+                            public boolean apply(Request<?> request) {
+                                return true;
+                            }
+                        });
+                        requestQueue.removeRequestFinishedListener(attributeListener);
+                        String err = error.toString();
+                        error.printStackTrace();
+                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        errorToast.show();
                     }
                 }) {
             @Override
@@ -402,7 +430,9 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     private void getShemaForDeck(Deck deck) {
         final int deckId = deck.getId();
+        //No cards url --> null
         int cardID = realm.where(CardDTOList.class).equalTo("deckID", deckId).findFirst().getListOfCardDTO().first().getId();
+
         String url = "http://quartett.af-mba.dbis.info/decks/" + deckId + "/cards/" + cardID + "/attributes/";
         final RealmList<Shema> listOfShemas = new RealmList<>();
         JsonArrayRequest jsArrReqeust = new JsonArrayRequest
@@ -430,7 +460,17 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
+                        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+                            @Override
+                            public boolean apply(Request<?> request) {
+                                return true;
+                            }
+                        });
+                        requestQueue.removeRequestFinishedListener(shemaListener);
+                        String err = error.toString();
+                        error.printStackTrace();
+                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        errorToast.show();
                     }
                 }) {
             @Override
@@ -489,8 +529,17 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-                        System.out.println("sth went wrong");
+                        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+                            @Override
+                            public boolean apply(Request<?> request) {
+                                return true;
+                            }
+                        });
+                        requestQueue.removeRequestFinishedListener(shemaListener);
+                        String err = error.toString();
+                        error.printStackTrace();
+                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        errorToast.show();
                     }
                 }) {
             @Override
@@ -626,4 +675,5 @@ public class DeckGalleryActivity extends AppCompatActivity {
         ConstraintLayout layout = findViewById(R.id.deckGalleryLayout);
         layout.setBackground(getDrawable(BACKGROUND));
     }
+
 }

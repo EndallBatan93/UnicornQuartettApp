@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -246,7 +247,7 @@ public class Util {
         return headers;
     }
 
-    public static void getDownloadableDecks(Context context) {
+    public static void getDownloadableDecks(final Context context) {
         final List<DeckDTO> downloadableDecks = new ArrayList<>();
         final RequestQueue requestQueue = Volley.newRequestQueue(context);
         String url = "http://quartett.af-mba.dbis.info/decks/";
@@ -264,13 +265,14 @@ public class Util {
                             }
                         }
                         createNewDecksIfAvailable(downloadableDecks);
-
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
+                        String err = error.toString();
+                        Toast errorToast = Toast.makeText(context, "Somebody did something very stupid:\n"+err, Toast.LENGTH_LONG);
+                        errorToast.show();
                     }
                 }) {
             @Override
