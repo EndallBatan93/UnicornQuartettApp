@@ -95,7 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
         TextView statistics = findViewById(R.id.stats);
         Button theme = findViewById(R.id.themeChooser);
         Date date = user.getDate();
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd:MM:yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         String dateString = dateFormat.format(date);
 
         registeredTextView.setText("Registered since: " + dateString);

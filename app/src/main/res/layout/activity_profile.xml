@@ -77,13 +77,16 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_weight="2">
+
             <TextView
                 android:id="@+id/registered"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="8dp"
                 android:text="Registerd since 11-12-2017"
-                android:textSize="9sp"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
