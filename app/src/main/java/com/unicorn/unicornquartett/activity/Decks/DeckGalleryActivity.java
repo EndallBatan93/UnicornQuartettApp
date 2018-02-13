@@ -92,6 +92,7 @@ public class DeckGalleryActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        cleanup();
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
     }
