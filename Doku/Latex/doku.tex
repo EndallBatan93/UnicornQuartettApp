@@ -54,9 +54,9 @@ Autoquartett  bezeichnet wird. Es folgen die genauen Beschreibungen der Spielele
 \subsubsection{Quartettkarte}
 
 \begin{figure}[!ht]
-\begin{center}
-    \includegraphics[scale=0.3]{pics/gameplay.jpg}
-    \caption{Mansory Siracusa aus dem Tuning Deck}
+\begin{center} 
+\includegraphics[scale=0.1]{pics/QuartettKarte.png}
+    \caption{Die Geniesserin  aus dem Bettsport Deck}
 \end{center}
 \end{figure}
 
@@ -218,74 +218,47 @@ Wenn die App nicht innerhalb angenehmer Reaktionszeiten reagieren kann, soll der
 
 \section{Konzept und Entwurf}
 \subsection{Mockups}
-Vor dem eigentlichen Implementieren der App wurden Mockups erstellt. Diese
-sollten einen ersten Eindruck vom User Interface geben und dienten als
-Orientierung während der eigentlichen Implementierung.
-
+Im Vorfeld der Implementierung musste natürlich auch ein Entwurfskonzept erarbeitet werden. Dieses Entwurfskonzept sollte die grundlegende Architektur der Applikation beschreiben und die einzelenen Screens in einer schlichten und funktionalen Art vorbereiten.
+Wir haben bei der Erstellung dieser Screens auf eine softwareunterstütze Lösung verzichtet und haben diese per Hand erstellt.
 \begin{figure}[!ht]
 \begin{center}
-	\includegraphics[scale=0.75]{img/mockup_drawer.png}
-	\caption{Navigation Drawer}
-	\label{drawer}
+	\includegraphics[scale=0.5]{pics/overview.png}
+	\caption{Komplettansicht-Prozessablauf}
+	\label{overview}
 \end{center}
-An jeder beliebigen Stelle der App hat man Zugriff auf den Navigation Drawer.
-Dieser ist ein Menü, welches sich von der linken Seite durch eine Wischgeste
-herausziehen lässt. Abbildung ~\ref{drawer} zeigt das Konzept dieses Menüs.
+Darstellung der gesamten Möglichkeiten beziehungsweise Prozesse die in der App realisiert werden sollten. 
+Das Profil ist von allen Screens aus erreichbar es sei denn man befindet sich in einem Spielprozess.
 \end{figure}
 
 \begin{figure}[!ht]
 \begin{center}
-	\includegraphics[scale=0.7]{img/mockup_game_process_1.png}
-	\caption{Singleplayer Einstellungen}
-	\label{singleplayer1}
+	\includegraphics[scale=0.4]{pics/userhandling.png}
+	\caption{Erstellung des Benutzers und bearbeiten der Daten}
+	\label{UserProfil}
 \end{center}
-Abbildung ~\ref{singleplayer1} skizziert den Prozess, welchen der Benutzer
-vollführen muss, um vom Hauptmenü zum Einzelspieler Modus zu gelangen.
+Abbildung ~\ref{UserProfil} skizziert den Prozess, welchen der Benutzer
+vollführen muss, um einen Nutzer zu erstellen und wie er eingegebene Daten später wieder ändern kann.
 \end{figure}
 
 \begin{figure}[!ht]
 \begin{center}
-	\includegraphics[scale=0.55]{img/mockup_game_process_2.png}
-	\caption{Singleplayer}
-	\label{singleplayer2}
+	\includegraphics[scale=0.4]{pics/deckgallery.png}
+	\caption{Kartenansicht/Kartengallerie}
+	\label{DeckGallery}
 \end{center}
-Nach dem das Deck ausgewählt wurde befindet sich der Spieler im eigentlichen
-Einzelspieler Modus. Abbildung ~\ref{singleplayer2} skizziert das
-Spielgeschehen.
+In der Abbildung ~\ref{DeckGallery} wählt der Nutzer eines seiner Decks aus und kann sich dessen Karten ansehen.
 \end{figure}
 
 \begin{figure}[!ht]
 \begin{center}
 	\centering
-	\includegraphics[scale=0.6]{img/mockup_settings.png}
-	\caption{Settings Activity}
-	\label{settings}
+	\includegraphics[scale=0.4]{pics/gameplay.png}
+	\caption{Spielablauf}
+	\label{gamePlay}
 \end{center}
-Einstellungen kann der Benutzer in der Settings Activity vornehmen. Allerdings
-sind die Möglichkeiten in unserer App sehr beschränkt wie Abbildung
-~\ref{settings} zeigt.
+Diese Screens zeigen den grundlegenden Ablauf eines Spiel. Diese sind zwar unterschiedlich je nach Modi aber zum Zeitpunkt der Mockups ging es nur um ein generelles Darstellen des Prozesses.
+~\ref{gamePlay} zeigt.
 \end{figure}
-
-\begin{figure}[!ht]
-\begin{center}
-	\includegraphics[scale=0.58]{img/mockup_stats_1.png}
-	\caption{Statistics Activity}
-	\label{stats1}
-\end{center}
-Außerdem haben wir Mockups zu den Statistiken erstellt. Hier kann der Benutzer
-seine bisherigen Erfolge einsehen. Diese Activity ist auf den Abbildungen
-~\ref{stats1} und ~\ref{stats2} zu sehen
-\end{figure}
-
-\begin{figure}[!ht]
-\begin{center}
-\centering
-	\includegraphics[scale=0.75]{img/mockup_stats_2.png}
-	\caption{Statistics Activity}
-	\label{stats2}
-\end{center}
-\end{figure}
-
 \clearpage
 
 \section{Implementierung}
