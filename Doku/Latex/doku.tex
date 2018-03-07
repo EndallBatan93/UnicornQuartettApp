@@ -47,9 +47,9 @@ Es folgen dann ausgewählte Implementierungsdetails und abschließend ein Abglei
 \section{Grundlagen}
 \subsection{Quartettspiel}
 
-Das Spielziel beim klassischen Quartett besteht darin möglichst viele Quartette, von vier zusammengehörigen
-Karten zu sammeln. Das Unicorn-Quartet spielt im Standardmodus eine Abwandlung des klassischen 
-Quartetts, das sich Supertrumpf nennt bzw. im Umgangssprachlichen als
+Beim klassischen Quartett geht das darum, möglichst viele Quartette (Ansammlung von 4 Karten gleicher Kategorie) zu erspielen.
+Dabei werden die Werte der Kontrahenten verglichen und der höhere Wert gewinnt. Der Gewinner bekommt die unterlegenden Karten.
+Das Unicorn-Quartet spielt im Standardmodus eine Abwandlung des klassischen Quartetts, das sich Supertrumpf nennt bzw. im Umgangssprachlichen als
 Autoquartett  bezeichnet wird. Es folgen die genauen Beschreibungen der Spielelemente und Spielmodi.
 \subsubsection{Quartettkarte}
 
@@ -60,157 +60,65 @@ Autoquartett  bezeichnet wird. Es folgen die genauen Beschreibungen der Spielele
 \end{center}
 \end{figure}
 
-In der oberen Abbildung wird eine Quartettkarte dargestellt. Deren Bild zeigt
-einen Gegenstand, das zum Gengere des Quartettdecks passt, in unserem Fall ein
-Auto, das zu einem Autoquartett gehört. In der Mitte befindet sich der Name des
-Gegenstandes, hierbei handelt es sich um einen Golf GTI. Der untere Teil besteht
-aus Attributen mit ihren Attributwerten, die im Spielverlauf verglichen werden.
+In Abb.1 wird eine Quartettkarte im Unicorn-Quartett visualisiert.
+Ganz oben wird der aktuelle Spielstand angezeigt und wer aktuell am Zug ist.
+Dann folgt ein Bild, auf dem das entsprechende Objekt der Karte zu sehen ist, in diesem Fall ein Auto.
+Unten werden die zur Auswahl stehenden Werte angezeigt.
+
 
 \subsubsection{Spielverlauf}
+An einem Spiel nehmen der Spieler und eine Künstliche Intelligenz als Kontrahent teil.
+Der menschliche Spieler legt ein Quartett und den Spielmodus fest.
+Hierbei kann sich zwischen einem normalen Spiel und dem sog. Unicorn Modus entscheiden.
+Zu Spielbeginn werden die Karten des Quartetts gemischt und gleichmäßig an die beiden Kontrahenten verteilt.
+Der menschliche Spieler ist immer zuerst an der Reihe und wählt einen Wert von seiner aktuellen Karte aus, mit dem er seinen Kontrahenten stechen möchte.
+Nachdem er seinen Wert bestätigt hat, werden sein Wert und der des Kontrahenten verglichen. Wer den besseren Wert hatte, bekommt die Karte des Verlierers.
+Anschließend ist der andere Spieler an der Reihe, d.h. es wird unabhängig vom Ausgang der vorheringen Runde immer abgewechselt.
+Gewinner des Spiels ist ganz klassisch der Spieler, der am Ende alle Karten hat.
 
-Am Spiel nehmen zwei Personen teil, der Benutzer der App ein Computergegener
-oder über den Multiplayer eine weitere Person. Der Benutzer entscheidet sich für
-ein Quartett. Die Karten werden gemischt und gleichmäßig unter den beiden
-Spielern verteilt. Beide Spieler haben nun einen umgedrehten Stapel an Karten.
-Die oberste Karte ist aufgedeckt, diese Karte ist nur für die jeweilige Person
-sichtbar. Der Benutzer wählt ein Attribut der Karte aus, das er mit der anderen
-Person vergleichen möchte. Nun werden die Werte der beiden Attribute verglichen.
-Gewinner der Runde ist die Person, die den besseren Attributswert hat. Dieser
-gewinnt die Karte. Klassisch wird gespielt bis einer der beiden Personen keine
-Karten mehr hat.
-
-\begin{figure}[!ht]
-\begin{center}
-    \includegraphics[scale=0.6]{img/map_quartett.png}
-    \caption{Darstellung eines Quartettspielverlaufes}
-\end{center}
-\end{figure}
-
-In unserem Fall haben wir uns gegen den klassischen Spielmodus entschieden, da
-dieser im Kontext einer Mobilen Anwendung ungeeignet ist. Gründe dafür sind,
-z.B. die relative Länge eines Spieles.
-\newline
-Daher haben wir uns für 4 unterschiedlichen Spielmodi entschieden die im
-Nachfolgenden erklärt werden.
+Um etwas Abwechslung in den normalen Quartett Spielfluss zu schaffen, wurde der Unicorn Modus entwickelt.
 
 \subsubsection{Spielmodi}
 
-\textbf{Rundenbasiert:}
-Gewonnen hat derjenige, mit den meisten gewonnenen Runden. Zu berücksichtigen
-ist das Rundenlimit, das vor Spielbeginn gesetzt wird.
+\textbf{Normal:}
+Der klassische Modus. Hier wird abwechselnd gespielt. Gewonnen hat derjenige, der am Ende alle Karten hat.
 
-\ \newline
-\textbf{Punktebasiert}:
-Vor dem Spiel wird eine Punktegrenze bestimmt. Gewinner ist derjenige, der diese
-Punktegrenze zuerst erreicht hat.
+\newline
+\textbf{Unicorn}:
+Der überraschende Modus. Auch hier wird abwechselnd gespielt. Jedoch können beide Kontrahenten ab einer Siegesserie von 3 hintereinander gewonnen Runden, sofern sie selbst
+an der Reihe sind, besondere, zufällig generierte Aktionen ausführen, die zu ihrem direkten Vorteil sind.
+Außerdem werden zufällig generierte Events, die beide Spieler positiv oder negetiv beinflussen, in das Spiel gestreut, ohne dass die Spieler darauf Einfluss nehmen können.
+Gewonnen hat der Spieler, der alle Karten hat oder die richtige Aktion ausgespielt hat.
 
-\ \newline
-\textbf{Zeitbasiert:}
-Es wird ein Zeitlimit vor dem Spiel gesetzt. Gewonnen hat die Person, die
-am meisten Punkte erreicht hat, bevor dass Zeitlimit abgelaufen ist.
 
-\subsection{Mobile Plattform}
-Der Kerngedanke dieses Projekts war das Kennenlernen einer Mobilen Plattform und
-ihrer Besonderheiten im Zusammenhang mit der Anwendungsentwicklung für diese
-Plattform. Wir haben uns für Android als Zielplattform entschieden.
+\subsection{Mobile Anwendungen}
+Ziel dieses Projektes war es, sich mit der Entwicklung von mobilen Anwendungen auf einer beliebigen Plattform zu befassen und erste Erfahrungen zu sammeln.
 
-Die wichtigsten Eigenarten von Android, im Vergleich zu der Entwicklung von
-Software auf Computern, sind das sogenannte Sandbox-Prinzip des Betriebssystems,
-die viel größere Abhängigkeit von Multithreading für ein performantes System und
-die sogenannten Activities und deren Lifecycle.
+Da beide Entwickler ein Android Endgerät besitzen und auch Interesse an dieser Umgebung haben, war sofort Android als Plattform gesetzt.
+ 
+Weitere Vorteile bei der Entwicklung von Android Anwendungen sind die große Verbreitung von Android Endgeräten und die Verwandtheit zur normalen Java Entwicklung.
 
-Kommen wir zunächst zu Androids Sandbox-Prinzip. Android führt Anwendungen in
-einer Sandbox aus, einer eingeschränkten Laufzeitumgebung, in der bestimmte
-Funktionen verboten sind. Dazu gehört beispielsweise der direkte Zugriff auf
-Daten einer anderen Anwendung. Dies führt dazu, dass Anwendungen Berechtigungen
-einholen müssen um beispielsweise eine Internetverbindung aufzubauen oder eine
-SMS zu verschicken. Diese Berechtigungen werden im Android-Manifest gepflegt,
-sodass diese dem System zum Installationszeitpunkt bereits bekannt sind. Während
-der Entwicklung ist man immer wieder auf das Problem gestoßen, dass man
-vergessen hat die entsprechenden Berechtigungen zu setzen.
-
-Besonders wichtig war während der Entwicklung, niemals zu viel Arbeit auf dem
-Main-Thread zu erledigen. Der Main-Thread, in der Android Welt auch UI-Thread
-genannt, ist der Thread der sich vor allem um das User Interface kümmert, in Form
-von Eventhandling und Interaktionen mit Views im User Interface. Alle
-Komponenten, die gestartet werden, laufen standardmäßig auf diesem Thread. Wird
-nun vom Programmierer nicht darauf geachtet diesen Thread nicht zu überlasten,
-kann er nicht mehr genug Leistung erbringen um die Views auf dem User Interface
-flüssig zu animieren oder um sofort auf Benutzereingaben zu reagieren. Diese
-Verzögerungen fallen dem Benutzer bei Geräten mit Touchscreens als Eingabemedium
-besonders auf. Durch die spezielle Art der Eingabe ist es überaus wichtig dafür
-Sorge zu tragen, dass das User Interface stets auf Eingaben durch den Benutzer
-reagiert.
-
-Android wurde dafür konzipiert um auf Smartphones und Embedded Systemen zu
-laufen. Da diese Geräte im Vergleich zu modernen PCs kleine Prozessoren und
-wenig Hauptspeicher haben und meist auch noch mit einem Akku als Stromquelle
-laufen, welcher bei intensivem Gebrauch schnell erschöpft ist mussten sich die
-Android Entwickler etwas ausdenken, um dem Rechnung zu tragen. Ihre Lösung war,
-dass Android in die Lebensdauer von Komponenten einer Anwendung und von
-Prozessen eingreift. Im Falle knapper Ressourcen können einzelne Activities,
-Services oder auch ganze Prozesse beendet werden. Diesem Umstand müssen wir als
-Programmierer wiederum Rechnung tragen, da wir davon ausgehen müssen, dass
-unsere Komponenten zur Laufzeit beendet werden. Um Datenverlust zu vermeiden
-bietet uns Android jedoch den sogenannten Activity Lifecycle. Das Betriebssystem
-\enquote{verspricht} uns sozusagen, dass gewisse Methoden einer Activity in
-bestimmter Reihenfolge durchlaufen werden wenn diese beendet wird oder eben auch
-wenn diese wieder neu gestartet wird.
+Im Hinblick auf mobile Anwendungen fallen besonders die beschränkten Ressourcen wie begrenzte Akkukapazität, Arbeitsspeicher, Rechenleistung und Festplattenspeicher ins Gewicht.
+Im Vergleich zu normalen PCs oder Servern stehen auf einem mobilen Gerät viel weniger Ressourcen zur Verfügung, die zudem von vielen Anwendungen sowie dem System gleichzeitig verwendet werden.
 
 \subsection{Libraries und Frameworks}
 Um einige Funktionen der Applikation nicht selbst implementieren zu müssen
 wurden folgende zusätzliche Programmbibliotheken und Frameworks verwendet:
 
 \noindent
-\ \newline
-\textbf{Sugar ORM, http://satyan.github.io/sugar/} \newline
-Eine sehr einfach zu konfigurierende ORM Bibliothek, welche allerdings nur
-simple Relationen abbilden kann. Sugar ORM wurde verwendet um die interne SQLite
-Datenbank des Android Systems direkt über Objekte anzusprechen. Somit mussten
-keine SQL Befehle zur Steuerung der Datenbank verwendet werden.
 
 \ \newline
 \textbf{Volley, https://github.com/google/volley} \newline
-Volley ist eine Netzwerkbibliothek welche die Kommunikation mit Webservices
-erheblich erleichtert. Alle requests und responses werden asynchron behandelt
-und als abstrakte Objekte repräsentiert. Diverse Datenformate (wie JSON) werden
-direkt in einer Objektrepräsentation ausgegeben und sind somit im Programm ohne
-weitere Umwandlung zugänglich. Auch das direkte Laden von Bildern in Widgets
-(z.B. ImageView) und das dazugehörige Caching wird von Volley übernommen. Volley
-wurde verwendet um die Kommunikation mit dem bereitgestellten Quartett Server zu
-implementieren.
-
-\ \newline
-\textbf{FlippableStackView, https://github.com/blipinsk/FlippableStackView} \newline
-Diese Bibliothek stellt ein Widget bereit, in welchem einzelne Views wie in
-einem Kartendeck durchgeblättert werden können. FlippableStackView wurde
-verwendet um die Detailansicht eines Decks in der Galerie zu erstellen.
-
-\ \newline
-\textbf{CircleProgress, https://github.com/lzyzsd/CircleProgress} \newline
-CircleProgress stellt eine Reihe an kreisförmigen Fortschrittsanzeigen bereit.
-Diese wurden verwendet um die Anzeige der Spielstatistiken zu realisieren.
-
-\ \newline
-\textbf{Android Image Cropper, https://github.com/ArthurHub/Android-Image-Cropper} \newline
-Android Image Cropper stellt eine Ansicht bereit in welcher zuvor aufgenommen
-Bilder zugeschnitten und gedreht werden können. Diese Bibliothek wurde zur
-Implementierung des Profilbilds in den Spieleinstellungen verwendet.
+Volley ist eine Bibliothek, die es sich zur Aufgabe gemacht hat, Netzwerkoperationen sehr einfach und effektiv durchzführen.
+Mithilfe von Volley wurde das Downloaden von neuen Decks und Karten realisiert.
 
 \ \newline
 \textbf{CircleImageView, https://github.com/hdodenhof/CircleImageView} \newline
-Diese Bibliothek beinhaltet ein modifiziertes ImageView Widget, welches statt
-einem Rechteck einen Kreis als Grundfläche besitzt. Mit Hilfe von
-CircleImageView wurde die Anzeige des Profilbilds in den Spieleinstellungen und
-im Navigation Drawer realisiert.
+Hiermit wird eine runde ImageView eingeführt, die für die Abbildung des Profil Bildes verwendet wurde.
 
 \ \newline
-\textbf{Google Play Services API, https://developers.google.com/games/services/} \newline
-Diese Framework ermöglich den Zugriff auf die Google Play Services und somit
-eine einfache Online-Anbindung für Spiele. Neben einem Programmiermodell für
-Multiplayerspiele stellt das Framework auch Ranglisten, ein Freundesystem und
-Einladungen für Spiele bereit. Die Google Play Services wurden für den
-Multiplayer der App verwendet.
+\textbf{Realm, https://github.com/realm/realm-java} \newline
+Realm ist eine objektorientiere Datenbank, die sich gerade für Android eignet, um einfach und ohne echte Datenbankbefehle tatsächliche Objekte in einer Datenbank zu verwalten, was die Behandlung der einzelnen Spielstati und Decks sowie deren Karten, Attribute und Bilder sehr einfach gestaltet. 
 
 
 \section{Anforderungsanalyse}
