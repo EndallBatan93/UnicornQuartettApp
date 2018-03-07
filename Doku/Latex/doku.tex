@@ -17,7 +17,7 @@
 
 \title{Mobile Application Lab}
 \subtitle{Dokumentation}
-\date{tbd}
+\date{07.03.2018}
 \author{Max Landthaler,Manuel Konstantin Hinke}
 
 \begin{document}
@@ -83,11 +83,10 @@ Um etwas Abwechslung in den normalen Quartett Spielfluss zu schaffen, wurde der 
 \textbf{Normal:}
 Der klassische Modus. Hier wird abwechselnd gespielt. Gewonnen hat derjenige, der am Ende alle Karten hat.
 
-\newline
 \textbf{Unicorn}:
 Der überraschende Modus. Auch hier wird abwechselnd gespielt. Jedoch können beide Kontrahenten ab einer Siegesserie von 3 hintereinander gewonnen Runden, sofern sie selbst
 an der Reihe sind, besondere, zufällig generierte Aktionen ausführen, die zu ihrem direkten Vorteil sind.
-Außerdem werden zufällig generierte Events, die beide Spieler positiv oder negetiv beinflussen, in das Spiel gestreut, ohne dass die Spieler darauf Einfluss nehmen können.
+Außerdem werden zufällig generierte Events, die beide Spieler positiv oder negativ beeinflussen, in das Spiel gestreut, ohne dass die Spieler darauf Einfluss nehmen können.
 Gewonnen hat der Spieler, der alle Karten hat oder die richtige Aktion ausgespielt hat.
 
 
@@ -106,8 +105,6 @@ Um einige Funktionen der Applikation nicht selbst implementieren zu müssen
 wurden folgende zusätzliche Programmbibliotheken und Frameworks verwendet:
 
 \noindent
-
-\ \newline
 \textbf{Volley, https://github.com/google/volley} \newline
 Volley ist eine Bibliothek, die es sich zur Aufgabe gemacht hat, Netzwerkoperationen sehr einfach und effektiv durchzführen.
 Mithilfe von Volley wurde das Downloaden von neuen Decks und Karten realisiert.
@@ -118,123 +115,106 @@ Hiermit wird eine runde ImageView eingeführt, die für die Abbildung des Profil
 
 \ \newline
 \textbf{Realm, https://github.com/realm/realm-java} \newline
-Realm ist eine objektorientiere Datenbank, die sich gerade für Android eignet, um einfach und ohne echte Datenbankbefehle tatsächliche Objekte in einer Datenbank zu verwalten, was die Behandlung der einzelnen Spielstati und Decks sowie deren Karten, Attribute und Bilder sehr einfach gestaltet. 
+Realm ist eine objektorientiere Datenbank, die sich gerade für Android eignet, um einfach und ohne echte Datenbankbefehle tatsächliche Objekte in einer Datenbank zu verwalten, was die Behandlung der einzelnen Spielstatistiken und Decks sowie deren Karten, Attribute und Bilder sehr einfach gestaltet. 
 
 
 \section{Anforderungsanalyse}
 \subsection{Funktionale Anforderungen}
 
-Im folgenden werden alle funktionalen und nicht funktionalen Anforderungen
-aufgelistet, die vor oder während der Entwicklung der Applikation gestellt
-wurden.
+Ein wichtiges Thema im Vorfeld der Implementierung war es die Anforderungen an das Unicorn Quartett klar zu definieren.
+Im folgenden werden die funktionalen und nicht funktionalen Anforderungen
+aufgelistet, die vor der Entwicklung der Applikation formuliert wurden. 
 
 \ \newline
-\textbf{FA1 Hauptmenü} \newline
-Der Benutzer kann von einem Hauptmenü, welches nach Start der App angezeigt
-wird, schnell auf die wichtigsten Funktionen der App zugreifen.
-
+\textbf{FA1 Ladebildschirm} \newline
+Beim Öffnen der App erscheint ein Ladebildschirm, in dem das Logo der App dargestellt wird. Zudem befindet sieht der Nutzer eine Fortschrittsanzeige mit Statusmeldungen. Anschließend wird der Nutzer automatisch auf den Startbildschirm weitergeleitet.
 \ \newline
-\textbf{FA2 Spielmodi} \newline
-Der Benutzer kann vor jedem Spiel aus 4 verschiedenen Spielmodi wählen:
-Zeitspiel (Spielende nach Ablauf eines Zeitlimits), Punktspiel (Spielende bei
-bestimmter Punktezahl), Rundenspiel (Spielende nach bestimmter Anzahl Runden),
-Insane (Vergleiche umgekehrt, Spielende nach bestimmter Anzahl Runden).
-
+\textbf{FA1-0 Nutzer erstellen} \newline
+Wenn der Nutzer zum ersten Mal die App startet, wird er dazu aufgefordert, einen Benutzer zu erstellen. Dies muss zu beim Start der App getätigt werden. Zur Erstellung des Nutzer wird ein Name und ein Profilbild welches wahlweise mit der Kamera aufgenommern werden kann oder aus der Galerie ausgewählt werden kann, benötigt. Über den Namen kann der Nutzer von anderen Nutzern identifiziert werden.
 \ \newline
-\textbf{FA3 Computergegner} \newline
-Im Einzelspieler Modus kann der Benutzer gegen einen simulierten Gegner
-antreten. Dieser sollte sich wie ein menschlicher Spieler verhalten und nicht
-auf Informationen zurückgreifen können, die einem menschlichen Gegner
-normalerweise nicht zur Verfügung stehen. So sollten z.B. die Werte der Karte
-des Benutzers dem Computergegner nicht für die Planung des Spielzugs zur
-Verfügung stehen. So soll ein \enquote{unfaires} Verhalten und damit ein
-frustrierendes Spielerlebnis verhindert werden.
-
+\textbf{FA1-1 Startbildschirm} \newline
+Auf dem Startbildschirm befinden sich 5 Elemente: Über Buttons mit entsprechenden Icons gelangt der Nutzer zu den folgenden Ansichten:
+- Spielen
+- Kartenverwaltung/Kartengallerie
+- Freunde
+- Rangliste
+- Profil
 \ \newline
-\textbf{FA4 Schwierigkeitsgrad} \newline
-Vor jedem neuen Spiel kann der Benutzer einen von 3 verschiedene
-Schwierigkeitsgraden (Leicht, Mittel, Schwer) wählen. Je nach gewähltem
-Schwierigkeitsgrad handelt der Computergegner mehr oder weniger intelligent.
-
+\textbf{FA2-1 Spiel erstellen | Offline Spiel} \newline
+Auf der Spielansicht kann der Nutzer zwischen  zwei Optionen wählen:
+- Offline Spiel gegen die „KI“
+- Online Spiel gegen Freunde
+Nach der Auswahl gelangt der Spieler auf die Ansicht, in der er sich zwischen den verschiedenen Spielmodi entscheiden kann.
 \ \newline
-\textbf{FA5 Spiel fortsetzen} \newline
-Der gesamte Spielfortschritt wird kontinuierlich in der Applikation persistent
-gespeichert. So kann auch nach einem Neustart der App das Spiel ohne
-Fortschrittsverlust fortgesetzt werden.
-
+\textbf{FA2-2 Online Spiel} \newline
+Wählt der Spieler die Option „online“ aus, kann er entweder gegen einen zufällig ausgewählten Online-Spieler spielen oder er wählt einen Spieler aus seiner Freundesliste aus.
 \ \newline
-\textbf{FA6 Galerie} \newline
-Alle im Spiel vorhandenen Quartettdecks lassen sich in einer speziellen Ansicht,
-der Galerie, betrachten. Dabei können alle im Deck enthaltenen Karten einzeln
-in einer detaillierten Ansicht betrachtet werden.
-
+\textbf{FA2-3 Spielmodi} \newline
+Der Nutzer kann zwischen zwischen zwei Spielmodi auswählen:
+- Standard (Stechen)
+- Unicorn Mode (Stechen, aber mit globalen Events und Sonderkarten)
 \ \newline
-\textbf{FA7 Deck Download} \newline
-Die Applikation erlaubt das Herunterladen weiterer Kartendecks von einem
-externen Server. Nach dem Herunterladen können diese Decks, genauso wie die
-bereits in der App vorhandenen Decks, im Spiel verwendet werden. Die Decks werden
-persistent gespeichert und sind somit nach erfolgreichem Download auch ohne
-Internetverbindung dauerhaft verfügbar.
-
+\textbf{FA2-4 Spiel} \newline
+Im eigentlichen Spiel sieht der Spieler je Runde genau eine Karte mit aktuellem Bild und den Werten der Karte. Der Nutzer wählt einen Wert aus, der ihm am vielversprechendsten erscheint.
+Dann erfolgt ein Wechsel der Anzeige von der einzelnen Karte des Spielers zu einer Gegenüberstellung der beiden Karten der gegeneinander antretenden Spieler. Der Wert des Siegers wird grün markiert, der des Verlierers rot. 
+Der aktuelle Spielstand wird eingeblendet und die nächste Runde beginnt.
+Dabei wird sichtbar visualisiert wer gerade am Zug ist.
 \ \newline
-\textbf{FA8 Statistiken} \newline
-Die App sammelt während der Laufzeit spielbezogene Daten, um Statistiken zu
-ermöglichen. Diese Statistiken können vom Spieler in einer speziellen Ansicht
-eingesehen werden. Mögliche Statistiken sind: kill / death ratio, höchste
-Gewinnserie, höchste Verlustserie
-
+\textbf{FA3-1 Kartenverwaltung} \newline
+In der Kartenverwaltung wird dem Spieler eine Übersicht aller möglichen Decks angezeigt. Vorhandene Decks werden in Farbe abgebildet, Decks, die erst mit der Zeit erworben werden können, sind zu Beginn ausgegraut.
+Klickt der Nutzer auf ein Deck, kann er sich die einzelnen Karten darin ansehen.
+\ \newline\\
+\textbf{FA4-1 Bestenliste} \newline
+In der Bestenliste werden die Top 5 Online Spieler angezeigt.
 \ \newline
-\textbf{FA9 Rangliste} \newline
-Es gibt eine Rangliste, in welcher der Benutzer die im Spiel erhaltenen Punkte
-mit seinem Namen publizieren kann.
-
+\textbf{FA5-1 Freunde} \newline
+In der Freundesübersicht kann der Nutzer entweder einen Freund über seinen Namen hinzufügen oder kann die Liste seiner Freunde ansehen, wenn diese die Freundschaftsanfragen angenommen haben.
 \ \newline
-\textbf{FA10 Achievements} \newline
-Die App beinhaltete ein Achievementsystem. Wenn gewissen Herausforderungen
-erfüllt werden, können Achievements freigeschaltet werden und in einer
-speziellen Ansicht angesehen werden.
-
+\textbf{FA6-1 Spieler Profil} \newline
+Im Spielerprofil kann der Nutzer seinen Account mit Google verknüpfen, um seinen Fortschritt auch online zu speichern und um online spielen zu können.
+Außerdem kann er hier seine Spielhistorie einsehen.
 \ \newline
-\textbf{FA11 Quartetteditor} \newline
-Es wird ein Quartetteditor bereitgestellt, der es dem Benutzer ermöglich
-eigene Quartettdecks zu erstellen. Mit den erstellen Decks kann wie mit den
-bereits im Spiel integrierten Decks gespielt werden.
-
-\ \newline
-\textbf{FA12 Levelsystem} \newline
-Ein Levelsystem suggeriert permanenten Fortschritt. Nach jedem Spiel erhält der
-Benutzer Erfahrungspunkte, welche das Level steigen lassen. Mit diesem System
-soll eine Langzeitmotivation erreicht werden.
-
-\ \newline
-\textbf{FA13 Multiplayer} \newline
-Es ist über ein Netzwerk möglich gegen andere Benutzer der App anzutreten.
-
 
 \subsection{Nicht Funktionale Anforderungen}
-
-\textbf{NFA1 Robustheit} \newline
-Das Spiel soll eine gewisse Robustheit aufweisen, also auf fehlerhafte Eingaben
-oder unvorhergesehene Ereignisse angemessen reagieren. Im Falle eine Absturzes
-sollte die Applikation ohne Verlust des Spielfortschritts neu gestartet werden
-können.
-
 \ \newline
-\textbf{NFA2 Erweiterbarkeit} \newline
-Die Programmstruktur der Applikation sollte derart gestaltet sein, dass
-spätere Erweiterungen möglichst einfach vorgenommen werden können.
-
+\textbf{NFA1 Aktuelle Version der Betriebssysteme} \newline
+Die Oberfläche der App sollte sich an aktuelle Designrichtlinien orientieren und auf den gängigsten Versionen lauffähig sein.
 \ \newline
-\textbf{NFA3 Responsiveness} \newline
-Die Oberfläche sollte stets innerhalb einer sehr kurzen Zeit auf
-Benutzereingaben reagieren. Bei längeren Wartezeiten, etwa während eines
-Downloads, sollte der Benutzer permanent, durch den Einsatz von entsprechenden
-GUI-Elementen, über den Fortschritt der Operation informiert werden.
 
+\textbf{NFA2 Usability Ziele} \newline
+Die App sollte einfach und verständlich aufgebaut werden sodass sich der Nutzer intuitiv in den Menüs zurechtfinden kann.
 \ \newline
-\textbf{NFA4 Usability} \newline
-Der Benutzer sollte die App, nach einer kurzen Einführung, durch eine intuitive
-und benutzerfreundliche Oberfläche ohne weitere Anleitung bedienen können.
+
+\textbf{NFA3 Feedback} \newline
+Die App sollte dem Nutzer unter bestimmten Bedingungen ein Feedback geben.
+Der Nutzer darf nie im Unklaren darüber sein was die App gerade macht.
+
+\pagebreak
+\textbf{NFA4 Selbsterklärbarkeit} \newline
+Die App sollte selbsterklärend aufgebaut sein. Der Nutzer sollte keine Probleme beim Verständnis der Funktionen oder Icons haben und ohne Hilfe das System bedienen können. Die App sollte ohne eine Anleitung bedienbar sein.
+\ \newline
+
+\textbf{NFA5 Benutzerfreundlichkeit} \newline
+Die App sollte benutzerfreundlich aufgebaut sein, dass heißt der User soll einen positiven Eindruck von der App bekommen und sie gerne verwenden.
+\ \newline
+
+\textbf{NFA6 Verfügbarkeit} \newline
+Die App sollte in den üblichen Smartphone Auflösungen darstellbar sein und sich auch an die Größenänderungen des Displays anpassen.
+\ \newline
+\\
+\textbf{NFA7 Robustheit} \newline
+Die App sollte gegenüber Fehleingaben robust sein.
+\ \newline
+
+\textbf{NFA8 Reaktionszeit} \newline
+Die App soll innerhalb so kurzer Zeit reagieren, dass der Nutzer keine nennenswerte Wartezeiten abwarten muss, ohne zu wissen, was vor sich geht.
+\ \newline
+
+\textbf{NFA9 Statusrückmeldung} \newline
+Wenn die App nicht innerhalb angenehmer Reaktionszeiten reagieren kann, soll der Nutzer über eine aussagekräftige Anzeige über den aktuellen Zustand der App informiert werden.
+\ \newline
+
+
 
 \section{Konzept und Entwurf}
 \subsection{Mockups}
