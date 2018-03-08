@@ -485,4 +485,74 @@ klarer Arbeitsablauf gegeben ist. Auch das lesen und editieren von fremden Code
 wird erleichtert, da von vornherein anhand der Benennung der einzelnen Klassen
 klar ist welche Aufgaben diese Komponenten übernehmen.
 
+\section{Anforderungsabgleich}
+Aufgrund der Unerfahrenheit der Entwickler und der Natur der Sache gibt es einige Punkte in denen sich die App von ihren Anforderungen unterscheidet. 
+Im einzelnen werden hier die Anforderungen noch einmal betrachtet und mit dem endgültigen Zustand verglichen.
+\subsection{Funktionale Anforderungen}
+\ \newline
+\textbf{FA1 Ladebildschirm – teilweise erfüllt} \newline
+Die Anforderung wurde teilweise erfüllt. Es gibt einen Ladebildschirm beim Startbildschirm der App jedoch wurde auf eine Fortschrittsanzeige verzichtet.
+\ \newline
+\textbf{FA1-0 Nutzer erstellen - erstellen} \newline
+Alle Anforderungen wurden hier erfüllt. 
+\ \newline
+\textbf{FA1-1 Startbildschirm – erfüllt/abgeändert} \newline
+Die Anforderungen wurden erfüllt jedoch sind durch einige Umstrukturierungen einige der geplanten UI-Elemente obsolet geworden.
+\ \newline
+\textbf{FA2-1 Spiel erstellen | Offline Spiel – nicht erfüllt} \newline
+Es wurde aus zeitlichen Gründen und anders gesetzten Prioritäten auf die Implementierung des Online Modus verzichtet, daher gibt es auch keine Auswahlmöglichkeiten zwischen Online und Offline Modus.
+\ \newline
+\textbf{FA2-2 Online Spiel – nicht erfüllt} \newline
+Wie bereits erwähnt wurde der Online Modus nicht umgesetzt.
+\ \newline
+\textbf{FA2-3 Spielmodi - erfüllt} \newline
+Wie in den Anforderungen festgelegt gibt es zwei verschiedene Spielmodi. 
+\ \newline
+\textbf{FA2-4 Spiel - erfüllt} \newline
+Der Spielmodus wurde größtenteils erfüllt. Bei der Formulierungen der Anforderungen war die Vorstellung eine ganz andere, daher gibt es einige Unterschiede im Ergebniss.
+\ \newline
+\textbf{FA3-1 Kartenverwaltung  - erfüllt} \newline
+Die Anforderungen der Kartenverwaltung wurden vollständig erfüllt. Es gibt eine DeckGallerie in der der Nutzer sein gesammelten Decks einzeln betrachten kann. 
+\ \newline\\
+\textbf{FA4-1 Bestenliste – nicht erfüllt} \newline
+Da es keinen Online Modus gibt wurde dieses Feature nicht implementiert.
+\ \newline
+\textbf{FA5-1 Freunde – nicht erfüllt} \newline
+Da es keinen Online Modus gibt wurde dieses Feature nicht implementiert.
+\ \newline
+\textbf{FA6-1 Spieler Profil - efüllt} \newline
+Das Spielerprofil wird zu Beginn erstellt und kann von fast jedem Screen aus geupdatet werden.
+\ \newline
+\subsection{Nicht-Funktionale Anforderungen}
+\ \newline
+\textbf{NFA1 Aktuelle Version der Betriebssysteme - erfüllt} \newline
+Soweit es getestet wurde sollte die App auf den gängigen Versionen/Betriesystemen in vollem Funktionsumfang verwendbar sein.
+\ \newline
+\textbf{NFA2 Usability Ziele – teilweise nicht erfüllt} \newline
+An einigen Stellen hat die UI und damit auch indirekt die Usability noch Ausbaubedarf.
+\ \newline
+\textbf{NFA3 Feedback - teilweise erfüllt} \newline
+Gerade beim Download von neuen Kartendecks fehlt eine Fortschrittsanzeige des Downloads. Der User bekommt nur bei Start und Fertigstellung des Downloads ein Rückmeldung. 
+\pagebreak
+\textbf{NFA4 Selbsterklärbarkeit - erfüllt} \newline
+Die App ist weiteßgehend ohne Anleitung benutzbar.
+\ \newline
+\textbf{NFA5 Benutzerfreundlichkeit – teilweise erfüllt} \newline
+Durch die vielen verschieden UI-Themes wird der Benutzer immer einen positiven Eindruck der App haben.
+\ \newline
+\textbf{NFA6 Verfügbarkeit - erfüllt(vermutlich)} \newline
+Auf den von uns getesteten Geräten funktioniert die Anpassung an die unterschiedlichen Screengrößen und Auflösungen.
+\ \newline
+\\
+\textbf{NFA7 Robustheit – größtenteils erfüllt} \newline
+Die App sollte gegenüber Fehleingaben robust sein.
+\ \newline
+\textbf{NFA8 Reaktionszeit – teilweise erfüllt} \newline
+Die App soll innerhalb so kurzer Zeit reagieren, dass der Nutzer keine nennenswerte Wartezeiten abwarten muss, ohne zu wissen, was vor sich geht.
+Einzige nennenswerte Stelle ist beim herunterladen der Decks.
+\ \newline
+\textbf{NFA9 Statusrückmeldung – nicht erfüllt} \newline
+Gerade bei Ladebildschirm und dem Downloadvorgang fehlen Fortschrittsanzeigen.
+\ \newline
+
 \end{document}
