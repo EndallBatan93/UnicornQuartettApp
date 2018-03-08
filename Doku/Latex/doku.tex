@@ -263,7 +263,9 @@ Diese Screens zeigen den grundlegenden Ablauf eines Spiel. Diese sind zwar unter
 
 \section{Implementierung}
 \subsection{Ausgewählte Implementierungsdetails}
-\subsubsection{Galerie}
+\subsubsection{Startseite | Profil}
+
+%TODO Bilder tauschen
 
 \begin{figure}[!ht]
   \centering
@@ -281,26 +283,18 @@ Diese Screens zeigen den grundlegenden Ablauf eines Spiel. Diese sind zwar unter
 \end{figure}
 
 \noindent
-In der Galerie werden alle Kartendecks aufgelistet, die auf dem Smartphone
-vorhanden sind oder vom Server heruntergeladen werden können. Heruntergeladenen
-Decks könne durch Antippen geöffnet werden. In der geöffneten Ansicht kann der
-Benutzer durch vertikale Wischgesten durch die einzelnen Karten des virtuellen
-Kartenstapels blättern. Tippt der Benutzer ein Deck an, welches nicht
-heruntergeladen ist, wird ein Dialog geöffnet in welchem das Herunterladen des
-Decks bestätigt oder abgelehnt werden kann. Das Deck wird nicht direkt geladen,
-da sich der Benutzer eventuell in einer Netzwerkumgebung befindet, in welcher
-durch Downloads Kosten entstehen können. Durch den Bestätigungsdialog wird dem
-Benutzer somit eine Möglichkeit gegeben den Download zu einem späteren Zeitpunkt
-mit günstigeren Netzwerkbedingungen zu starten. Wird der Dialog bestätigt startet
-der Download des Decks. Im Listenelement des Decks wird ein Ladebalken angezeigt
-und im Notification Drawer wird eine Notification erstellt die ebenfalls den
-Fortschritt des Downloads anzeigt. Nach erfolgreichem Download wird die
-Notification geschlossen und der Ladebalken verschwindet wieder. Das Deck ist
-dann persistent auf dem Gerät gespeichert und kann nun auch ohne
-Internetverbinung angezeigt werden. Zudem können nun auch die Karten des Decks,
-wie oben beschreiben angezeigt werden. Auch kann das Deck nun im Einzelspieler
-Modus verwendet werden.
+Wenn der Nutzer das erste Mal die Anwendung startet, wird er aufgefordert, einen Benutzernamen einzugeben und ein Profilbild anzugeben. Zudem muss er sich für ein Darstellungsthema entscheiden.
+Dieses kann er entweder mit der Kamera des Smartphones aufnehmen oder ein bereits erstelltes Bild aus der Galerie verwenden.
+Das Profilbild wird nun in allen Übersichtsscreens am unterem linken Bildschirmrand angezeigt.
+Beim erstmaligem Starten der Anwendung wird somit ein User Objekt angelegt, welches anschließend in der Realm Datenbank persitiert wird. \newline
+Klickt der Nutzer auf sein Profilbild, kommt er zur Profilansicht. Dort kann er seinen Nutzernamen, das Profilbild und das Darstellungsthema ändern.
+Zudem kann der Nutzer hier allerdings auch die Schwierigkeitsstufe der künstlichen Intelligenz auswählen. Er erhält weiterhin eine individuelle Übersicht einer internen Auswertung über seine gesamte Spielhistorie, 
+welche abhängig von dem Verhältnis "Sieg - Niederlage" unterschiedliche Rückmeldungen an den Nutzer bietet.
+All diese Konfigurationen werden in der Datenbank im User Eintrag hinterlegt und ggf. aktualisiert. Die Spielhistorie wird anhang von einer in der Datenbank hinterlegten Liste an Games analysiert.
 
+
+\subsubsection{Deckansicht}
+%TODO Bilder tauschen
 \begin{figure}[!ht]
   \centering
   \begin{minipage}{0.45\textwidth}
@@ -317,31 +311,15 @@ Modus verwendet werden.
 \end{figure}
 
 \ \newline
-Um die Galerie mit diesen beschriebenen Funktionen zu realisieren, waren einige
-besondere Implementierungsmethoden notwendig. Da den meisten Decks und Karten
-relativ hochauflösende Bilder zugeordnet sind, entstehen beim Anzeigen der Decks
-bzw. Karten Verzögerungen, da große Datenmengen geladen werden müssen. Dabei ist
-außerdem zu erwähnen, dass das Laden der Bilder der Decks, die nicht auf dem
-Gerät gespeichert sind, über das Netzwerk erfolgt und somit zusätzliche
-Verzögerungen entstehen. All diese Verzögerungen sind als starke Ruckler
-bemerkbar und beinträchtigen das Nutzererlebnis erheblich. Das Laden der Bilder
-wurde daher auf einen zweiten Thread ausgelagert. Somit kann der Benutzer
-weitere Interaktion vornehmen während im Hintergrund die Bilder nachgeladen
-werden. Auch der Download eines Decks verwendet einen eigenen Thread, um
-Verzögerungen im Haupt-Thread der Applikation zu vermeiden. Zusätzlich wurde
-hier auch das Service Modell der Android Platform verwendet. So kann garantiert
-werden, dass der Download abgeschlossen wird, auch wenn die Galerie verlassen
-oder die App während des Downloads geschlossen wird. Um die heruntergeladenen
-Daten in der Datenbank zu speichern war ebenfalls eine besonderer Strategie
-nötig. Die Daten können nicht sofort gespeichert werden, da sonst bei Fehlern
-inkonsistente Zustände in der Datenbank auftreten. Daher werden geladene Daten
-zunächst im RAM gehalten bis der Download vollständig abgeschlossen ist und dann
-in einer einzigen Transaktion in die Datenbank geschrieben. Somit wird immer ein
-konsistenter Zustand der Datenbank erreicht und Fehler können einfacher
-abgefangen werden.
+In der Deckansicht kann man alle zum Download stehenden bzw. bereits heruntergeladenen Decks einsehen. Beim Start der Activity wird überprüft, welche Decks auf dem Server zum Download verfügbar sind und welche davon bereits auf dem Endgerät heruntergeladen wurden.
+Steht ein Deck zum Download bereit, kann auf den entsprechenden Platzhalter geklickt werden und der Download beginnt. Sämtliche Netzwerkaktionen wurden über Volley realisiert. Zudem kann ein Deck nur bei bestehender WLAN-Verbindung heruntergeladen werden. Sollte dies nicht der Fall sein, wird der Nutzer darüber informiert. Dabei werden nacheinander alle nötigen Informationen über das Deck, sein Attributschema und die
+einzelnen Karten heruntergeladen und in temporäre Objekte zum Bauen von den tatsächlich in der Datenbank hinterlegten für das Spiel notwendingen Objekten zusammengefasst. Nach dem tatsächlichen Download werden aus diesen temporären BuildObjekten in einem weiteren Prozess die 
+tatsächlichen Objekte für die Datenbank erstellt. Ist der Vorgang erfolgreich abgeschlossen, werden die temporären Dateien gelöscht und die Deckansicht refresht.
+Während dem Entwicklungsprozess traten auf manchen Endgeräten immer wieder \textit{OutOfMemoryError}s auf. Um diese zu verhindern, musste jedes Bild über einen Algorithmus relativ zu seiner ursprünglichen Auflösung heruntergerendert werden.
+Durch einen Klick auf ein heruntergeladenes Deck gelangt man in die Kartenansicht des Decks, in dem Karten des Decks inkl. ihrer Werte angezeigt werden.
 
-\subsubsection{Einzelspieler}
-
+\subsubsection{Das Spiel}
+%TODO Bilder tauschen
 \begin{figure}[!ht]
   \centering
   \begin{minipage}{0.45\textwidth}
@@ -358,67 +336,17 @@ abgefangen werden.
 \end{figure}
 
 \noindent
-Im Einzelspielermodus der Quartett App werden vor jedem Spiel zunächst einige
-Spieleinstellungen abgefragt. Der Name des Spielers wird für den Eintrag in die
-lokale Rangliste verwendet. Außerdem kann der Schwierigkeitsgrad, also die
-Stärke der KI, und der Spielmodus eingestellt werden. Um die Einstellungen nicht
-bei jedem Spielstart erneut setzen zu müssen können Standardwerte für jeden
-Parameter in den allgemeinen Spieleinstellungen hinterlegt werden. Nachdem alle
-Einstellungen getroffen wurden wird der Spieler aufgefordert ein Deck
-auszuwählen, mit welchem das Spiel gestartet werden soll. Dabei stehen nur Decks
-zur Auswahl die bereits heruntergeladen worden sind. Nach der Auswahl eines
-Decks startet das eigentliche Spiel. Dem Spieler wird eine Karte angezeigt, von
-welcher ein Attribut ausgewählt werden kann. Dieses Attribut wird mit dem
-Attribut verglichen, das die KI ausgewählt hat. Je nach Wert und Art des
-Attributs gewinnt oder verliert der Spieler die Karte. Das Ergebnis des
-Vergleichs wird in einer eigenen Ansicht präsentiert. Dort werden die beiden
-Karten gegenüber gestellt und Gewinner (grün) und Verlierer (rot) entsprechend
-eingefärbt. Hat der Spieler gewonnen so darf er erneut das Attribut bestimmen,
-sonst wird der nächste Zug durch die KI ausgeführt. Ist schließlich die
-Abbruchbedingung des Spiels erreicht (Zeit, Punkte, Runden) wird das Spiel
-beendet und eine Punktezahl berechnet. War der Spieler besonders gut wird
-außerdem automatisch ein Eintrag in der Rangliste vorgenommen. Danach besteht
-die Möglichkeit das Spiel mit den selben Einstellungen erneut zu starten, die
-Einstellungen zu ändern, oder in das Hauptmenü zurückzukehren.
-
-\begin{figure}[!ht]
-  \centering
-  \begin{minipage}{0.45\textwidth}
-    \centering
-    \includegraphics[width=4cm]{img/game_compare.png}
-    \caption{Vergleichsansicht}
-  \end{minipage}
-  \hfill
-  \begin{minipage}{0.45\textwidth}
-    \centering
-    \includegraphics[width=4cm]{img/game_end.png}
-    \caption{Spielende}
-  \end{minipage}
-\end{figure}
-
-\noindent
-Bei der Implementierung des Einzelspielers war besonders die KI eine
-Herausforderung. Diese musste sich möglichst wie ein Spieler verhalten und kein
-unfaires Spielerlebnis bieten, also nicht zu viel Wissen über den Spielstatus
-erhalten. Die hier verwendete Implementierung erzeugt zunächst für jedes
-Attribut eine nach eben diesem Attribut sortierte Liste der Karten. Danach wird
-die Position der Karte in jeder dieser Listen ermittelt und dem jeweiligen
-Attribut zugeordnet. Damit weiß die KI nun welches der Attribute das
-\enquote{beste}, also das mit den höchsten Gewinnchancen ist. Je nach
-eingestelltem Schwierigkeitsgrad wird die KI dann eher bessere oder eher
-schlechtere Attribute auswählen. So wird ein Spieler simuliert, der das
-Kartendeck, je nach Schwierigkeitsgrad, mehr oder weniger gut kennt, somit
-abschätzen kann wie \enquote{gut} ein Attribut ist und auf Basis dieser
-Schätzung seine Entscheidungen trifft. Außerdem erhält die KI mit dieser
-Implementierung auch nicht mehr Informationen als ein menschlicher Spieler.
-Unfaires Verhalten wird somit verhindert.
-
-\subsubsection{Multiplayer}
-Der Multiplayer bietet den Spielern die Möglichkeit über eine Internetverbindung gegeneinander zu spielen. Entscheidet sich der Nutzer zu einem Multiplayer Spiel gelangt dieser zu erst auf eine Activity die ihm eine Liste aller Spiele anzeigt die er gerade spielt und auch die Möglichkeit gibt ein neues Spiel zu starten. Wählt der Nutzer ein neues Spiel kann er sich entscheiden ob er automatisch einem anderen Spieler zugeteilt werden möchte oder gezielt mit einer bestimmten Person spielen möchte.
-
-Im Mulitplayer modus wird im Gegensatz zum herkömmlichen Quartett immer abwechselnd gespielt egal wer die vorherige Runde gewonnen hat. Dies ist eine Designentscheidung die aus Usability Gründen getroffen wurde. Andernfalls könnte es vorkommen ein Spieler macht einen Zug, schließt die App um später weiter zu spielen aber in der Zwischenzeit gewinnt sein Gegner alle folgenden runden und beendet das Spiel ohne, dass der erste Spieler etwas mitbekommt.
-
-Die technische Umsetzung wurde durch die bereits im Kapitel Libaries und Frameworks erwähnten Google Play Services extrem erleichtert. Durch die Verwendung dieser services mussten wir uns nur noch um den Client seitigen Teil der Anwendung kümmern. Hier war der anspruchsvollste Teil jedes mögliche Szenario abzudecken. Also entsprechend zu reagieren wenn einer der Spieler einen Zug gemacht hat und der andere zum Beispiel gerade noch das Ergebnis des vorherigen Zuges angeschaut hat oder gar nicht mehr innerhalb der App war. Da Quartett ein rundenbasiertes Spiel ist war die Synchronisation eher trivial.    
+Der Nutzer kann zwischen zwei verschiedenen Spielmodi auswählen: Dem "normalen" Standard Modus und den speziellen Unicorn Modus.
+Beide verfolgen grundlegend das gleiche Prinzip: Abwechselnd wählen die Kontrahenten einen Wert von ihrer Karte aus. Der Gewinner, also der Spieler mit dem besseren Wert, bekommt die Karte des Verlierers.
+Dabei wird nach jeder Runde der aktuelle Zwischenstand, die jeweiligen Kartenstapel sowie der StichKartenStapel, der angelegt wird, sobald beide Spieler den gleichen Wert haben, in einem Game Objekt in der Datenbank hinterlegt.
+Das heißt, dass jeder Zeit das aktuelle Spiel unterbrochen werden kann und erst später, auch nach dem Beenden der Anwendung, wieder an der gleichen Stelle fortgesetzt werden kann. Zudem hat der Nutzer die Möglichkeit, ein angefangenes Spiel zu löschen und
+neu oder mit einem anderem Deck anzufangen.
+\newline
+Im Unicorn Modus hingegen beeinflussen zufällig generierte Events und vom Spieler eingesetzte Boni das Spielgeschehen. Das grundlegende Spielprinzip bleibt jedoch erhalten.
+\newline
+Die Implementierung der künstlichen Intelligenz hat sich sehr einfach gestaltet. Je nach Schwierigkeitsgrad entscheidet die KI zufällig oder aus einem Bereich der prozentual anhand dem Durchschnitt der Wertekategorien im Deck berechneten Werte.
+Die KI kennt dabei wie ein menschlicher Spieler die Karten des Gegners nicht und kann somit nicht unfairer Weise strategische Entscheidungen bzgl. der Werte seines Gegners treffen.
+ 
 \subsection{Architektur}
 \subsubsection{Datenmodell}
 
