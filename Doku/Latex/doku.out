@@ -7,7 +7,7 @@
 \BOOKMARK [3][-]{subsubsection.2.1.1}{Quartettkarte}{subsection.2.1}% 7
 \BOOKMARK [3][-]{subsubsection.2.1.2}{Spielverlauf}{subsection.2.1}% 8
 \BOOKMARK [3][-]{subsubsection.2.1.3}{Spielmodi}{subsection.2.1}% 9
-\BOOKMARK [2][-]{subsection.2.2}{Mobile Plattform}{section.2}% 10
+\BOOKMARK [2][-]{subsection.2.2}{Mobile Anwendungen}{section.2}% 10
 \BOOKMARK [2][-]{subsection.2.3}{Libraries und Frameworks}{section.2}% 11
 \BOOKMARK [1][-]{section.3}{Anforderungsanalyse}{}% 12
 \BOOKMARK [2][-]{subsection.3.1}{Funktionale Anforderungen}{section.3}% 13
@@ -16,12 +16,9 @@
 \BOOKMARK [2][-]{subsection.4.1}{Mockups}{section.4}% 16
 \BOOKMARK [1][-]{section.5}{Implementierung}{}% 17
 \BOOKMARK [2][-]{subsection.5.1}{Ausgew\344hlte Implementierungsdetails}{section.5}% 18
-\BOOKMARK [3][-]{subsubsection.5.1.1}{Galerie}{subsection.5.1}% 19
-\BOOKMARK [3][-]{subsubsection.5.1.2}{Einzelspieler}{subsection.5.1}% 20
-\BOOKMARK [3][-]{subsubsection.5.1.3}{Multiplayer}{subsection.5.1}% 21
+\BOOKMARK [3][-]{subsubsection.5.1.1}{Startseite | Profil}{subsection.5.1}% 19
+\BOOKMARK [3][-]{subsubsection.5.1.2}{Deckansicht}{subsection.5.1}% 20
+\BOOKMARK [3][-]{subsubsection.5.1.3}{Das Spiel}{subsection.5.1}% 21
 \BOOKMARK [2][-]{subsection.5.2}{Architektur}{section.5}% 22
 \BOOKMARK [3][-]{subsubsection.5.2.1}{Datenmodell}{subsection.5.2}% 23
 \BOOKMARK [3][-]{subsubsection.5.2.2}{Klassenstruktur}{subsection.5.2}% 24
-\BOOKMARK [1][-]{section.6}{Anforderungsabgleich}{}% 25
-\BOOKMARK [2][-]{subsection.6.1}{Funktionale Anforderungen}{section.6}% 26
-\BOOKMARK [2][-]{subsection.6.2}{Nicht Funktionale Anforderungen}{section.6}% 27

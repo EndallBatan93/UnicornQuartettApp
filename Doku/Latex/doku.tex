@@ -75,14 +75,14 @@ Der menschliche Spieler ist immer zuerst an der Reihe und wählt einen Wert von 
 Nachdem er seinen Wert bestätigt hat, werden sein Wert und der des Kontrahenten verglichen. Wer den besseren Wert hatte, bekommt die Karte des Verlierers.
 Anschließend ist der andere Spieler an der Reihe, d.h. es wird unabhängig vom Ausgang der vorheringen Runde immer abgewechselt.
 Gewinner des Spiels ist ganz klassisch der Spieler, der am Ende alle Karten hat.
-
+\newline
 Um etwas Abwechslung in den normalen Quartett Spielfluss zu schaffen, wurde der Unicorn Modus entwickelt.
 
 \subsubsection{Spielmodi}
 
 \textbf{Normal:}
 Der klassische Modus. Hier wird abwechselnd gespielt. Gewonnen hat derjenige, der am Ende alle Karten hat.
-
+\newline
 \textbf{Unicorn}:
 Der überraschende Modus. Auch hier wird abwechselnd gespielt. Jedoch können beide Kontrahenten ab einer Siegesserie von 3 hintereinander gewonnen Runden, sofern sie selbst
 an der Reihe sind, besondere, zufällig generierte Aktionen ausführen, die zu ihrem direkten Vorteil sind.
@@ -105,6 +105,7 @@ Um einige Funktionen der Applikation nicht selbst implementieren zu müssen
 wurden folgende zusätzliche Programmbibliotheken und Frameworks verwendet:
 
 \noindent
+\newline 
 \textbf{Volley, https://github.com/google/volley} \newline
 Volley ist eine Bibliothek, die es sich zur Aufgabe gemacht hat, Netzwerkoperationen sehr einfach und effektiv durchzführen.
 Mithilfe von Volley wurde das Downloaden von neuen Decks und Karten realisiert.
@@ -124,8 +125,8 @@ Realm ist eine objektorientiere Datenbank, die sich gerade für Android eignet, 
 Ein wichtiges Thema im Vorfeld der Implementierung war es die Anforderungen an das Unicorn Quartett klar zu definieren.
 Im folgenden werden die funktionalen und nicht funktionalen Anforderungen
 aufgelistet, die vor der Entwicklung der Applikation formuliert wurden. 
+\ \pagebreak
 
-\ \newline
 \textbf{FA1 Ladebildschirm} \newline
 Beim Öffnen der App erscheint ein Ladebildschirm, in dem das Logo der App dargestellt wird. Zudem befindet sieht der Nutzer eine Fortschrittsanzeige mit Statusmeldungen. Anschließend wird der Nutzer automatisch auf den Startbildschirm weitergeleitet.
 \ \newline
@@ -144,14 +145,16 @@ Auf dem Startbildschirm befinden sich 5 Elemente: Über Buttons mit entsprechend
 Auf der Spielansicht kann der Nutzer zwischen  zwei Optionen wählen:
 - Offline Spiel gegen die „KI“
 - Online Spiel gegen Freunde
-Nach der Auswahl gelangt der Spieler auf die Ansicht, in der er sich zwischen den verschiedenen Spielmodi entscheiden kann.
+Nach der Auswahl gelangt der Spieler auf die Ansicht, in der er sich zwischen den verschiedenen entscheiden kann.
 \ \newline
 \textbf{FA2-2 Online Spiel} \newline
 Wählt der Spieler die Option „online“ aus, kann er entweder gegen einen zufällig ausgewählten Online-Spieler spielen oder er wählt einen Spieler aus seiner Freundesliste aus.
 \ \newline
 \textbf{FA2-3 Spielmodi} \newline
 Der Nutzer kann zwischen zwischen zwei Spielmodi auswählen:
-- Standard (Stechen)
+\ \newline
+- Standard (Stechen) 
+\ \newline
 - Unicorn Mode (Stechen, aber mit globalen Events und Sonderkarten)
 \ \newline
 \textbf{FA2-4 Spiel} \newline
@@ -163,7 +166,7 @@ Dabei wird sichtbar visualisiert wer gerade am Zug ist.
 \textbf{FA3-1 Kartenverwaltung} \newline
 In der Kartenverwaltung wird dem Spieler eine Übersicht aller möglichen Decks angezeigt. Vorhandene Decks werden in Farbe abgebildet, Decks, die erst mit der Zeit erworben werden können, sind zu Beginn ausgegraut.
 Klickt der Nutzer auf ein Deck, kann er sich die einzelnen Karten darin ansehen.
-\ \newline\\
+\ \newline\
 \textbf{FA4-1 Bestenliste} \newline
 In der Bestenliste werden die Top 5 Online Spieler angezeigt.
 \ \newline
@@ -180,36 +183,28 @@ Außerdem kann er hier seine Spielhistorie einsehen.
 \textbf{NFA1 Aktuelle Version der Betriebssysteme} \newline
 Die Oberfläche der App sollte sich an aktuelle Designrichtlinien orientieren und auf den gängigsten Versionen lauffähig sein.
 \ \newline
-
 \textbf{NFA2 Usability Ziele} \newline
 Die App sollte einfach und verständlich aufgebaut werden sodass sich der Nutzer intuitiv in den Menüs zurechtfinden kann.
 \ \newline
-
 \textbf{NFA3 Feedback} \newline
 Die App sollte dem Nutzer unter bestimmten Bedingungen ein Feedback geben.
 Der Nutzer darf nie im Unklaren darüber sein was die App gerade macht.
-
-\pagebreak
-\textbf{NFA4 Selbsterklärbarkeit} \newline
+\ \newline
+\textbf{NFA4 Selbsterklärbarkeit} 
 Die App sollte selbsterklärend aufgebaut sein. Der Nutzer sollte keine Probleme beim Verständnis der Funktionen oder Icons haben und ohne Hilfe das System bedienen können. Die App sollte ohne eine Anleitung bedienbar sein.
 \ \newline
-
 \textbf{NFA5 Benutzerfreundlichkeit} \newline
 Die App sollte benutzerfreundlich aufgebaut sein, dass heißt der User soll einen positiven Eindruck von der App bekommen und sie gerne verwenden.
 \ \newline
-
 \textbf{NFA6 Verfügbarkeit} \newline
 Die App sollte in den üblichen Smartphone Auflösungen darstellbar sein und sich auch an die Größenänderungen des Displays anpassen.
 \ \newline
-\\
 \textbf{NFA7 Robustheit} \newline
 Die App sollte gegenüber Fehleingaben robust sein.
 \ \newline
-
 \textbf{NFA8 Reaktionszeit} \newline
 Die App soll innerhalb so kurzer Zeit reagieren, dass der Nutzer keine nennenswerte Wartezeiten abwarten muss, ohne zu wissen, was vor sich geht.
 \ \newline
-
 \textbf{NFA9 Statusrückmeldung} \newline
 Wenn die App nicht innerhalb angenehmer Reaktionszeiten reagieren kann, soll der Nutzer über eine aussagekräftige Anzeige über den aktuellen Zustand der App informiert werden.
 \ \newline
@@ -269,14 +264,14 @@ Diese Screens zeigen den grundlegenden Ablauf eines Spiel. Diese sind zwar unter
   \centering
   \begin{minipage}{0.45\textwidth}
     \centering
-    \includegraphics[width=4cm]{img/gallery_decks.png}
-    \caption{Deckansicht}
+    \includegraphics[width=4cm]{img/start.png}
+    \caption{Startseite}
   \end{minipage}
   \hfill
   \begin{minipage}{0.45\textwidth}
     \centering
-    \includegraphics[width=4cm]{img/gallery_cards.png}
-    \caption{Kartenansicht}
+    \includegraphics[width=4cm]{img/profile.png}
+    \caption{Profil}
   \end{minipage}
 \end{figure}
 
@@ -308,7 +303,6 @@ Während dem Entwicklungsprozess traten auf manchen Endgeräten immer wieder \te
 Durch einen Klick auf ein heruntergeladenes Deck gelangt man in die Kartenansicht des Decks, in dem Karten des Decks inkl. ihrer Werte angezeigt werden.
 
 \subsubsection{Das Spiel}
-%TODO Bilder tauschen
 \begin{figure}[!ht]
   \centering
   \begin{minipage}{0.45\textwidth}
